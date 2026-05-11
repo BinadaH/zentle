@@ -10,7 +10,8 @@ enum OPTIONS {
 	CTRL_TO_ZOOM,
 	REALTIME_MOVE_SCALE,
 	GRID_WEIGHT,
-	SHAPE_RECOGNIZER_DELAY
+	SHAPE_RECOGNIZER_DELAY,
+	UI_SCALE
 }
 
 var options: Dictionary = {
@@ -19,6 +20,7 @@ var options: Dictionary = {
 	OPTIONS.REALTIME_MOVE_SCALE: true,
 	OPTIONS.GRID_WEIGHT: 2,
 	OPTIONS.SHAPE_RECOGNIZER_DELAY: 0.5,
+	OPTIONS.UI_SCALE: 1
 }
 
 var string_options: Dictionary[OPTIONS, String] = {
@@ -26,14 +28,21 @@ var string_options: Dictionary[OPTIONS, String] = {
 	OPTIONS.CTRL_TO_ZOOM: "ctrl_to_zoom",
 	OPTIONS.REALTIME_MOVE_SCALE: "realtime_move_scale",
 	OPTIONS.GRID_WEIGHT: "grid_weight",
-	OPTIONS.SHAPE_RECOGNIZER_DELAY: "shape_recognizer_delay"
+	OPTIONS.SHAPE_RECOGNIZER_DELAY: "shape_recognizer_delay",
+	OPTIONS.UI_SCALE: "ui_scale"
 }
 
 var shape_snap_tolerance = 0.5		#0.5 half a square
 var shape_snap_dist = 20      		#dist before snapping
 
+func set_and_save_editor_option(option: OPTIONS, value: Variant):
+	options[option] = value
+	config.set_value("editor", string_options[option], value)
+	config.save(config_path)
+	
 func _ready():
 	call_deferred("load_config_file")
+
 
 var config: ConfigFile = ConfigFile.new()
 var config_path = "user://settings.cfg"

@@ -2,10 +2,27 @@
 
 [ext_resource type="Script" uid="uid://dc05wpldl5csv" path="res://scripts/theme_selector.gd" id="1_cxx7o"]
 
-[node name="ThemeSelector" type="VBoxContainer" unique_id=1192998557]
+[node name="ThemeSelector" type="MarginContainer" unique_id=372284654]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 script = ExtResource("1_cxx7o")
+
+[node name="ThemeSelector" type="VBoxContainer" parent="." unique_id=1192998557]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="ThemeSelector" unique_id=443746469]
+layout_mode = 2
+placeholder_text = "Search"
+
+[node name="themes" type="VBoxContainer" parent="ThemeSelector" unique_id=176694636]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="text_changed" from="ThemeSelector/LineEdit" to="." method="_on_line_edit_text_changed"]

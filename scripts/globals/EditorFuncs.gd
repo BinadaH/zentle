@@ -49,6 +49,10 @@ func get_screen_to_world_pos(screen_pos : Vector2) -> Vector2:
 func get_world_to_screen_pos(world_pos : Vector2) -> Vector2:
 	return (world_pos - EditorData.camera.position) * EditorData.camera.zoom.x + (EditorData.main.get_viewport_rect().size / 2)
 
+func set_ui_scale(s: float):
+	get_tree().root.content_scale_factor = s
+	EditorOptions.set_and_save_editor_option(EditorOptions.OPTIONS.UI_SCALE, s)
+
 func cam_zoomed(zoom):
 	canvas_manager.update_text_edit_size()
 

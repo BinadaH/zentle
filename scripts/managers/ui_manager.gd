@@ -9,17 +9,18 @@ class FileMenuItem:
 		self.label = label
 		self.callback = callback
 	
-var file_menu_items: Dictionary[int, FileMenuItem] = {
-	0: FileMenuItem.new("Save", self.save),
-	2: FileMenuItem.new("Open", self.open),
-	1: FileMenuItem.new("New", self.new),
-}
+var file_menu_items: Array[FileMenuItem] = [
+	FileMenuItem.new("Save", self.save),
+	FileMenuItem.new("Open", self.open),
+	FileMenuItem.new("Settings", self.settings),
+	FileMenuItem.new("New", self.new),
+]
 
 func _ready():
 	EditorFuncs.set_ui_manager(self)
 	load_color_grid()
 	
-	for item_id in file_menu_items.keys():
+	for item_id in range(file_menu_items.size()):
 		var label = file_menu_items[item_id].label
 		$Control/view/top_panel/HBoxContainer/MenuBar/file_menu.add_item(label, item_id)
 	
@@ -41,8 +42,11 @@ func new():
 func open():
 	EditorFuncs.begin_handle_open()
 	
+func settings():
+	EditorFuncs.toggle_quick_tools()
+	
 func _on_file_menu_id_pressed(id):
-	var item = file_menu_items.get(id, null)
+	var item = file_menu_items[id]
 	if item:
 		item.callback.call()
 	
@@ -139,6 +143,10 @@ func _on_copy_btn_pressed():
 func _on_paste_btn_pressed():
 	EditorFuncs.handle_paste()
 
-
 func _on_pen_size_value_changed(value):
 	EditorData.current_size = value
+
+func _on_quick_controls_container_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.pressed && event.button_index == MOUSE_BUTTON_LEFT:
+			EditorFuncs.toggle_quick_tools()

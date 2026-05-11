@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://beymo5ecdkku2"]
+
+[ext_resource type="Script" uid="uid://d00wm6l7urqkj" path="res://scripts/settings.gd" id="1_wngva"]
+
+[node name="Settings" type="MarginContainer" unique_id=633254788]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_wngva")
+
+[node name="Settings" type="VBoxContainer" parent="." unique_id=985318019]
+layout_mode = 2
+
+[node name="ui_scale" type="HBoxContainer" parent="Settings" unique_id=978164202]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Settings/ui_scale" unique_id=2104233178]
+layout_mode = 2
+text = "UI Scale: "
+
+[node name="OptionButton" type="OptionButton" parent="Settings/ui_scale" unique_id=51963402]
+layout_mode = 2
+
+[connection signal="item_selected" from="Settings/ui_scale/OptionButton" to="." method="_on_option_button_item_selected"]

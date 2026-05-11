@@ -16,9 +16,13 @@
 [ext_resource type="Texture2D" uid="uid://cwbfa05tjp8u2" path="res://sprites/icons/paste_tool.png" id="13_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://y3s8y7jarrwn" path="res://sprites/icons/zoom.png" id="14_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://sifqnqeicb4c" path="res://scenes/quick_tools/theme_selector.tscn" id="15_jbj1t"]
+[ext_resource type="PackedScene" uid="uid://beymo5ecdkku2" path="res://scenes/quick_tools/settings.tscn" id="16_muem4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jbj1t"]
 bg_color = Color(0.14406255, 0.14406255, 0.14406249, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_muem4"]
+bg_color = Color(0.3779188, 0.3779189, 0.37791875, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tbgi4"]
 shader = ExtResource("6_tefeu")
@@ -47,7 +51,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("canvas_main/MarginContainer:position")
+tracks/1/path = NodePath("canvas_main/quick_controls_container:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -59,7 +63,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("canvas_main/MarginContainer:modulate")
+tracks/2/path = NodePath("canvas_main/quick_controls_container:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -71,7 +75,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("canvas_main/MarginContainer:visible")
+tracks/3/path = NodePath("canvas_main/quick_controls_container:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -103,7 +107,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("canvas_main/MarginContainer:position")
+tracks/0/path = NodePath("canvas_main/quick_controls_container:position")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -115,7 +119,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("canvas_main/MarginContainer:modulate")
+tracks/1/path = NodePath("canvas_main/quick_controls_container:modulate")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -127,7 +131,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("canvas_main/MarginContainer:visible")
+tracks/2/path = NodePath("canvas_main/quick_controls_container:visible")
 tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -139,7 +143,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("canvas_main/MarginContainer/quick_options/VBoxContainer/Panel/ThemeSelector")
+tracks/3/path = NodePath("canvas_main/quick_controls_container/quick_options/TabContainer/ThemeSelector")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -391,48 +395,40 @@ ok_button_text = "Save"
 dialog_text = "Do you want to save the current file?"
 cancel_button_text = "Discard"
 
-[node name="MarginContainer" type="MarginContainer" parent="canvas_main" unique_id=1097161308]
+[node name="quick_controls_container" type="MarginContainer" parent="canvas_main" unique_id=1097161308]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 theme_override_constants/margin_left = 250
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 250
 theme_override_constants/margin_bottom = 200
 
-[node name="quick_options" type="Control" parent="canvas_main/MarginContainer" unique_id=580674118]
-custom_minimum_size = Vector2(600, 250)
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="canvas_main/MarginContainer/quick_options" unique_id=1837705761]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="LineEdit" type="LineEdit" parent="canvas_main/MarginContainer/quick_options/VBoxContainer" unique_id=371449232]
-layout_mode = 2
-
-[node name="Panel" type="Panel" parent="canvas_main/MarginContainer/quick_options/VBoxContainer" unique_id=124272823]
+[node name="quick_options" type="Panel" parent="canvas_main/quick_controls_container" unique_id=124272823]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_muem4")
 
-[node name="ThemeSelector" parent="canvas_main/MarginContainer/quick_options/VBoxContainer/Panel" unique_id=1192998557 node_paths=PackedStringArray("line_edit") instance=ExtResource("15_jbj1t")]
-layout_mode = 1
-line_edit = NodePath("../../LineEdit")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="canvas_main/MarginContainer/quick_options/VBoxContainer/Panel" unique_id=1771742661]
-visible = false
+[node name="TabContainer" type="TabContainer" parent="canvas_main/quick_controls_container/quick_options" unique_id=803237185]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+current_tab = 0
+
+[node name="Settings" parent="canvas_main/quick_controls_container/quick_options/TabContainer" unique_id=985318019 instance=ExtResource("16_muem4")]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="ThemeSelector" parent="canvas_main/quick_controls_container/quick_options/TabContainer" unique_id=1192998557 instance=ExtResource("15_jbj1t")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="latex_preview" type="TextureRect" parent="canvas_main" unique_id=1914542287]
 anchors_preset = 3
@@ -472,4 +468,4 @@ libraries/ = SubResource("AnimationLibrary_muem4")
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/paste_btn" to="canvas_main" method="_on_paste_btn_pressed"]
 [connection signal="value_changed" from="canvas_main/Control/view/top_panel/HBoxContainer/pen_size" to="canvas_main" method="_on_pen_size_value_changed"]
 [connection signal="value_changed" from="canvas_main/Control/VBoxContainer/VSlider" to="camera" method="_on_v_slider_value_changed"]
-[connection signal="text_changed" from="canvas_main/MarginContainer/quick_options/VBoxContainer/LineEdit" to="canvas_main/MarginContainer/quick_options/VBoxContainer/Panel/ThemeSelector" method="_on_line_edit_text_changed"]
+[connection signal="gui_input" from="canvas_main/quick_controls_container" to="canvas_main" method="_on_quick_controls_container_gui_input"]
