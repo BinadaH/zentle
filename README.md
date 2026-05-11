@@ -4,7 +4,7 @@ Zentle is a minimalist note-taking app focused on speed. \
 Note: This project is in a very early WIP stage. If it doesn't break, it's probably a bug.  \
 WEB DEMO: https://bin-h.itch.io/zentle
 <br> <br>
-<img width="1280" height="720" alt="front" src="https://github.com/user-attachments/assets/cbed217b-4db3-4f32-8bb8-cc316caefdfc" />
+<img width="1280" height="720" alt="front" src="https://github.com/user-attachments/assets/4f24fde3-63ed-476d-ab89-4a9fe5960048" />
 
 ### Features
 
