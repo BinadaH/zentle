@@ -15,6 +15,11 @@ func _ready():
 	camera.connect("has_moved", EditorFuncs.cam_zoomed)
 	camera.connect("has_zoomed", EditorFuncs.cam_moved)
 	
+	get_tree().root.connect("size_changed", func(): 
+		background.update_material_position(EditorData.camera.position)
+		background.update_material_zoom(EditorData.camera.zoom.x)
+	)
+	
 	EditorData.draw_ui = $draw_ui
 	EditorFiles.set_animation_player($AnimationPlayer)
 	
