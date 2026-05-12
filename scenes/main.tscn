@@ -21,6 +21,8 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jbj1t"]
 bg_color = Color(0.14406255, 0.14406255, 0.14406249, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_muem4"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_muem4"]
 bg_color = Color(0.3779188, 0.3779189, 0.37791875, 1)
 
@@ -216,9 +218,6 @@ anchor_right = 1.0
 offset_bottom = 40.0
 grow_horizontal = 2
 
-[node name="Control" type="Control" parent="canvas_main/Control/view/top_panel/HBoxContainer" unique_id=1356856269]
-layout_mode = 2
-
 [node name="MenuBar" type="MenuBar" parent="canvas_main/Control/view/top_panel/HBoxContainer" unique_id=837110770]
 layout_mode = 2
 size_flags_horizontal = 0
@@ -265,6 +264,9 @@ layout_mode = 2
 tooltip_text = "Eraser"
 icon = ExtResource("9_ya4ey")
 expand_icon = true
+
+[node name="VSeparator3" type="VSeparator" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=100938217]
+layout_mode = 2
 
 [node name="delete_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=219847737]
 custom_minimum_size = Vector2(40, 40)
@@ -327,14 +329,29 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="pen_size" type="HSlider" parent="canvas_main/Control/view/top_panel/HBoxContainer" unique_id=1262561150]
+[node name="VSeparator" type="VSeparator" parent="canvas_main/Control/view/top_panel/HBoxContainer" unique_id=1352127966]
+layout_mode = 2
+theme_override_constants/separation = 5
+theme_override_styles/separator = SubResource("StyleBoxEmpty_muem4")
+
+[node name="show_size_slider" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer" unique_id=188783426]
+layout_mode = 2
+toggle_mode = true
+text = "+"
+
+[node name="slider_size" type="HSlider" parent="canvas_main/Control/view/top_panel/HBoxContainer" unique_id=1262561150]
+visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-min_value = 5.0
-max_value = 50.0
-value = 5.0
+min_value = 0.5
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[node name="button_size" type="HBoxContainer" parent="canvas_main/Control/view/top_panel/HBoxContainer" unique_id=1115165986]
+layout_mode = 2
 
 [node name="file_name" type="Label" parent="canvas_main/Control/view/top_panel" unique_id=1484092455]
 layout_mode = 1
@@ -474,6 +491,7 @@ libraries/ = SubResource("AnimationLibrary_muem4")
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/delete_btn" to="canvas_main" method="_on_delete_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/copy_btn" to="canvas_main" method="_on_copy_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/paste_btn" to="canvas_main" method="_on_paste_btn_pressed"]
-[connection signal="value_changed" from="canvas_main/Control/view/top_panel/HBoxContainer/pen_size" to="canvas_main" method="_on_pen_size_value_changed"]
+[connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/show_size_slider" to="canvas_main" method="_on_show_size_slider_pressed"]
+[connection signal="value_changed" from="canvas_main/Control/view/top_panel/HBoxContainer/slider_size" to="canvas_main" method="_on_pen_size_value_changed"]
 [connection signal="value_changed" from="canvas_main/Control/VBoxContainer/VSlider" to="camera" method="_on_v_slider_value_changed"]
 [connection signal="gui_input" from="canvas_main/quick_controls_container" to="canvas_main" method="_on_quick_controls_container_gui_input"]

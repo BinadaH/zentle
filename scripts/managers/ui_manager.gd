@@ -1,6 +1,9 @@
 extends CanvasLayer
 class_name UIManager
 
+@onready var btn_size_container = $Control/view/top_panel/HBoxContainer/button_size
+@onready var slider_size = $Control/view/top_panel/HBoxContainer/slider_size
+
 class FileMenuItem:
 	var callback: Callable
 	var label
@@ -28,11 +31,33 @@ func _ready():
 	EditorFiles.set_file_label($Control/view/top_panel/file_name)
 	EditorFiles.set_confirm_dialog($ConfirmationDialog)
 	
-	
 	EditorOptions.connect("theme_changed", func(old_palette): reload_color_grid())
 	
-	$Control/view/top_panel/HBoxContainer/pen_size.value = EditorData.current_size
+	# Setup Slider / Buttons size controls
+	slider_size.value = EditorData.current_size / EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE] * 2.5
 	
+	var btn_size_img : Image = load("res://sprites/circle.png").get_image()
+	var btn_sizes = [0.5, 1, 2]
+	var num_sizes = btn_sizes.size()
+	for size_i in range(num_sizes):
+		var btn = Button.new()
+		var t_img_dup = btn_size_img.duplicate()
+		var img_size_step = log((size_i + 1) / float(num_sizes) + 1)
+		t_img_dup.resize(32 * img_size_step, 32 * img_size_step)
+		btn.icon = ImageTexture.create_from_image(t_img_dup)
+		
+		btn_size_container.call_deferred("add_child", btn)
+		btn.connect("pressed", func(): 
+			update_tool_sizes(btn_sizes[size_i])
+			)
+
+func update_tool_sizes(size):
+	EditorData.current_size = size * 0.4 * EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]
+	EditorData.current_text_size = size * EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]
+
+	if !EditorTools.is_current(EditorTools.TOOLS.TEXT):
+		EditorTools.set_tool(EditorTools.TOOLS.PEN)
+
 func save():
 	EditorFuncs.handle_save()
 	
@@ -144,9 +169,14 @@ func _on_paste_btn_pressed():
 	EditorFuncs.handle_paste()
 
 func _on_pen_size_value_changed(value):
-	EditorData.current_size = value
-
+	update_tool_sizes(value)
+	
 func _on_quick_controls_container_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed && event.button_index == MOUSE_BUTTON_LEFT:
 			EditorFuncs.toggle_quick_tools()
+
+## Switch between Slider / Buttons size controls
+func _on_show_size_slider_pressed():
+	slider_size.visible = !slider_size.visible
+	btn_size_container.visible = !btn_size_container.visible

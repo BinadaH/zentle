@@ -15,7 +15,7 @@ func _notification(what):
 
 func _ready():
 	var cl = get_tree().get_nodes_in_group("canvas_ui")
-	if cl[0]:
+	if cl and cl[0]:
 		text_edit = CodeEdit.new()
 		text_edit.add_auto_brace_completion_pair("$", "$")
 		text_edit.auto_brace_completion_enabled = true
@@ -34,6 +34,7 @@ func _ready():
 		focus_style_box.shadow_size = 4
 		focus_style_box.shadow_color = Color(0.292, 0.292, 0.292, 1.0)
 		focus_style_box.bg_color = Color(0.089, 0.089, 0.089, 1.0)
+		focus_style_box.set_content_margin_all(0)
 		text_edit.add_theme_stylebox_override("focus", focus_style_box)
 
 		
