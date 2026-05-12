@@ -234,48 +234,56 @@ layout_mode = 2
 [node name="pen_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=1538722229]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+tooltip_text = "Pen"
 icon = ExtResource("6_85g3d")
 expand_icon = true
 
 [node name="hand_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=205273641]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+tooltip_text = "Move"
 icon = ExtResource("6_tipki")
 expand_icon = true
 
 [node name="select_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=2007516895]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+tooltip_text = "Selection"
 icon = ExtResource("6_o6xl0")
 expand_icon = true
 
 [node name="text_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=525248601]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+tooltip_text = "Text"
 icon = ExtResource("9_eb6dy")
 expand_icon = true
 
 [node name="eraser_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=1362134942]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+tooltip_text = "Eraser"
 icon = ExtResource("9_ya4ey")
 expand_icon = true
 
 [node name="delete_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=219847737]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+tooltip_text = "Delete"
 icon = ExtResource("10_eb6dy")
 expand_icon = true
 
 [node name="copy_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=425468621]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+tooltip_text = "Copy"
 icon = ExtResource("12_a8y0u")
 expand_icon = true
 
 [node name="paste_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=1612782835]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+tooltip_text = "Paste"
 icon = ExtResource("13_jkv2x")
 expand_icon = true
 

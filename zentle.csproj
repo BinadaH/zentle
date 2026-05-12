@@ -7,5 +7,6 @@
   <ItemGroup>
     <PackageReference Include="CSharpMath.SkiaSharp" Version="0.5.1" />
     <PackageReference Include="SkiaSharp" Version="3.119.2" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.2" Condition=" '$(GodotTargetPlatform)' == 'linuxbsd' " />
   </ItemGroup>
 </Project>
