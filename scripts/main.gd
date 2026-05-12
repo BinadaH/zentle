@@ -4,10 +4,12 @@ class_name Main
 @onready var canvas = $canvas
 @onready var camera = $camera
 @onready var background = $background
+@onready var draw_line = $canvas_main/Control/view/draw_area/SubViewportContainer/SubViewport/draw_line
 
 func _ready():
 	EditorData.main_ready(self)
 	EditorData.camera = camera
+	EditorData.draw_line = draw_line
 	
 	camera.connect("has_moved", background.update_material_position)
 	camera.connect("has_zoomed", background.update_material_zoom)
@@ -18,6 +20,7 @@ func _ready():
 	get_tree().root.connect("size_changed", func(): 
 		background.update_material_position(EditorData.camera.position)
 		background.update_material_zoom(EditorData.camera.zoom.x)
+		draw_line.clear_viewport(false)
 		
 	)
 	

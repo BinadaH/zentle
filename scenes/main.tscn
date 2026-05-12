@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://wy1knqyuv4jv" path="res://sprites/icons/delete_tool.png" id="10_eb6dy"]
 [ext_resource type="Texture2D" uid="uid://7b6jgsvelwvf" path="res://sprites/icons/copy_tool.png" id="12_a8y0u"]
 [ext_resource type="Texture2D" uid="uid://cwbfa05tjp8u2" path="res://sprites/icons/paste_tool.png" id="13_jkv2x"]
+[ext_resource type="Script" uid="uid://smoh27ak08to" path="res://scripts/draw_line.gd" id="14_dp3eg"]
 [ext_resource type="Texture2D" uid="uid://y3s8y7jarrwn" path="res://sprites/icons/zoom.png" id="14_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://sifqnqeicb4c" path="res://scenes/quick_tools/theme_selector.tscn" id="15_jbj1t"]
 [ext_resource type="PackedScene" uid="uid://beymo5ecdkku2" path="res://scenes/quick_tools/settings.tscn" id="16_muem4"]
@@ -205,6 +206,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 
 [node name="top_panel" type="Panel" parent="canvas_main/Control/view" unique_id=731574821]
 custom_minimum_size = Vector2(0, 40)
@@ -372,6 +374,33 @@ text = "new file"
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="canvas_main/Control/view/draw_area" unique_id=2023395705]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="canvas_main/Control/view/draw_area/SubViewportContainer" unique_id=1231874334]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 608)
+render_target_clear_mode = 1
+render_target_update_mode = 4
+
+[node name="draw_line" type="Control" parent="canvas_main/Control/view/draw_area/SubViewportContainer/SubViewport" unique_id=1323941339]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("14_dp3eg")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="canvas_main/Control" unique_id=1270762103]
 custom_minimum_size = Vector2(20, 300)

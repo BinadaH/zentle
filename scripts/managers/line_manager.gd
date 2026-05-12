@@ -7,6 +7,8 @@ var base_line: Line2D
 var curr_points = []
 var curr_pressures = []
 
+const SIMPLIFY_LINE_FACTOR = 0.75
+
 enum STROKE_TYPES {
 	NORMAL,
 	DASHED,
@@ -24,7 +26,6 @@ func _init():
 	base_line.end_cap_mode = Line2D.LINE_CAP_ROUND
 	base_line.begin_cap_mode = Line2D.LINE_CAP_ROUND
 	base_line.joint_mode = Line2D.LINE_JOINT_ROUND
-	base_line.antialiased = true
 	
 	shape_recognizer = ShapeRecognizer.new()
 
@@ -47,6 +48,8 @@ func create_line():
 	
 	check_shape_timer = EditorData.get_tree().create_timer(EditorOptions.options[EditorOptions.OPTIONS.SHAPE_RECOGNIZER_DELAY])
 	check_shape_timer.connect("timeout", check_shape)
+	
+	current_line.visible = false
 
 func handle_mouse_motion():
 	if EditorData.mouse_down:
@@ -92,14 +95,17 @@ func update_shape():
 			current_line.points = [found_shape.points[0], world_snapped]
 
 func draw_line():
-	if last_smooth_pressure:
-		last_smooth_pressure = lerp(last_smooth_pressure, EditorData.pressure, 0.1)
+	var current_raw_pressure = EditorData.pressure
+	if last_smooth_pressure == null:
+		last_smooth_pressure = current_raw_pressure
 	else:
-		last_smooth_pressure = EditorData.pressure
+		last_smooth_pressure = lerp(last_smooth_pressure, current_raw_pressure, 0.1)
 	
 	var target_point = EditorData.world_pos
-	if last_smooth_point:
+	if last_smooth_point != null:
 		target_point = lerp(last_smooth_point, target_point, 0.25)
+	else:
+		last_smooth_point = target_point
 	
 	if not smoothed_points.is_empty():
 		if target_point.distance_to(smoothed_points[-1]) < MIN_DISTANCE:
@@ -109,13 +115,9 @@ func draw_line():
 	smoothed_pressures.append(last_smooth_pressure)
 	smoothed_points.append(target_point)
 	
-	current_line.points = smoothed_points
-
-	var num_points = smoothed_points.size()
-	if num_points % 5 != 0 and num_points > 10: 
-		return
-
-	_update_width_curve(num_points)
+	# Add new point to the draw_line viewport
+	EditorData.draw_line.draw_new_point(target_point, last_smooth_pressure * EditorData.current_size * 0.5)
+	
 	check_shape_timer.time_left = 1
 
 var found_shape : ShapeRecognizer.ShapeRecognizerResult = null
@@ -123,10 +125,12 @@ var shape_check_iter = 0
 func check_shape():
 	if !current_line: return
 	shape_check_iter += 1
-	var result = shape_recognizer.get_shape(current_line.points, shape_check_iter)
+	var result = shape_recognizer.get_shape(smoothed_points, shape_check_iter)
 	if result.recognized:
 		found_shape = result
 		current_line.points = result.points
+		current_line.visible = true
+		EditorData.draw_line.clear_viewport()
 		current_line.width_curve.clear_points()
 		current_line.width_curve.add_point(Vector2(1.0, 1.0))
 	else:
@@ -134,23 +138,18 @@ func check_shape():
 		check_shape_timer.connect("timeout", check_shape)
 		check_shape_timer.time_left = EditorOptions.options[EditorOptions.OPTIONS.SHAPE_RECOGNIZER_DELAY]
 
-func _update_width_curve(num_points: int):
-	var curve = current_line.width_curve
-	curve.clear_points()
-	
-	var dx = 1.0 / (num_points - 1)
-	var sample_interval = 10
-	
-	curve.add_point(Vector2(0, smoothed_pressures[0]))
-	
-	for i in range(sample_interval, num_points - 1, sample_interval):
-		curve.add_point(Vector2(i * dx, smoothed_pressures[i]))
-	
-	curve.add_point(Vector2(1.0, smoothed_pressures[-1]))
 
+func _update_width_curve():
+	if smoothed_pressures.size() == 0: return
+	var steps = 100
+	for i in range(0, steps, 1):
+		var p = float(i) / steps
+		var index = int(smoothed_pressures.size()* p)
+		current_line.width_curve.add_point(Vector2(p, smoothed_pressures[index]))
+	
 func done():
 	if !current_line: return
-	
+	current_line.visible = true
 	if found_shape:
 		found_shape = null
 	else:
@@ -158,11 +157,12 @@ func done():
 			var p = smoothed_points[0]
 			smoothed_points.append(p + Vector2(0.1, 0.1)) 
 			smoothed_pressures.append(smoothed_pressures[0])
-			current_line.points = smoothed_points
+		else:
+			smoothed_points = simplify_points(smoothed_points, SIMPLIFY_LINE_FACTOR)
 			
-		if smoothed_points.size() > 2:
-			current_line.points = simplify_points(smoothed_points, 0.75)
-			
+		current_line.points = smoothed_points
+		_update_width_curve()
+		
 	set_spatial_grid_pos(current_line)
 	reset_line()
 	
@@ -178,6 +178,8 @@ func reset_line():
 		check_shape_timer.disconnect("timeout", check_shape)
 	check_shape_timer = null
 	shape_check_iter = 0
+	
+	EditorData.draw_line.clear_viewport()
 
 func simplify_points(points: PackedVector2Array, epsilon: float) -> PackedVector2Array:
 	if points.size() < 3:
