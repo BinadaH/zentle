@@ -29,30 +29,28 @@ func _unhandled_input(event):
 		if event.button_index == MOUSE_BUTTON_MIDDLE:
 			middle_pressed = event.pressed
 		
-		if event.button_index == MOUSE_BUTTON_RIGHT:
-			move = event.pressed
-		elif EditorOptions.options[EditorOptions.OPTIONS.CTRL_TO_ZOOM] == event.ctrl_pressed:
-			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				z_slider.value = snapped(clamp(z_slider.value * ZOOM_SENSITIVITY, MIN_CAM_ZOOM, MAX_CAM_ZOOM), 0.001)
-			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				z_slider.value = snapped(clamp(z_slider.value / ZOOM_SENSITIVITY, MIN_CAM_ZOOM, MAX_CAM_ZOOM), 0.001)
-		
-		elif event.pressed:
-			moving = true
-			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				target_vel.y += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
-			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				target_vel.y += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
-			elif event.button_index == MOUSE_BUTTON_WHEEL_LEFT:
-				target_vel.x += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
-			elif event.button_index == MOUSE_BUTTON_WHEEL_RIGHT:
-				target_vel.x += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
-			else:
-				moving = false
-				
-			if moving:
-				emit_signal("has_moved", position)
+		# Prevent zooming when quicktools panel is opened
+		elif !EditorData.quick_tools_opened:
 			
+			# Handle zoom
+			if EditorOptions.options[EditorOptions.OPTIONS.CTRL_TO_ZOOM] == event.ctrl_pressed:
+				if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+					z_slider.value = snapped(clamp(z_slider.value * ZOOM_SENSITIVITY, MIN_CAM_ZOOM, MAX_CAM_ZOOM), 0.001)
+				elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+					z_slider.value = snapped(clamp(z_slider.value / ZOOM_SENSITIVITY, MIN_CAM_ZOOM, MAX_CAM_ZOOM), 0.001)
+			
+			# Handle scroll
+			elif event.pressed:
+				if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+					target_vel.y += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+				elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+					target_vel.y += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+				elif event.button_index == MOUSE_BUTTON_WHEEL_LEFT:
+					target_vel.x += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+				elif event.button_index == MOUSE_BUTTON_WHEEL_RIGHT:
+					target_vel.x += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+	
+	# Handle touchpad two finger zoom
 	if event is InputEventKey:
 		if event.pressed && event.ctrl_pressed:
 			if event.keycode == KEY_KP_ADD:

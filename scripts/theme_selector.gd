@@ -1,6 +1,6 @@
 extends MarginContainer
 
-@onready var themes_btn_container = $ThemeSelector/themes
+@onready var themes_btn_container = $ThemeSelector/ScrollContainer/themes
 func _ready():
 	EditorOptions.connect("config_loaded", func():
 		for theme in EditorOptions.all_themes:
@@ -10,7 +10,15 @@ func _ready():
 				EditorOptions.load_theme(theme)
 			)
 			themes_btn_container.add_child(btn)
+		for theme in EditorOptions.all_themes:
+			var btn = Button.new()
+			btn.text = get_theme_name(theme)
+			btn.connect("pressed", func(): 
+				EditorOptions.load_theme(theme)
+			)
+			themes_btn_container.add_child(btn)
 		)
+		
 
 func get_theme_name(theme: String):
 	var theme_name = theme.lstrip("theme")

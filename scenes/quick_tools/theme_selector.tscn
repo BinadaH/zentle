@@ -21,8 +21,13 @@ layout_mode = 2
 layout_mode = 2
 placeholder_text = "Search"
 
-[node name="themes" type="VBoxContainer" parent="ThemeSelector" unique_id=176694636]
+[node name="ScrollContainer" type="ScrollContainer" parent="ThemeSelector" unique_id=1739078122]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="themes" type="VBoxContainer" parent="ThemeSelector/ScrollContainer" unique_id=176694636]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [connection signal="text_changed" from="ThemeSelector/LineEdit" to="." method="_on_line_edit_text_changed"]
