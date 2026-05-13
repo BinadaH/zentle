@@ -18,19 +18,15 @@ const ZOOM_SENSITIVITY = 1.1
 
 var cam_vel = Vector2()
 var target_vel = Vector2()
-var middle_pressed = false
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
-		if middle_pressed || (EditorTools.is_current(EditorTools.TOOLS.HAND) && EditorData.mouse_down):
+		if EditorData.middle_down || (EditorTools.is_current(EditorTools.TOOLS.HAND) && EditorData.mouse_down):
 			position -= EditorData.mouse_relative / zoom.x
 			emit_signal("has_moved", position)
 			
 	elif event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_MIDDLE:
-			middle_pressed = event.pressed
-		
 		# Prevent zooming when quicktools panel is opened
-		elif !EditorData.quick_tools_opened:
+		if !EditorData.quick_tools_opened:
 			
 			# Handle zoom
 			if EditorOptions.options[EditorOptions.OPTIONS.CTRL_TO_ZOOM] == event.ctrl_pressed:
@@ -75,9 +71,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	cam_vel = cam_vel.lerp(target_vel, delta * CAM_SMOOTHNESS)
 	if cam_vel.length_squared() > 0.01:
+		EditorFuncs.request_high_performance(0)
 		position += cam_vel
+		moving = true
 		emit_signal("has_moved", position)
-	else:
+	elif moving:
+		EditorFuncs.release_high_performance(0)
 		moving = false
 		
 	target_vel = target_vel.lerp(Vector2.ZERO, 0.5)
@@ -86,9 +85,11 @@ func _process(delta: float) -> void:
 		
 	if abs(zoom.x - target_zoom) > 0.001:
 		var new_zoom = lerp(zoom.x, float(target_zoom), delta * CAM_SMOOTHNESS)
+		EditorFuncs.request_high_performance(0)
 		set_zoom_to(new_zoom)
 		zooming = true
 	elif zooming:
+		EditorFuncs.release_high_performance(0)
 		set_zoom_to(target_zoom)
 		zooming = false
 

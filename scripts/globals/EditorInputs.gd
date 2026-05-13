@@ -43,6 +43,11 @@ func handle_mouse_button(event: InputEventMouseButton):
 	if event.button_index == MOUSE_BUTTON_LEFT:
 		EditorData.mouse_down = event.pressed
 		if event.pressed:
+			EditorFuncs.request_high_performance()
+		else:
+			EditorFuncs.release_high_performance()
+		
+		if event.pressed:
 			if EditorTools.is_current(EditorTools.TOOLS.SELECT):
 				# Exit from editing a [Text] object while using the Select Tool and clicking outside the CodeEdit
 				EditorData.mouse_relative = Vector2(0, 0)
@@ -94,7 +99,13 @@ func handle_mouse_button(event: InputEventMouseButton):
 		match EditorTools.current_tool:
 			EditorTools.TOOLS.SELECT:
 				EditorFuncs.selection_manager.clear_selection_status()
-				
+	
+	elif event.button_index == MOUSE_BUTTON_MIDDLE:
+		EditorData.middle_down = event.pressed
+		if event.pressed:
+			EditorFuncs.request_high_performance()
+		else:
+			EditorFuncs.release_high_performance()
 
 func handle_mouse_motion(event: InputEventMouseMotion):
 	# Workaround: event.relative occasionally returns fixed Vector2.ZERO, calculating

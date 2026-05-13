@@ -182,3 +182,9 @@ func _on_quick_controls_container_gui_input(event):
 func _on_show_size_slider_pressed():
 	slider_size.visible = !slider_size.visible
 	btn_size_container.visible = !btn_size_container.visible
+
+func _on_animation_player_animation_started(anim_name):
+	EditorFuncs.request_high_performance()
+
+func _on_animation_player_animation_finished(anim_name):
+	EditorFuncs.release_high_performance()

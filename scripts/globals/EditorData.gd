@@ -7,6 +7,7 @@ var snapped_world_relative: Vector2 = Vector2()
 var pressure: float = 1
 
 var mouse_down: bool = false
+var middle_down: bool = false
 var camera: EditorCamera
 
 var ctrl_pressed: bool = false

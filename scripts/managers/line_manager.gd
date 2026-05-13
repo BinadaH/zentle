@@ -29,6 +29,18 @@ func _init():
 	
 	shape_recognizer = ShapeRecognizer.new()
 
+func handle_mouse_motion():
+	if EditorData.mouse_down:
+		if !current_line:
+			#creating the line on mouse down
+			create_line()
+		else:
+			#updating the line that was previously created
+			update_line()
+	else:
+		#On mouse release, if line exists -> reset the state
+		done()
+
 func create_line():
 	if EditorData.shift_pressed && !EditorData.ctrl_pressed:
 		current_line = dash_line.duplicate()
@@ -50,18 +62,9 @@ func create_line():
 	check_shape_timer.connect("timeout", check_shape)
 	
 	current_line.visible = false
+	
 
-func handle_mouse_motion():
-	if EditorData.mouse_down:
-		if !current_line:
-			#creating the line on mouse down
-			create_line()
-		else:
-			#updating the line that was previously created
-			update_line()
-	else:
-		#On mouse release, if line exists -> reset the state
-		done()
+
 
 var last_smooth_point = null
 var last_smooth_pressure = null
@@ -164,6 +167,7 @@ func done():
 		_update_width_curve()
 		
 	set_spatial_grid_pos(current_line)
+	
 	reset_line()
 	
 func reset_line():

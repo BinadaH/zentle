@@ -30,9 +30,42 @@ func _ready():
 	EditorFuncs.animations = $AnimationPlayer
 	$canvas_main/quick_controls_container.visible = false
 	
-	# TODO use OS.low_processor_usage_mode 
-	# and RenderingServer.render_loop_enabled when idle
-	Engine.max_fps = 120
+	# Use low_processor_usage_mode when idling
+	OS.low_processor_usage_mode = true
+	OS.low_processor_usage_mode_sleep_usec = 45000
+	EditorOptions.connect("config_loaded", func(): 
+		print(EditorOptions.options[EditorOptions.OPTIONS.MAX_FPS])
+		Engine.max_fps = EditorOptions.options[EditorOptions.OPTIONS.MAX_FPS]
+	)
+
+@onready var debug_info_label = $canvas_main/Control/debug_info
+var time_since_last_render = 0
+var frame_threshold = 1.5
+func _process(delta):
+	# If no active tasks are present (drawing, animations, ...)
+	# turn off rendering
+	if EditorFuncs.active_tasks > 0:
+		RenderingServer.render_loop_enabled = true
+		time_since_last_render = 0
+	else:
+		# Wait for a frame_threshold seconds before
+		# turing redering off
+		time_since_last_render += delta
+		if time_since_last_render >= frame_threshold:
+			RenderingServer.render_loop_enabled = false
+	
+	if !RenderingServer.render_loop_enabled: return
+
+	var debug_info_text = ""
+	debug_info_text += "FPS: " + str(Engine.get_frames_per_second()) + "\n"
+	debug_info_text += "Frame Time: " + str(Performance.get_monitor(Performance.TIME_PROCESS))
+	
+	debug_info_label.text = debug_info_text
+	
+func _input(event):
+	# Turn rendering back on if any input is received
+	RenderingServer.render_loop_enabled = true
+	time_since_last_render = 0
 
 func _unhandled_input(event):
 	EditorInputs.handle_input(event)

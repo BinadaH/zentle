@@ -22,6 +22,25 @@ func _ready():
 func set_ui_manager(manager):
 	ui_manager = manager
 
+
+var active_tasks : int = 0
+## Call request_high_performance at the beginning of the event 
+## and release_high_performance at the end.
+##
+## If not calling only once per event increment should be = 0 
+## and call release_high_performance with decrement = 0 once the event has ended.
+func request_high_performance(increment = 1):
+	active_tasks += increment
+	OS.low_processor_usage_mode = false
+
+## Used with [method request_high_performance]
+func release_high_performance(decrement = 1):
+	active_tasks -= decrement
+	if active_tasks <= 0:
+		active_tasks = 0
+		OS.low_processor_usage_mode = true
+		
+	
 var animations: AnimationPlayer
 func play_animation(anim_name, reversed = false):
 	if reversed:
