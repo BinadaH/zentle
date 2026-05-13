@@ -34,7 +34,6 @@ func _ready():
 	OS.low_processor_usage_mode = true
 	OS.low_processor_usage_mode_sleep_usec = 45000
 	EditorOptions.connect("config_loaded", func(): 
-		print(EditorOptions.options[EditorOptions.OPTIONS.MAX_FPS])
 		Engine.max_fps = EditorOptions.options[EditorOptions.OPTIONS.MAX_FPS]
 	)
 

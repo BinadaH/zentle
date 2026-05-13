@@ -52,6 +52,7 @@ var config_path = "user://settings.cfg"
 func load_config_file():
 	var err = config.load(config_path)
 	if err != OK:
+		config.clear()
 		save_default_settings()
 		emit_signal("theme_changed", EditorColors.color_palette.duplicate())
 		load_themes_from_settings()
