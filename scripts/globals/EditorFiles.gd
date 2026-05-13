@@ -6,13 +6,14 @@ var confirm_dialog: ConfirmationDialog
 var file_label: Label
 var animations: AnimationPlayer
 
-const CURR_FS_VERSION = 2
+const CURR_FS_VERSION = 3
 
 var need_to_save = false
 
 var serializers: Dictionary[int, CanvasSerializer] = {
 	1: preload("res://scripts/serializers/v1.gd").new(1),
-	2: preload("res://scripts/serializers/v2.gd").new(2)
+	2: preload("res://scripts/serializers/v2.gd").new(2),
+	3: preload("res://scripts/serializers/v3.gd").new(3)
 }
 
 func check_save_status(is_synced: bool):
@@ -73,9 +74,9 @@ func begin_open_file():
 	
 func end_save_to_path(path: String):
 	var serialized_data = serializers[CURR_FS_VERSION].serialize_canvas()
-	if serialized_data["content"].size() == 0: return
+	if !serialized_data: return
 	
-	var f = FileAccess.open(path, FileAccess.WRITE)
+	var f = FileAccess.open_compressed(path, FileAccess.WRITE, FileAccess.COMPRESSION_ZSTD)
 	if !f: return
 	
 	var success = f.store_var(serialized_data, true)
@@ -92,11 +93,21 @@ func end_save_to_path(path: String):
 			confirm_dialog_callback = Callable()
 	
 func end_open_path(path: String):
-	var f = FileAccess.open(path, FileAccess.READ)
-	if !f: return
-	var data = f.get_var(true)
-	f.close()
+	# We assume the file is compressed
+	var f = FileAccess.open_compressed(path, FileAccess.READ, FileAccess.COMPRESSION_ZSTD)
+	var data = null
 	
+	# If the file wasn't compressed of get_var fails
+	# we open the file normally
+	if f: 
+		data = f.get_var(true)
+	if !data: 
+		f = FileAccess.open(path, FileAccess.READ)
+		if f:
+			data = f.get_var(true)
+			f.close()
+	
+	# Exit if no data was loaded during the file opening fase
 	if !data: return
 	
 	var fs_version = data.get("version", null)

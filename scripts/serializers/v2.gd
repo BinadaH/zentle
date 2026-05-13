@@ -78,7 +78,6 @@ func deserialize_canvas(data: Dictionary):
 				else:
 					l_d = line_manager.base_line.duplicate()
 					
-				
 				l_d.position = obj["pos"]
 				l_d.points = obj["points"] 
 				l_d.default_color = load_col(obj)
