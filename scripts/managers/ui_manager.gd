@@ -41,9 +41,11 @@ func _ready():
 	var num_sizes = btn_sizes.size()
 	for size_i in range(num_sizes):
 		var btn = Button.new()
+		btn.custom_minimum_size.x = 20
+		btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var t_img_dup = btn_size_img.duplicate()
-		var img_size_step = log((size_i + 1) / float(num_sizes) + 1)
-		t_img_dup.resize(32 * img_size_step, 32 * img_size_step)
+		var img_size_step = log((size_i + 1) / float(num_sizes) + 1.5)
+		t_img_dup.resize(16 * img_size_step, 16 * img_size_step)
 		btn.icon = ImageTexture.create_from_image(t_img_dup)
 		
 		btn_size_container.call_deferred("add_child", btn)
