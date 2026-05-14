@@ -181,7 +181,10 @@ func update_text_edit_size():
 
 func clear():
 	for child in get_children():
-		child.queue_free()
+		if child in copy_buffer:
+			remove_from_canvas(child)
+		else:
+			child.queue_free()
 
 func get_children():
 	return EditorData.main.canvas.get_children()

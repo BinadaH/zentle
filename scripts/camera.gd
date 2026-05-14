@@ -19,8 +19,10 @@ const ZOOM_SENSITIVITY = 1.1
 var cam_vel = Vector2()
 var target_vel = Vector2()
 func _unhandled_input(event):
+	if EditorFuncs.line_manager.current_line: return
+	
 	if event is InputEventMouseMotion:
-		if EditorData.middle_down || (EditorTools.is_current(EditorTools.TOOLS.HAND) && EditorData.mouse_down):
+		if (EditorData.middle_down) || (EditorTools.is_current(EditorTools.TOOLS.HAND) && EditorData.mouse_down):
 			position -= EditorData.mouse_relative / zoom.x
 			emit_signal("has_moved", position)
 			
@@ -67,7 +69,6 @@ func _ready() -> void:
 	emit_signal("has_moved", position)
 	emit_signal("has_zoomed", zoom.x)
 
-
 func _process(delta: float) -> void:
 	cam_vel = cam_vel.lerp(target_vel, delta * CAM_SMOOTHNESS)
 	if cam_vel.length_squared() > 0.01:
@@ -99,7 +100,10 @@ func set_zoom_to(val):
 	emit_signal("has_zoomed", zoom.x)
 
 func _on_v_slider_value_changed(value: float) -> void:
-	target_zoom = max(MIN_CAM_ZOOM, min(MAX_CAM_ZOOM, value))
+	if !EditorFuncs.line_manager.current_line:
+		target_zoom = max(MIN_CAM_ZOOM, min(MAX_CAM_ZOOM, value))
+	else:
+		z_slider.value = target_zoom
 	
 func reset():
 	z_slider.value = 1
