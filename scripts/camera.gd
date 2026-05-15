@@ -39,14 +39,21 @@ func _unhandled_input(event):
 			
 			# Handle scroll
 			elif event.pressed:
-				if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-					target_vel.y += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
-				elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-					target_vel.y += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
-				elif event.button_index == MOUSE_BUTTON_WHEEL_LEFT:
-					target_vel.x += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
-				elif event.button_index == MOUSE_BUTTON_WHEEL_RIGHT:
-					target_vel.x += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+				match event.button_index:
+					MOUSE_BUTTON_WHEEL_UP:
+						if event.shift_pressed:
+							target_vel.x += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+						else:
+							target_vel.y += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+					MOUSE_BUTTON_WHEEL_DOWN:
+						if event.shift_pressed:
+							target_vel.x += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+						else:
+							target_vel.y += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+					MOUSE_BUTTON_WHEEL_LEFT:
+						target_vel.x += -mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
+					MOUSE_BUTTON_WHEEL_RIGHT:
+						target_vel.x += mouse_wheel_pan_modifier(event.factor) * CAM_SPEED / target_zoom
 	
 	# Handle touchpad two finger zoom
 	if event is InputEventKey:
