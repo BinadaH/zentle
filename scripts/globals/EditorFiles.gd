@@ -41,8 +41,13 @@ func set_confirm_dialog(_confirm_dialog: ConfirmationDialog):
 	confirm_dialog = _confirm_dialog
 	confirm_dialog.get_cancel_button().connect("pressed", func(): 
 		need_to_save = false
+		file_label.text = file_label.text.rstrip("*")
 		if !confirm_dialog_callback.is_null():
 			confirm_dialog_callback.call()
+			confirm_dialog_callback = Callable()
+	)
+	confirm_dialog.connect("visibility_changed", func():
+		if !confirm_dialog.visible:
 			confirm_dialog_callback = Callable()
 	)
 	confirm_dialog.connect("confirmed", begin_save_file)
