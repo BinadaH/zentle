@@ -36,10 +36,16 @@ func _ready():
 	EditorOptions.connect("config_loaded", func(): 
 		Engine.max_fps = EditorOptions.options[EditorOptions.OPTIONS.MAX_FPS]
 	)
+	
+	should_keep_rendering_on.append($canvas_main/Control/view/top_panel/HBoxContainer/MenuBar/file_menu)
 
 @onready var debug_info_label = $canvas_main/Control/debug_info
 var time_since_last_render = 0
 var frame_threshold = 1.5
+
+# Nodes inside this array will keep rendering on when visible
+var should_keep_rendering_on = []
+
 func _process(delta):
 	# If no active tasks are present (drawing, animations, ...)
 	# turn off rendering
@@ -49,9 +55,15 @@ func _process(delta):
 	else:
 		# Wait for a frame_threshold seconds before
 		# turing redering off
-		time_since_last_render += delta
-		if time_since_last_render >= frame_threshold:
-			RenderingServer.render_loop_enabled = false
+		var keep_on = false
+		for obj in should_keep_rendering_on:
+			if obj.visible:
+				keep_on = true
+				break
+		if !keep_on:
+			time_since_last_render += delta
+			if time_since_last_render >= frame_threshold:
+				RenderingServer.render_loop_enabled = false
 	
 	if !RenderingServer.render_loop_enabled: return
 
