@@ -10,13 +10,6 @@ func _ready():
 				EditorOptions.load_theme(theme)
 			)
 			themes_btn_container.add_child(btn)
-		for theme in EditorOptions.all_themes:
-			var btn = Button.new()
-			btn.text = get_theme_name(theme)
-			btn.connect("pressed", func(): 
-				EditorOptions.load_theme(theme)
-			)
-			themes_btn_container.add_child(btn)
 		)
 		
 
