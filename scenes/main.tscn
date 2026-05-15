@@ -174,6 +174,8 @@ closed = true
 width = 5.0
 default_color = Color(1, 1, 1, 0.38039216)
 
+[node name="export_regions" type="Node2D" parent="." unique_id=844082228]
+
 [node name="canvas" type="Node2D" parent="." unique_id=1568860248]
 
 [node name="draw_ui" type="Node2D" parent="." unique_id=742636793]
@@ -265,6 +267,14 @@ custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 tooltip_text = "Eraser"
 icon = ExtResource("9_ya4ey")
+expand_icon = true
+
+[node name="export_reg_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=1930988323]
+visible = false
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+tooltip_text = "Eraser"
+text = "R"
 expand_icon = true
 
 [node name="VSeparator3" type="VSeparator" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=100938217]
@@ -452,6 +462,7 @@ text = "Debug Info:"
 
 [node name="open_save_dialog" type="FileDialog" parent="canvas_main" unique_id=1163121996]
 oversampling_override = 1.0
+access = 2
 filters = PackedStringArray("*.zentle")
 use_native_dialog = true
 
@@ -550,6 +561,7 @@ libraries/ = SubResource("AnimationLibrary_muem4")
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/select_btn" to="canvas_main" method="_on_select_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/text_btn" to="canvas_main" method="_on_text_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/eraser_btn" to="canvas_main" method="_on_eraser_btn_pressed"]
+[connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/export_reg_btn" to="canvas_main" method="_on_export_reg_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/delete_btn" to="canvas_main" method="_on_delete_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/copy_btn" to="canvas_main" method="_on_copy_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/paste_btn" to="canvas_main" method="_on_paste_btn_pressed"]

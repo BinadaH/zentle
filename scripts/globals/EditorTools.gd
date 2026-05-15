@@ -9,6 +9,7 @@ enum TOOLS{
 	TEXT,
 	REGION,
 	ERASER,
+	EXPORT_REGION,
 	NONE
 }
 
@@ -44,8 +45,11 @@ func _ready():
 	preloaded_cursors[TOOLS.HAND] = load("res://sprites/icons/hand_cursor.png").get_image()
 	preloaded_cursors[TOOLS.HAND].resize(32, 32)
 	
-	preloaded_cursors[TOOLS.SELECT] =  load("res://sprites/icons/select_cursor.png").get_image()
+	preloaded_cursors[TOOLS.SELECT] = load("res://sprites/icons/select_cursor.png").get_image()
 	preloaded_cursors[TOOLS.SELECT].resize(32, 32)
+	
+	preloaded_cursors[TOOLS.EXPORT_REGION] = load("res://sprites/icons/select_cursor.png").get_image()
+	preloaded_cursors[TOOLS.EXPORT_REGION].resize(32, 32)
 	
 	preloaded_cursors[TOOLS.ERASER] = Image.create(EditorData.curr_eraser_size, EditorData.curr_eraser_size, false, Image.FORMAT_RGB8)
 	preloaded_cursors[TOOLS.PEN] = Image.create(4, 4, false, Image.FORMAT_RGB8)

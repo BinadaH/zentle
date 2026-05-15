@@ -6,6 +6,7 @@ var line_manager: LineManager
 var selection_manager: SelectionManger
 var ui_manager: UIManager
 var canvas_manager: CanvasManager
+var export_manager: ExportManager
 
 
 var latex_generator: GenerateLatexImg
@@ -15,6 +16,7 @@ func _init():
 	selection_manager = SelectionManger.new()
 	canvas_manager = CanvasManager.new()
 	latex_generator = GenerateLatexImg.new()
+	export_manager = ExportManager.new()
 	
 func _ready():
 	EditorOptions.connect("theme_changed", canvas_manager.on_theme_change)

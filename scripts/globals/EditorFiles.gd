@@ -76,11 +76,12 @@ func begin_save_file():
 func begin_open_file():
 	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	file_dialog.visible = true
-	
+
+
 func end_save_to_path(path: String):
 	var serialized_data = serializers[CURR_FS_VERSION].serialize_canvas()
 	if !serialized_data: return
-	
+
 	var f = FileAccess.open_compressed(path, FileAccess.WRITE, FileAccess.COMPRESSION_ZSTD)
 	if !f: return
 	
@@ -100,6 +101,7 @@ func end_save_to_path(path: String):
 func end_open_path(path: String):
 	# We assume the file is compressed
 	var f = FileAccess.open_compressed(path, FileAccess.READ, FileAccess.COMPRESSION_ZSTD)
+	print(f)
 	var data = null
 	
 	# If the file wasn't compressed of get_var fails

@@ -28,7 +28,10 @@ func _ready():
 	EditorFiles.set_animation_player($AnimationPlayer)
 	
 	EditorFuncs.animations = $AnimationPlayer
+	EditorFuncs.export_manager.region_container = $export_regions
+	
 	$canvas_main/quick_controls_container.visible = false
+	
 	
 	# Use low_processor_usage_mode when idling
 	OS.low_processor_usage_mode = true

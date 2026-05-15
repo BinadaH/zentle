@@ -190,3 +190,6 @@ func _on_animation_player_animation_started(anim_name):
 
 func _on_animation_player_animation_finished(anim_name):
 	EditorFuncs.release_high_performance()
+
+func _on_export_reg_btn_pressed():
+	EditorTools.set_tool(EditorTools.TOOLS.EXPORT_REGION)

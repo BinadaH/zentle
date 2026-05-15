@@ -90,13 +90,17 @@ func handle_mouse_button(event: InputEventMouseButton):
 						
 			elif EditorTools.is_current(EditorTools.TOOLS.ERASER):
 				EditorFuncs.canvas_manager.update_eraser()
+			elif EditorTools.is_current(EditorTools.TOOLS.EXPORT_REGION):
+				EditorFuncs.export_manager.handle_mouse_down()
+				
 		
 		# BUTTON LEFT UP
 		else:
 			match EditorTools.current_tool:
 				EditorTools.TOOLS.SELECT:
 					EditorFuncs.selection_manager.update_selection()
-					
+				EditorTools.TOOLS.EXPORT_REGION:
+					EditorFuncs.export_manager.handle_mouse_up()
 
 	elif event.pressed && event.button_index == MOUSE_BUTTON_RIGHT:
 		match EditorTools.current_tool:
@@ -131,3 +135,5 @@ func handle_mouse_motion(event: InputEventMouseMotion):
 			EditorFuncs.selection_manager.update_selection()
 		EditorTools.TOOLS.ERASER:
 			EditorFuncs.canvas_manager.update_eraser()
+		EditorTools.TOOLS.EXPORT_REGION:
+			EditorFuncs.export_manager.handle_mouse_movement()
