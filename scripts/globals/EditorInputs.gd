@@ -18,6 +18,9 @@ func handle_key(event: InputEventKey):
 	elif event.keycode == KEY_ESCAPE:
 		if EditorData.quick_tools_opened:
 			EditorFuncs.close_quick_tools()
+		elif EditorTools.is_current(EditorTools.TOOLS.SELECT):
+			EditorFuncs.selection_manager.clear_selection_status()
+			
 	
 	elif event.pressed && event.ctrl_pressed:
 		if event.keycode == KEY_Y or (event.shift_pressed && event.keycode == KEY_Z):
