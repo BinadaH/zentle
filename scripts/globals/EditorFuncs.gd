@@ -155,28 +155,7 @@ func get_object_rect(obj) -> Rect2:
 	return r.abs()
 	
 	
-func is_rect_over_line2d(line: Line2D, rect : Rect2):
-	var r_top_left = rect.position
-	var r_top_right = Vector2(rect.end.x, rect.position.y)
-	var r_bottom_left = Vector2(rect.position.x, rect.end.y)
-	var r_bottom_right = rect.end
-	
-	var rect_segments = [
-		[r_top_left, r_top_right],
-		[r_top_right, r_bottom_right],
-		[r_bottom_right, r_bottom_left],
-		[r_bottom_left, r_top_left]
-	]
-	
-	for point_i in range(line.points.size() - 1):
-		var curr_point = line.points[point_i] + line.position
-		if rect.has_point(curr_point):
-			return true
-			
-		for edge in rect_segments:
-			if Geometry2D.segment_intersects_segment(curr_point, line.points[point_i + 1], edge[0], edge[1]):
-				return true
-	return false
+
 
 func get_grid_pos(world_pos, fac = 1) -> Vector2:
 	var sq_size = EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]

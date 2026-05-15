@@ -5,7 +5,7 @@ var undo_redo = UndoRedo.new()
 var last_save_version = 1
 
 func _ready():
-	undo_redo.max_steps = 10
+	undo_redo.max_steps = 50
 
 func create_action(action_name: String, do_call: Callable, undo_call: Callable, call_do: bool = true, do_ref = null, undo_ref = null):
 	undo_redo.create_action(action_name)

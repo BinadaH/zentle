@@ -31,9 +31,17 @@ func _perform_area_selection():
 	var combined_rect : Rect2
 	var area: Rect2 = selection_rect.abs()
 
-	for child in EditorFuncs.canvas_manager.get_canvas().get_children():
-		var obj_rect = EditorFuncs.get_object_rect(child)
-		var to_add = area.encloses(obj_rect) if EditorData.ctrl_pressed else area.intersects(obj_rect)
+	for child in EditorFuncs.canvas_manager.get_children():
+		var to_add = false
+		var obj_rect = Rect2()
+		
+		if child is Line2D:
+			to_add = EditorFuncs.canvas_manager.is_rect_over_line2d(child, area)
+			if to_add:
+				obj_rect = EditorFuncs.get_object_rect(child)
+		else:
+			obj_rect = EditorFuncs.get_object_rect(child)
+			to_add = area.encloses(obj_rect) if EditorData.ctrl_pressed else area.intersects(obj_rect)
 		
 		if to_add:
 			found_objs.append(child)
@@ -106,11 +114,22 @@ func single_click_selection():
 		else:
 			return
 	
-	var objs = EditorFuncs.canvas_manager.get_canvas().get_children()
+	var objs = EditorFuncs.canvas_manager.get_children()
 	for objs_i in range(objs.size() - 1, -1, -1):
 		var child = objs[objs_i]
-		var new_rect = EditorFuncs.get_object_rect(child)
-		if new_rect.has_point(EditorData.world_pos):
+		var is_selected = false
+		var new_rect
+		
+		if child is Line2D:
+			var area = Rect2(EditorData.world_pos, Vector2.ZERO)
+			is_selected = EditorFuncs.canvas_manager.is_rect_over_line2d(child, area)
+			if is_selected:
+				new_rect = EditorFuncs.get_object_rect(child)
+		else:
+			new_rect = EditorFuncs.get_object_rect(child)
+			is_selected = new_rect.has_point(EditorData.world_pos)
+			
+		if is_selected:
 			if selection_made && selection_made.objs.has(child):
 				continue
 			if selection_made && EditorData.ctrl_pressed:

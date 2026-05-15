@@ -135,13 +135,13 @@ func update_eraser():
 		erasing = true
 		var rect_size = EditorData.curr_eraser_size / EditorData.camera.zoom.x
 		var vec_size = Vector2(rect_size, rect_size)
-		var mouse_rect = Rect2(EditorData.world_pos - vec_size / 2, vec_size)
+		var mouse_rect = Rect2(EditorData.world_pos, Vector2.ZERO).grow(rect_size * 0.5)
 		var mouse_cell = round(EditorData.world_pos / EditorData.ERASER_SPATIAL_GRID_SIZE)
 		for x in range(-1, 2):
 			for y in range(-1, 2):
 				for line in EditorData.lines_spatial_grid.get(Vector2i(mouse_cell) + Vector2i(x, y), []):
 					if EditorFuncs.get_object_rect(line).intersects(mouse_rect):
-						if EditorFuncs.is_rect_over_line2d(line, mouse_rect):
+						if is_rect_over_line2d(line, mouse_rect):
 							for cell in line.get_meta("spatial_grid"):
 								if EditorData.lines_spatial_grid.has(cell):
 									EditorData.lines_spatial_grid[cell].erase(line)
@@ -200,3 +200,29 @@ func on_theme_change(old_palette):
 		if col_i >= 0:
 			text.curr_color = EditorColors.color_palette[col_i]
 			text.modulate = text.curr_color
+
+
+func is_rect_over_line2d(line: Line2D, rect : Rect2):
+	rect = rect.grow(line.width * 0.5)
+	var r_top_left = rect.position
+	var r_top_right = Vector2(rect.end.x, rect.position.y)
+	var r_bottom_left = Vector2(rect.position.x, rect.end.y)
+	var r_bottom_right = rect.end
+	
+	var rect_segments = [
+		[r_top_left, r_top_right],
+		[r_top_right, r_bottom_right],
+		[r_bottom_right, r_bottom_left],
+		[r_bottom_left, r_top_left]
+	]
+	
+	for point_i in range(line.points.size() - 1):
+		var curr_point = line.points[point_i] + line.position
+		if rect.has_point(curr_point):
+			return true
+			
+		var next_point = line.points[point_i + 1] + line.position
+		for edge in rect_segments:
+			if Geometry2D.segment_intersects_segment(curr_point, next_point, edge[0], edge[1]):
+				return true
+	return false
