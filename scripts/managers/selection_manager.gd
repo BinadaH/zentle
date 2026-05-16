@@ -30,22 +30,30 @@ func _perform_area_selection():
 	var found_objs = []
 	var combined_rect : Rect2
 	var area: Rect2 = selection_rect.abs()
-
-	for child in EditorFuncs.canvas_manager.get_children():
-		var to_add = false
-		var obj_rect = Rect2()
-		
-		if child is Line2D:
-			to_add = EditorFuncs.canvas_manager.is_rect_over_line2d(child, area)
-			if to_add:
-				obj_rect = EditorFuncs.get_object_rect(child)
-		else:
-			obj_rect = EditorFuncs.get_object_rect(child)
-			to_add = area.encloses(obj_rect) if EditorData.ctrl_pressed else area.intersects(obj_rect)
-		
-		if to_add:
-			found_objs.append(child)
-			combined_rect = combined_rect.merge(obj_rect) if found_objs.size() > 1 else obj_rect
+	
+	var grid_size = EditorData.SPATIAL_GRID_SIZE
+	var start_cell = (area.position / grid_size).floor()
+	var end_cell = (area.end / grid_size).floor()
+	
+	for cell in EditorData.spatial_grid:
+		var cell_rect = Rect2(cell * EditorData.SPATIAL_GRID_SIZE, Vector2.ONE * EditorData.SPATIAL_GRID_SIZE)
+		if area.intersects(cell_rect):
+			for child in EditorData.spatial_grid.get(cell, []):
+				if found_objs.has(child): continue
+				var to_add = false
+				var obj_rect = Rect2()
+				
+				if child is Line2D:
+					to_add = EditorFuncs.canvas_manager.is_rect_over_line2d(child, area)
+					if to_add:
+						obj_rect = EditorFuncs.get_object_rect(child)
+				else:
+					obj_rect = EditorFuncs.get_object_rect(child)
+					to_add = area.encloses(obj_rect) if EditorData.ctrl_pressed else area.intersects(obj_rect)
+				
+				if to_add:
+					found_objs.append(child)
+					combined_rect = combined_rect.merge(obj_rect) if found_objs.size() > 1 else obj_rect
 			
 	if found_objs.size() > 0:
 		selection_made = ShapeBounds.new(combined_rect)

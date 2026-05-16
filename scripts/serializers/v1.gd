@@ -93,7 +93,6 @@ func deserialize_canvas(data: Dictionary):
 			l_d.width_curve.add_point(Vector2(x_pos, l["press"][i]))
 		
 		return_data.append(l_d)
-		line_manager.set_spatial_grid_pos(l_d)
 	# Ricostruzione Immagini (Latex o altro)
 	for img in data.get("imgs", []):
 		var r = TextureRect.new()

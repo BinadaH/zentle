@@ -22,9 +22,9 @@ var main: Main
 var draw_ui: Node2D
 var draw_line: Control
 
-var lines_spatial_grid = {}
+var spatial_grid = {}
 
-var ERASER_SPATIAL_GRID_SIZE = 100
+var SPATIAL_GRID_SIZE = 100
 
 var can_use_shortcuts = true
 var quick_tools_opened = false

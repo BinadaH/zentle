@@ -122,7 +122,6 @@ func deserialize_canvas(data: Dictionary):
 					var x_pos = float(i) / max(1, p_count - 1)
 					l_d.width_curve.add_point(Vector2(x_pos, curr_press_points[i]))
 				
-				EditorFuncs.line_manager.set_spatial_grid_pos(l_d)
 				return_data.append(l_d)
 			
 			OBJECT_TYPES.IMAGE:

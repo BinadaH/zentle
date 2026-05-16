@@ -85,14 +85,12 @@ func deserialize_canvas(data: Dictionary):
 				l_d.set_meta("stroke", l_type)
 				l_d.set_meta("col_i", obj.get("col_i", 0))
 				
-				
 				l_d.width_curve = Curve.new()
 				var p_count = obj["press"].size()
 				for i in range(p_count):
 					var x_pos = float(i) / max(1, p_count - 1)
 					l_d.width_curve.add_point(Vector2(x_pos, obj["press"][i]))
 				
-				EditorFuncs.line_manager.set_spatial_grid_pos(l_d)
 				return_data.append(l_d)
 			
 			OBJECT_TYPES.IMAGE:

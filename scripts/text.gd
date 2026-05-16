@@ -137,8 +137,8 @@ func render(text: String):
 	size.x = 0
 	update_minimum_size()
 	text_edit.visible = false
-	
-			
+	EditorFuncs.canvas_manager.set_spatial_grid_pos(self)
+
 func edit_text():
 	text_edit.add_theme_color_override("font_color", curr_color)
 	$content.visible = false

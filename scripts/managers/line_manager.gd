@@ -166,7 +166,7 @@ func done():
 		current_line.points = smoothed_points
 		_update_width_curve()
 		
-	set_spatial_grid_pos(current_line)
+	EditorFuncs.canvas_manager.set_spatial_grid_pos(current_line)
 	
 	reset_line()
 	
@@ -215,29 +215,3 @@ func _get_distance_to_segment(p: Vector2, a: Vector2, b: Vector2) -> float:
 	var projection = a + t * (b - a)
 	return p.distance_to(projection)
 	
-func clear_spatial_grid_pos(line):
-	var curr_cells = line.get_meta("spatial_grid", [])
-	for cell in curr_cells:
-		if EditorData.lines_spatial_grid.has(cell):
-			EditorData.lines_spatial_grid[cell].erase(line)
-	
-	line.set_meta("spatial_grid", [])
-
-func set_spatial_grid_pos(line):
-	clear_spatial_grid_pos(line)
-	var curr_rect = EditorFuncs.get_object_rect(line)
-	var grid_pos = round(curr_rect.position / EditorData.ERASER_SPATIAL_GRID_SIZE)
-	var num_add = round(curr_rect.size / EditorData.ERASER_SPATIAL_GRID_SIZE)
-	
-	var curr_spatial_grid = []
-	for x in range(num_add.x + 1):
-		for y in range(num_add.y + 1):
-			var new_pos = Vector2i(grid_pos.x + x, grid_pos.y + y)
-			curr_spatial_grid.append(new_pos)
-	
-			if !EditorData.lines_spatial_grid.has(new_pos):
-				EditorData.lines_spatial_grid[new_pos] = [line]
-			else:
-				EditorData.lines_spatial_grid[new_pos].append(line)
-				
-	line.set_meta("spatial_grid", curr_spatial_grid)

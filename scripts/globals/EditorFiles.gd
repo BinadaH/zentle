@@ -116,6 +116,7 @@ func end_open_path(path: String):
 	if !data: return
 	
 	var fs_version = data.get("version", null)
+	print("Opening File Version: ", fs_version)
 	if !fs_version: return
 	
 	var seriaizer: CanvasSerializer = serializers.get(fs_version if fs_version is int else 1)

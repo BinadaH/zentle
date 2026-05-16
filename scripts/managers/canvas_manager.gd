@@ -62,9 +62,11 @@ func paste_copy():
 func add_to_canvas(node):
 	if is_instance_valid(node):
 		EditorData.main.canvas.add_child(node)
+		set_spatial_grid_pos(node)
 
 func remove_from_canvas(node):
 	if is_instance_valid(node):
+		clear_spatial_grid_pos(node)
 		EditorData.main.canvas.remove_child(node)
 
 func get_canvas():
@@ -136,24 +138,24 @@ func update_eraser():
 		var rect_size = EditorData.curr_eraser_size / EditorData.camera.zoom.x
 		var vec_size = Vector2(rect_size, rect_size)
 		var mouse_rect = Rect2(EditorData.world_pos, Vector2.ZERO).grow(rect_size * 0.5)
-		var mouse_cell = round(EditorData.world_pos / EditorData.ERASER_SPATIAL_GRID_SIZE)
+		var mouse_cell = round(EditorData.world_pos / EditorData.SPATIAL_GRID_SIZE)
 		for x in range(-1, 2):
 			for y in range(-1, 2):
-				for line in EditorData.lines_spatial_grid.get(Vector2i(mouse_cell) + Vector2i(x, y), []):
+				for line in EditorData.spatial_grid.get(Vector2i(mouse_cell) + Vector2i(x, y), []):
+					if not (line is Line2D): continue
 					if EditorFuncs.get_object_rect(line).intersects(mouse_rect):
 						if is_rect_over_line2d(line, mouse_rect):
 							for cell in line.get_meta("spatial_grid"):
-								if EditorData.lines_spatial_grid.has(cell):
-									EditorData.lines_spatial_grid[cell].erase(line)
-									if EditorData.lines_spatial_grid[cell].is_empty():
-										EditorData.lines_spatial_grid.erase(cell)
+								if EditorData.spatial_grid.has(cell):
+									EditorData.spatial_grid[cell].erase(line)
+									if EditorData.spatial_grid[cell].is_empty():
+										EditorData.spatial_grid.erase(cell)
 									
 							if is_instance_valid(line):
 								if line.get_parent() ==  EditorData.main.canvas:
 									var undo_func = func(l):
-										EditorFuncs.canvas_manager.add_to_canvas(l)
-										EditorFuncs.line_manager.set_spatial_grid_pos(l)
-										
+										add_to_canvas(l)
+
 									EditorHistory.create_action("erase", EditorFuncs.canvas_manager.remove_from_canvas.bind(line), undo_func.bind(line), true, null, line)
 							else:
 								pass #remove from grid?
@@ -226,3 +228,32 @@ func is_rect_over_line2d(line: Line2D, rect : Rect2):
 			if Geometry2D.segment_intersects_segment(curr_point, next_point, edge[0], edge[1]):
 				return true
 	return false
+
+
+func clear_spatial_grid_pos(obj):
+	var curr_cells = obj.get_meta("spatial_grid", [])
+	for cell in curr_cells:
+		if EditorData.spatial_grid.has(cell):
+			EditorData.spatial_grid[cell].erase(obj)
+	
+	obj.set_meta("spatial_grid", [])
+
+func set_spatial_grid_pos(obj):
+	clear_spatial_grid_pos(obj)
+	var curr_rect = EditorFuncs.get_object_rect(obj)
+	var start_cell = (curr_rect.position / EditorData.SPATIAL_GRID_SIZE).floor()
+	var end_cell = (curr_rect.end / EditorData.SPATIAL_GRID_SIZE).floor()
+	
+	var curr_spatial_grid = []
+	for x in range(int(start_cell.x), int(end_cell.x) + 1):
+		for y in range(int(start_cell.y), int(end_cell.y) + 1):
+			var new_pos = Vector2i(x, y)
+			curr_spatial_grid.append(new_pos)
+	
+			if !EditorData.spatial_grid.has(new_pos):
+				EditorData.spatial_grid[new_pos] = [obj]
+			else:
+				if !(obj in EditorData.spatial_grid[new_pos]):
+					EditorData.spatial_grid[new_pos].append(obj)
+		
+	obj.set_meta("spatial_grid", curr_spatial_grid)

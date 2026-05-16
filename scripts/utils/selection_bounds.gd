@@ -109,9 +109,8 @@ func end_move_scale():
 		do_func.call(last_move_factor, last_scale_factor, origin)
 	
 	for obj in objs:
-		if obj is Line2D:
-			EditorFuncs.line_manager.set_spatial_grid_pos(obj)
-		elif obj && obj.is_in_group("text"):
+		EditorFuncs.canvas_manager.set_spatial_grid_pos(obj)
+		if obj && obj.is_in_group("text"):
 			if !(is_equal_approx(obj.scale.x, 1.0) && is_equal_approx(obj.scale.y, 1.0)):
 				obj.curr_font_size *= obj.scale.x
 				obj.scale = Vector2.ONE
