@@ -174,8 +174,6 @@ closed = true
 width = 5.0
 default_color = Color(1, 1, 1, 0.38039216)
 
-[node name="export_regions" type="Node2D" parent="." unique_id=844082228]
-
 [node name="canvas" type="Node2D" parent="." unique_id=1568860248]
 
 [node name="draw_ui" type="Node2D" parent="." unique_id=742636793]
@@ -251,7 +249,8 @@ expand_icon = true
 [node name="select_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=2007516895]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-tooltip_text = "Selection"
+tooltip_text = "Selection
+Export Region (hold)"
 icon = ExtResource("6_o6xl0")
 expand_icon = true
 
@@ -270,10 +269,9 @@ icon = ExtResource("9_ya4ey")
 expand_icon = true
 
 [node name="export_reg_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=1930988323]
-visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-tooltip_text = "Eraser"
+tooltip_text = "Export Regions"
 text = "R"
 expand_icon = true
 
@@ -558,7 +556,8 @@ libraries/ = SubResource("AnimationLibrary_muem4")
 [connection signal="id_pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/MenuBar/file_menu" to="canvas_main" method="_on_file_menu_id_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/pen_btn" to="canvas_main" method="_on_pen_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/hand_btn" to="canvas_main" method="_on_hand_btn_pressed"]
-[connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/select_btn" to="canvas_main" method="_on_select_btn_pressed"]
+[connection signal="button_down" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/select_btn" to="canvas_main" method="_on_select_btn_button_down"]
+[connection signal="button_up" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/select_btn" to="canvas_main" method="_on_select_btn_button_up"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/text_btn" to="canvas_main" method="_on_text_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/eraser_btn" to="canvas_main" method="_on_eraser_btn_pressed"]
 [connection signal="pressed" from="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn/export_reg_btn" to="canvas_main" method="_on_export_reg_btn_pressed"]

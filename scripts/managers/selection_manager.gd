@@ -47,6 +47,10 @@ func _perform_area_selection():
 					to_add = EditorFuncs.canvas_manager.is_rect_over_line2d(child, area)
 					if to_add:
 						obj_rect = EditorFuncs.get_object_rect(child)
+				elif child.is_in_group("export_region"):
+					obj_rect = EditorFuncs.get_object_rect(child)
+					to_add = EditorFuncs.rect_intersects_rect_borders(area, obj_rect) || area.encloses(obj_rect)
+			
 				else:
 					obj_rect = EditorFuncs.get_object_rect(child)
 					to_add = area.encloses(obj_rect) if EditorData.ctrl_pressed else area.intersects(obj_rect)
@@ -133,6 +137,10 @@ func single_click_selection():
 			is_selected = EditorFuncs.canvas_manager.is_rect_over_line2d(child, area)
 			if is_selected:
 				new_rect = EditorFuncs.get_object_rect(child)
+		elif child.is_in_group("export_region"):
+			var area = Rect2(EditorData.world_pos, Vector2.ZERO).grow(10)
+			new_rect = EditorFuncs.get_object_rect(child)
+			is_selected = EditorFuncs.rect_intersects_rect_borders(area, new_rect)
 		else:
 			new_rect = EditorFuncs.get_object_rect(child)
 			is_selected = new_rect.has_point(EditorData.world_pos)

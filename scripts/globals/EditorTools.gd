@@ -7,7 +7,6 @@ enum TOOLS{
 	LINE,
 	SPACER,
 	TEXT,
-	REGION,
 	ERASER,
 	EXPORT_REGION,
 	NONE
@@ -19,6 +18,12 @@ var toggle_shortcuts = {
 	KEY_H: TOOLS.HAND,
 	KEY_Q: TOOLS.PEN,
 	KEY_T: TOOLS.TEXT,
+}
+
+var sub_shortcuts = {
+	TOOLS.SELECT: {
+		KEY_R: TOOLS.EXPORT_REGION
+	}
 }
 
 var preloaded_cursors : Dictionary[TOOLS, Image] = {
@@ -48,7 +53,7 @@ func _ready():
 	preloaded_cursors[TOOLS.SELECT] = load("res://sprites/icons/select_cursor.png").get_image()
 	preloaded_cursors[TOOLS.SELECT].resize(32, 32)
 	
-	preloaded_cursors[TOOLS.EXPORT_REGION] = load("res://sprites/icons/select_cursor.png").get_image()
+	preloaded_cursors[TOOLS.EXPORT_REGION] = load("res://sprites/icons/region_cursor.png").get_image()
 	preloaded_cursors[TOOLS.EXPORT_REGION].resize(32, 32)
 	
 	preloaded_cursors[TOOLS.ERASER] = Image.create(EditorData.curr_eraser_size, EditorData.curr_eraser_size, false, Image.FORMAT_RGB8)

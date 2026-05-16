@@ -28,7 +28,6 @@ func _ready():
 	EditorFiles.set_animation_player($AnimationPlayer)
 	
 	EditorFuncs.animations = $AnimationPlayer
-	EditorFuncs.export_manager.region_container = $export_regions
 	
 	$canvas_main/quick_controls_container.visible = false
 	

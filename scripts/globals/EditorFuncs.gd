@@ -156,8 +156,13 @@ func get_object_rect(obj) -> Rect2:
 	
 	return r.abs()
 	
-	
+func rect_intersects_rect_borders(rect1: Rect2, rect2: Rect2):
+	if !rect1.intersects(rect2):
+		return false
+	if rect2.encloses(rect1) || rect1.encloses(rect2):
+		return false
 
+	return true
 
 func get_grid_pos(world_pos, fac = 1) -> Vector2:
 	var sq_size = EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]

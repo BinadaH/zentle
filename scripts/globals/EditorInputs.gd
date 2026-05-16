@@ -38,8 +38,9 @@ func handle_key(event: InputEventKey):
 		if event.keycode == KEY_T && event.shift_pressed:
 			EditorFuncs.toggle_quick_tools()
 
-	elif EditorData.can_use_shortcuts && EditorTools.toggle_shortcuts.has(event.keycode):
-		EditorTools.toggle_to(EditorTools.toggle_shortcuts[event.keycode], event.pressed)
+	if EditorData.can_use_shortcuts:
+		if EditorTools.toggle_shortcuts.has(event.keycode):
+			EditorTools.toggle_to(EditorTools.toggle_shortcuts[event.keycode], event.pressed)
 
 # TODO refactoring
 func handle_mouse_button(event: InputEventMouseButton):

@@ -15,6 +15,7 @@ class FileMenuItem:
 var file_menu_items: Array[FileMenuItem] = [
 	FileMenuItem.new("Save", self.save),
 	FileMenuItem.new("Open", self.open),
+	FileMenuItem.new("Export", self.export),
 	FileMenuItem.new("Settings", self.settings),
 	FileMenuItem.new("New", self.new),
 ]
@@ -61,6 +62,9 @@ func update_tool_sizes(size):
 
 	if !EditorTools.is_current(EditorTools.TOOLS.TEXT):
 		EditorTools.set_tool(EditorTools.TOOLS.PEN)
+
+func export():
+	EditorFuncs.export_manager.make_export()
 
 func save():
 	EditorFuncs.handle_save()
@@ -193,3 +197,23 @@ func _on_animation_player_animation_finished(anim_name):
 
 func _on_export_reg_btn_pressed():
 	EditorTools.set_tool(EditorTools.TOOLS.EXPORT_REGION)
+
+var select_btn_timer : SceneTreeTimer = null
+func toggle_select_btn():
+	EditorTools.set_tool(EditorTools.TOOLS.EXPORT_REGION)
+	_clear_select_btn_timer()
+	
+func _clear_select_btn_timer():
+	if select_btn_timer:
+		select_btn_timer.disconnect("timeout", toggle_select_btn)
+		select_btn_timer = null
+
+func _on_select_btn_button_down():
+	select_btn_timer = get_tree().create_timer(0.5)
+	select_btn_timer.connect("timeout", toggle_select_btn)
+
+func _on_select_btn_button_up():
+	if select_btn_timer:
+		EditorTools.set_tool(EditorTools.TOOLS.SELECT)
+		_clear_select_btn_timer()
+		
