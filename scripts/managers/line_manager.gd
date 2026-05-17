@@ -162,6 +162,7 @@ func done():
 		var p = smoothed_points[0]
 		smoothed_points.append(p + Vector2(0.1, 0.1)) 
 		smoothed_pressures.append(smoothed_pressures[0])
+		current_line.points = smoothed_points
 	else:
 		var is_scratch = shape_recognizer.is_scratch(smoothed_points, curr_length)
 		if is_scratch.recognized:

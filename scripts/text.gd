@@ -170,51 +170,18 @@ func _on_text_edit_gui_input(event):
 			if event.ctrl_pressed:
 				match event.keycode:
 					KEY_PLUS:
-						curr_font_size += 5
+						curr_font_size += 10
 						text_edit.add_theme_font_size_override("font_size", curr_font_size)
-					
+						EditorFuncs.canvas_manager.update_text_edit_size()
 					KEY_MINUS:
-						curr_font_size = max(10, curr_font_size - 5)
+						curr_font_size = max(10, curr_font_size - 10)
 						text_edit.add_theme_font_size_override("font_size", curr_font_size)
-
+						EditorFuncs.canvas_manager.update_text_edit_size()
 					KEY_ENTER:
 						text_edit.release_focus()
 						
 		if event.keycode == KEY_ESCAPE:
 			text_edit.release_focus()
-		#else: 
-			#var selected_text = text_edit.get_selected_text()
-			#var typed_char = event.unicode
-			#var opening = ""
-			#var closing = ""
-			#
-			#if typed_char  <= 31:
-				#if event.pressed && event.ctrl_pressed:
-					#match event.keycode:
-						#KEY_B: opening = "**"; closing = "**"
-						#KEY_U: opening = "__"; closing = "__"
-						#KEY_I: opening = "^^"; closing = "^^"
-						#
-			#else:
-				#typed_char = char(event.unicode)
-				#match typed_char:
-					#"{": opening = "{"; closing = "}"
-					#"(": opening = "("; closing = ")"
-					#"[": opening = "["; closing = "]"
-					#"\"": opening = "\""; closing = "\""
-					#"$": opening = "$"; closing = "$"
-					#_:
-						#match event.keycode && event.ctrl_pressed:
-							#KEY_B: opening = "**"; closing = "**"
-							#KEY_U: opening = "__"; closing = "__"
-							#KEY_I: opening = "^^"; closing = "^^"
-			#
-			#if opening and closing:
-				#var new_text = opening + selected_text + closing
-				#text_edit.insert_text_at_caret(new_text)
-				#text_edit.set_caret_column(text_edit.get_caret_column() - len(closing))
-				#get_viewport().set_input_as_handled()
-					
 
 func get_text_node():
 	var new_l = RichTextLabel.new()
