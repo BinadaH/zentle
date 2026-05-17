@@ -112,6 +112,7 @@ func reset():
 	EditorHistory.clear()
 	EditorData.camera.reset()
 	EditorFiles.set_current_path("")
+	EditorData.spatial_grid.clear()
 	
 func begin_handle_open():
 	EditorFiles.show_confirm_dialog(self.end_handle_open)

@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://6lvycgvfhfqt"]
+
+[ext_resource type="FontFile" uid="uid://c1k5dpby8rfjc" path="res://fonts/JetBrainsMono-Regular.ttf" id="1_nixot"]
+
+[resource]
+default_font = ExtResource("1_nixot")

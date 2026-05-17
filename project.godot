@@ -36,6 +36,10 @@ window/vsync/vsync_mode=0
 
 project/assembly_name="zentle"
 
+[gui]
+
+theme/custom="uid://6lvycgvfhfqt"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

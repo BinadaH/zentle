@@ -71,6 +71,8 @@ func markdown_to_bbcode(markdown_text: String) -> String:
 
 	return result
 
+
+var latex_blocks = []
 func render(text: String):
 	EditorData.can_use_shortcuts = true
 	if text == "":
@@ -83,6 +85,7 @@ func render(text: String):
 		$content.remove_child(child)
 	
 	self.text = text
+	latex_blocks.clear()
 	text = markdown_to_bbcode(text)
 	var parsed_data = EditorFuncs.parse_text_and_latex(text)
 	var line = HBoxContainer.new()
@@ -95,6 +98,7 @@ func render(text: String):
 			if data.mode == "inline":
 				var ret : ImageTexture = get_latex_img(data.content, curr_font_size)
 				if ret:
+					latex_blocks.append(data.content)
 					var new_s = TextureRect.new()
 					new_s.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 					new_s.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -210,3 +214,6 @@ func on_caret_changed():
 			EditorData.latex_preview.modulate = EditorColors.color_palette[0]
 	else:
 		EditorData.latex_preview.visible = false
+
+func get_line_nodes() -> Array:
+	return $content.get_children()

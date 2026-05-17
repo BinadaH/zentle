@@ -10,7 +10,7 @@ func _ready():
 	EditorData.main_ready(self)
 	EditorData.camera = camera
 	EditorData.draw_line = draw_line
-	
+	TextServer
 	camera.connect("has_moved", background.update_material_position)
 	camera.connect("has_zoomed", background.update_material_zoom)
 	
