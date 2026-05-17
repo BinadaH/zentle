@@ -17,6 +17,8 @@ func _ready():
 	var cl = get_tree().get_nodes_in_group("canvas_ui")
 	if cl and cl[0]:
 		text_edit = CodeEdit.new()
+		text_edit.connect("caret_changed", on_caret_changed)
+		
 		text_edit.add_auto_brace_completion_pair("$", "$")
 		text_edit.auto_brace_completion_enabled = true
 		text_edit.auto_brace_completion_highlight_matching = true
@@ -59,26 +61,20 @@ func markdown_to_bbcode(markdown_text: String) -> String:
 	var result = markdown_text
 	var regex = RegEx.new()
 
-	# 1. Grassetto: **testo** -> [b]testo[/b]
-	# Usiamo \\*\\* per fare l'escape degli asterischi (caratteri speciali regex)
+	# Bold **T** [b]testo[/b]
 	regex.compile("\\*\\*(.*?)\\*\\*")
 	result = regex.sub(result, "[b]$1[/b]", true)
 
-	# 2. Grassetto (Alternativo): __testo__ -> [b]testo[/b]
-	# L'underscore non ha bisogno di escape ma è meglio essere espliciti
+	# Underline __T__ [b]testo[/b]
 	regex.compile("__(.*?)__")
 	result = regex.sub(result, "[u]$1[/u]", true)
-
-	# 3. Corsivo: *testo* -> [i]testo[/i]
-	# Nota: deve essere eseguito DOPO il grassetto, altrimenti ruberebbe i singoli asterischi
-	regex.compile("\\^\\^(.*?)\\^\\^")
-	result = regex.sub(result, "[i]$1[/i]", true)
 
 	return result
 
 func render(text: String):
 	EditorData.can_use_shortcuts = true
 	if text == "":
+		EditorFuncs.canvas_manager.remove_from_canvas(self)
 		queue_free()
 		return
 	
@@ -97,7 +93,7 @@ func render(text: String):
 			line.add_child(new_l)
 		elif data.type == "latex":
 			if data.mode == "inline":
-				var ret : ImageTexture = EditorFuncs.latex_generator.GetImage(data.content, curr_font_size)
+				var ret : ImageTexture = get_latex_img(data.content, curr_font_size)
 				if ret:
 					var new_s = TextureRect.new()
 					new_s.expand_mode = TextureRect.EXPAND_KEEP_SIZE
@@ -105,22 +101,7 @@ func render(text: String):
 					
 					new_s.texture = ret
 					line.add_child(new_s)
-			#elif data.mode == "display":
-				#var ret : ImageTexture = GenerateLatexImg.GenerateImg(data.content, curr_font_size * 2)
-				#if ret:
-					#var new_s = TextureRect.new()
-					#new_s.expand_mode = TextureRect.EXPAND_KEEP_SIZE
-					#new_s.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-					#
-					#new_s.texture = ret
-					#if line.get_child_count() > 0:
-						#$content.add_child(line)
-						#line = HBoxContainer.new()
-					#line.alignment = BoxContainer.ALIGNMENT_CENTER
-					#line.add_child(new_s)
-					#$content.add_child(line)
-					#line = HBoxContainer.new()
-				
+
 		elif data.type == "newline":
 			if line.get_child_count() == 0:
 				var l = Control.new()
@@ -159,6 +140,7 @@ func move_caret_to_mouse():
 
 func _on_text_edit_focus_exited():
 	text_edit.visible = false
+	EditorData.latex_preview.visible = false
 	render(text_edit.text)
 
 func _on_text_edit_focus_entered():
@@ -196,3 +178,35 @@ func get_text_node():
 	new_l.add_theme_font_size_override("bold_italics_font_size", curr_font_size)
 	
 	return new_l
+	
+func get_latex_img(expression: String, font_size: float) -> ImageTexture:
+	return EditorFuncs.latex_generator.GetImage(expression, font_size)
+
+func on_caret_changed():
+	var line_i = text_edit.get_caret_line()
+	var row_i = text_edit.get_caret_column()
+	var caret_line: String = text_edit.get_line(line_i)
+	var block_start = -1
+	
+	var caret_in_block = false
+	var block = ""
+	for char_i in caret_line.length():
+		if caret_line[char_i] == '$':
+			if block_start < 0:
+				block_start = char_i
+			else:
+				if row_i >= block_start && row_i <= char_i:
+					# Caret in $$ block
+					caret_in_block = true
+					block = caret_line.substr(block_start + 1, char_i - block_start - 1)
+					break
+				block_start = -1
+	
+	if caret_in_block:
+		var ret : ImageTexture = get_latex_img(block, 30)
+		if ret:
+			EditorData.latex_preview.visible = true
+			EditorData.latex_preview.texture = ret
+			EditorData.latex_preview.modulate = EditorColors.color_palette[0]
+	else:
+		EditorData.latex_preview.visible = false

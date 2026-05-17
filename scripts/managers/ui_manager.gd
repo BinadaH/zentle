@@ -31,6 +31,8 @@ func _ready():
 	EditorFiles.set_file_label($Control/view/top_panel/file_name)
 	EditorFiles.set_confirm_dialog($ConfirmationDialog)
 	
+	EditorData.latex_preview = $latex_preview
+	
 	EditorOptions.connect("theme_changed", func(old_palette): reload_color_grid())
 	
 	# Setup Slider / Buttons size controls

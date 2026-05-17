@@ -500,15 +500,33 @@ layout_mode = 2
 metadata/_tab_index = 1
 
 [node name="latex_preview" type="TextureRect" parent="canvas_main" unique_id=1914542287]
-anchors_preset = 3
+visible = false
+texture_filter = 6
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_top = 57.0
+offset_right = -20.0
+offset_bottom = 97.0
+grow_horizontal = 0
+stretch_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="canvas_main/latex_preview" unique_id=1813412590]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -40.0
-grow_horizontal = 0
-grow_vertical = 0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = -10
+theme_override_constants/margin_top = -10
+theme_override_constants/margin_right = -10
+theme_override_constants/margin_bottom = -10
+
+[node name="Panel" type="Panel" parent="canvas_main/latex_preview/MarginContainer" unique_id=344279187]
+layout_mode = 2
 
 [node name="canvas_bg" type="CanvasLayer" parent="." unique_id=113325402]
 layer = -1

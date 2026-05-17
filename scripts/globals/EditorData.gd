@@ -21,6 +21,7 @@ var curr_eraser_size: int = 10
 var main: Main
 var draw_ui: Node2D
 var draw_line: Control
+var latex_preview: TextureRect
 
 var spatial_grid = {}
 
