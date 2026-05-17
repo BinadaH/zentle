@@ -257,3 +257,20 @@ func set_spatial_grid_pos(obj):
 					EditorData.spatial_grid[new_pos].append(obj)
 		
 	obj.set_meta("spatial_grid", curr_spatial_grid)
+
+func get_lines_under_rect(rect: Rect2) -> Array:
+	var start_cell = (rect.position / EditorData.SPATIAL_GRID_SIZE).floor()
+	var end_cell = (rect.end / EditorData.SPATIAL_GRID_SIZE).floor()
+
+	
+	var objs = []
+	for x in range(int(start_cell.x), int(end_cell.x) + 1):
+		for y in range(int(start_cell.y), int(end_cell.y) + 1):
+			var new_pos = Vector2i(x, y)
+			if EditorData.spatial_grid.has(new_pos):
+				var cell_objs = EditorData.spatial_grid[new_pos]
+				for obj in cell_objs:
+					if obj is Line2D:
+						if !(obj in objs) && is_rect_over_line2d(obj, rect):
+							objs.append(obj)
+	return objs

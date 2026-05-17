@@ -5,6 +5,7 @@ enum SHAPES{
 	RECTANGLE,
 	ELLIPSE,
 	SEGMENT,
+	SCRATCH,
 	NONE
 }
 
@@ -21,6 +22,15 @@ class ShapeRecognizerResult:
 		self.shape = shape
 		self.center = center
 		self.bounding_box = bounding_box
+
+func is_scratch(points: PackedVector2Array, length: float) -> ShapeRecognizerResult:
+	var result = ShapeRecognizerResult.new(points, false, SHAPES.SCRATCH)
+	if points.size() < 10 || length == 0: return result
+	
+	var rect = EditorFuncs.get_points_rect(points)
+	result.bounding_box = rect
+	result.recognized = length / (rect.size.x + rect.size.y) > 3.5
+	return result
 
 func get_shape(points: PackedVector2Array, checking_iter: int = 1) -> ShapeRecognizerResult:
 	var result = ShapeRecognizerResult.new(points, false, SHAPES.NONE)

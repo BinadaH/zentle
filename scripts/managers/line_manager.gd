@@ -6,6 +6,7 @@ var base_line: Line2D
 
 var curr_points = []
 var curr_pressures = []
+var curr_length = 0
 
 const SIMPLIFY_LINE_FACTOR = 0.75
 
@@ -53,8 +54,6 @@ func create_line():
 	current_line.width = EditorData.current_size
 	current_line.width_curve = Curve.new()
 	
-	EditorHistory.create_action("Create Line", EditorFuncs.canvas_manager.add_to_canvas.bind(current_line), EditorFuncs.canvas_manager.remove_from_canvas.bind(current_line), true, current_line)
-
 	curr_points.append(EditorData.world_pos)
 	curr_pressures.append(EditorData.pressure)
 	
@@ -62,8 +61,7 @@ func create_line():
 	check_shape_timer.connect("timeout", check_shape)
 	
 	current_line.visible = false
-	
-
+	curr_length = 0
 
 
 var last_smooth_point = null
@@ -114,6 +112,7 @@ func draw_line():
 		if target_point.distance_to(smoothed_points[-1]) < MIN_DISTANCE:
 			return
 	
+	curr_length += last_smooth_point.distance_to(target_point)
 	last_smooth_point = target_point
 	smoothed_pressures.append(last_smooth_pressure)
 	smoothed_points.append(target_point)
@@ -132,6 +131,7 @@ func check_shape():
 	if result.recognized:
 		found_shape = result
 		current_line.points = result.points
+		EditorFuncs.canvas_manager.add_to_canvas(current_line)
 		current_line.visible = true
 		EditorData.draw_line.clear_viewport()
 		current_line.width_curve.clear_points()
@@ -153,19 +153,30 @@ func _update_width_curve():
 func done():
 	if !current_line: return
 	current_line.visible = true
+	
+	var call_history_do_func = true
 	if found_shape:
 		found_shape = null
+		call_history_do_func = false
+	elif smoothed_points.size() == 1:
+		var p = smoothed_points[0]
+		smoothed_points.append(p + Vector2(0.1, 0.1)) 
+		smoothed_pressures.append(smoothed_pressures[0])
 	else:
-		if smoothed_points.size() == 1:
-			var p = smoothed_points[0]
-			smoothed_points.append(p + Vector2(0.1, 0.1)) 
-			smoothed_pressures.append(smoothed_pressures[0])
+		var is_scratch = shape_recognizer.is_scratch(smoothed_points, curr_length)
+		if is_scratch.recognized:
+			var rect = is_scratch.bounding_box
+			var lines_to_erase = EditorFuncs.canvas_manager.get_lines_under_rect(rect)
+			EditorHistory.create_action("erase", EditorFuncs.canvas_manager.remove_objs.bind(lines_to_erase), EditorFuncs.canvas_manager.add_objs.bind(lines_to_erase), true, null, lines_to_erase)
+			reset_line()
+			return
 		else:
 			smoothed_points = simplify_points(smoothed_points, SIMPLIFY_LINE_FACTOR)
-			
-		current_line.points = smoothed_points
-		_update_width_curve()
 		
+		current_line.points = smoothed_points
+	
+	_update_width_curve()
+	EditorHistory.create_action("Create Line", EditorFuncs.canvas_manager.add_to_canvas.bind(current_line), EditorFuncs.canvas_manager.remove_from_canvas.bind(current_line), call_history_do_func, current_line)
 	EditorFuncs.canvas_manager.set_spatial_grid_pos(current_line)
 	
 	reset_line()

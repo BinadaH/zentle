@@ -16,7 +16,11 @@ func create_action(action_name: String, do_call: Callable, undo_call: Callable, 
 	if do_ref:
 		undo_redo.add_do_reference(do_ref)
 	if undo_ref:
-		undo_redo.add_undo_reference(undo_ref)
+		if undo_ref is Array:
+			for ref in undo_ref:
+				undo_redo.add_undo_reference(ref)
+		else:
+			undo_redo.add_undo_reference(undo_ref)
 	
 	undo_redo.commit_action(call_do)
 	history_changed.emit()
