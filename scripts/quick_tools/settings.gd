@@ -14,7 +14,6 @@ var settings_to_load: Array[EditorOptions.OPTIONS] = [
 	EditorOptions.OPTIONS.CTRL_TO_ZOOM,
 	EditorOptions.OPTIONS.REALTIME_MOVE_SCALE,
 	EditorOptions.OPTIONS.SCRATCH_TO_ERASE,
-	EditorOptions.OPTIONS.GRID_WEIGHT,
 	EditorOptions.OPTIONS.MAX_FPS
 ]
 

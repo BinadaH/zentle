@@ -151,6 +151,16 @@ func save_default_settings():
 			"success":"#a3be8cff",
 			"background_color":"#2e3440ff",
 			"grid_color":"#3b4252ff",
+		},
+		"theme_print_clean": {
+			"main_text":"#1a1a1aff",
+			"critical":"#b30000ff",
+			"important":"#d97706ff",
+			"quote":"#4b5563ff",
+			"meta":"#2563ebff",
+			"success":"#16a34aff",
+			"background_color":"#ffffffff",
+			"grid_color":"#e5e7ebff"
 		}
 	}
 	

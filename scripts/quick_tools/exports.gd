@@ -1,6 +1,6 @@
 extends MarginContainer
 
-@onready var export_option_btn: OptionButton = $HBoxContainer/Control/CenterContainer/VBoxContainer/OptionButton
+@onready var export_option_btn: OptionButton = $HBoxContainer/Control/CenterContainer/VBoxContainer/HBoxContainer/OptionButton
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
@@ -55,9 +55,16 @@ func _on_button_pressed():
 		$FileDialog.filters = [target_ext]
 		$FileDialog.visible = true
 
+@onready var timer = $HBoxContainer/Control/CenterContainer/VBoxContainer/Timer
+@onready var grid_check = $HBoxContainer/Control/CenterContainer/VBoxContainer/HBoxContainer/CheckBox
 func _on_file_dialog_file_selected(path: String):
-	print(path)
-	EditorFuncs.export_manager.make_export(export_option_btn.selected, path)
+	var ok = EditorFuncs.export_manager.make_export(export_option_btn.selected, path, grid_check.button_pressed)
+	if ok:
+		sucess_label.text = "Exported Sucessfully"
+	else:
+		sucess_label.text = "Export Failed"
+	
+	timer.start()
 
 # TODO: refactoring (shouldn't need to reload every time)
 @onready var toggle_all = $HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer/toggle_all
@@ -67,3 +74,7 @@ func _on_toggle_all_pressed():
 		reg.set_export_to(toggle_all.button_pressed)
 	
 	load_export_regions()
+
+@onready var sucess_label = $HBoxContainer/Control/CenterContainer/VBoxContainer/Label
+func _on_timer_timeout():
+	sucess_label.text = "Choose a format:"

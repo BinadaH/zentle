@@ -21,11 +21,12 @@ func _init():
 	var font = load("res://fonts/JetBrainsMono-Regular.ttf")
 	generate_export.SetupFont(null)
 	
-func make_export(type: FILE, path: String):
+func make_export(type: FILE, path: String, grid_on: bool):
 	var file_name = path.get_file().get_basename()
 	var save_folder = path.get_base_dir()
+	var success = true
 	
-	generate_export.Setup(EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE], EditorOptions.options[EditorOptions.OPTIONS.GRID_WEIGHT], EditorColors.background_col, EditorColors.grid_col)
+	generate_export.Setup(EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE], EditorOptions.options[EditorOptions.OPTIONS.GRID_WEIGHT], EditorColors.background_col, EditorColors.grid_col, grid_on)
 	var regions = EditorFuncs.get_tree().get_nodes_in_group("export_region")
 	regions.sort_custom(func(reg1, reg2): return reg1.export_index < reg2.export_index)
 	var page_objs = []
@@ -49,7 +50,7 @@ func make_export(type: FILE, path: String):
 			var curr_file_path= "%s_%s.svg" % [file_name, reg.get_title()]
 			var img = generate_export.ExportSvg(items, rect.position, rect.size)
 			var f = FileAccess.open(save_folder.path_join(curr_file_path), FileAccess.WRITE)
-			f.store_buffer(img)
+			success = f.store_buffer(img)
 		else:
 			page_objs.append(items)
 			page_positions.append(rect.position)
@@ -60,8 +61,9 @@ func make_export(type: FILE, path: String):
 		var curr_file_path = "%s.pdf" % [save_folder.path_join(file_name)]
 		var pdf = generate_export.ExportPdf(page_objs, page_positions, page_sizes)
 		var f = FileAccess.open(curr_file_path, FileAccess.WRITE)
-		f.store_buffer(pdf)
+		success = f.store_buffer(pdf)
 		f.close()
+	return success
 
 func handle_mouse_down():
 	curr_region = Region.new()

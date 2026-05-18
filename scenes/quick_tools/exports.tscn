@@ -83,10 +83,21 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Control/CenterContainer" unique_id=726281741]
 layout_mode = 2
+theme_override_constants/separation = 15
 alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="HBoxContainer/Control/CenterContainer/VBoxContainer" unique_id=1726745364]
+[node name="Label" type="Label" parent="HBoxContainer/Control/CenterContainer/VBoxContainer" unique_id=1415958483]
 layout_mode = 2
+text = "Choose a format:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Control/CenterContainer/VBoxContainer" unique_id=1904913850]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 20
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/Control/CenterContainer/VBoxContainer/HBoxContainer" unique_id=1726745364]
+layout_mode = 2
+size_flags_horizontal = 4
 selected = 0
 item_count = 2
 popup/item_0/text = "pdf"
@@ -94,10 +105,19 @@ popup/item_0/id = 0
 popup/item_1/text = "svg"
 popup/item_1/id = 1
 
+[node name="CheckBox" type="CheckBox" parent="HBoxContainer/Control/CenterContainer/VBoxContainer/HBoxContainer" unique_id=516492304]
+layout_mode = 2
+button_pressed = true
+text = "Grid"
+
 [node name="Button" type="Button" parent="HBoxContainer/Control/CenterContainer/VBoxContainer" unique_id=1700751415]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Export"
+
+[node name="Timer" type="Timer" parent="HBoxContainer/Control/CenterContainer/VBoxContainer" unique_id=14700882]
+wait_time = 2.0
+one_shot = true
 
 [node name="FileDialog" type="FileDialog" parent="." unique_id=1112204163]
 access = 2
@@ -105,4 +125,5 @@ use_native_dialog = true
 
 [connection signal="pressed" from="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer/toggle_all" to="." method="_on_toggle_all_pressed"]
 [connection signal="pressed" from="HBoxContainer/Control/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="timeout" from="HBoxContainer/Control/CenterContainer/VBoxContainer/Timer" to="." method="_on_timer_timeout"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

@@ -14,6 +14,7 @@ public partial class GenerateExport : Node
     SKTypeface fontTypeface = SKTypeface.Default;
     int sq_size = 0;
     int grid_w = 0;
+    bool grid_on = true;
 
 
     public void SetupFont(FontFile font_file)
@@ -31,12 +32,13 @@ public partial class GenerateExport : Node
         }
     }
 
-    public void Setup(int sq_size, int grid_weight, Godot.Color bg_color, Godot.Color grid_color)
+    public void Setup(int sq_size, int grid_weight, Godot.Color bg_color, Godot.Color grid_color, bool grid_on)
     {
         this.bg_color = bg_color;
         this.grid_w = grid_weight;
         this.sq_size = sq_size;
         this.grid_color = grid_color;
+        this.grid_on = grid_on;
     }
 
     private SKColor GDColor2SKColor(Godot.Color col)
@@ -95,7 +97,8 @@ public partial class GenerateExport : Node
         using (var paint = new SKPaint())
         {
             DrawBackground(canvas, paint, size);
-            DrawGrid(canvas, paint, position, size);
+            if (grid_on)
+                DrawGrid(canvas, paint, position, size);
 
 
             foreach (var item in objs)
