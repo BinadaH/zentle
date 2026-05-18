@@ -170,6 +170,7 @@ _data = {
 script = ExtResource("1_o5qli")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=431555796]
+position = Vector2(1, 1)
 points = PackedVector2Array(0, -20, 20, 0, 0, 20, -20, 0)
 closed = true
 width = 5.0

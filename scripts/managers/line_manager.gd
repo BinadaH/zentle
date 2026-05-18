@@ -164,8 +164,12 @@ func done():
 		smoothed_pressures.append(smoothed_pressures[0])
 		current_line.points = smoothed_points
 	else:
-		var is_scratch = shape_recognizer.is_scratch(smoothed_points, curr_length)
-		if is_scratch.recognized:
+		# Check for scratch only when enabled
+		var is_scratch = null
+		if EditorOptions.options[EditorOptions.OPTIONS.SCRATCH_TO_ERASE]:
+			is_scratch = shape_recognizer.is_scratch(smoothed_points, curr_length)
+			
+		if is_scratch && is_scratch.recognized:
 			var rect = is_scratch.bounding_box
 			var lines_to_erase = EditorFuncs.canvas_manager.get_lines_under_rect(rect)
 			EditorHistory.create_action("erase", EditorFuncs.canvas_manager.remove_objs.bind(lines_to_erase), EditorFuncs.canvas_manager.add_objs.bind(lines_to_erase), true, null, lines_to_erase)

@@ -14,17 +14,17 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("1_wngva")
 
-[node name="Settings" type="VBoxContainer" parent="." unique_id=985318019]
+[node name="Settings" type="GridContainer" parent="." unique_id=991895525]
 layout_mode = 2
+columns = 2
 
-[node name="ui_scale" type="HBoxContainer" parent="Settings" unique_id=978164202]
+[node name="Label" type="Label" parent="Settings" unique_id=2104233178]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="Settings/ui_scale" unique_id=2104233178]
-layout_mode = 2
+size_flags_horizontal = 0
 text = "UI Scale: "
 
-[node name="OptionButton" type="OptionButton" parent="Settings/ui_scale" unique_id=51963402]
+[node name="OptionButton" type="OptionButton" parent="Settings" unique_id=51963402]
 layout_mode = 2
+size_flags_horizontal = 2
 
-[connection signal="item_selected" from="Settings/ui_scale/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="Settings/OptionButton" to="." method="_on_option_button_item_selected"]

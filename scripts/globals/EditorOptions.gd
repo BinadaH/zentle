@@ -12,6 +12,7 @@ enum OPTIONS {
 	GRID_WEIGHT,
 	SHAPE_RECOGNIZER_DELAY,
 	UI_SCALE,
+	SCRATCH_TO_ERASE,
 	MAX_FPS
 }
 
@@ -22,6 +23,7 @@ var options: Dictionary = {
 	OPTIONS.GRID_WEIGHT: 2,
 	OPTIONS.SHAPE_RECOGNIZER_DELAY: 0.5,
 	OPTIONS.UI_SCALE: 1,
+	OPTIONS.SCRATCH_TO_ERASE: true,
 	OPTIONS.MAX_FPS: 144
 }
 
@@ -32,7 +34,8 @@ var string_options: Dictionary[OPTIONS, String] = {
 	OPTIONS.GRID_WEIGHT: "grid_weight",
 	OPTIONS.SHAPE_RECOGNIZER_DELAY: "shape_recognizer_delay",
 	OPTIONS.UI_SCALE: "ui_scale",
-	OPTIONS.MAX_FPS: "max_fps"
+	OPTIONS.MAX_FPS: "max_fps",
+	OPTIONS.SCRATCH_TO_ERASE: "scratch_to_erase"
 }
 
 var shape_snap_tolerance = 0.5		#0.5 half a square
@@ -42,6 +45,12 @@ func set_and_save_editor_option(option: OPTIONS, value: Variant):
 	options[option] = value
 	config.set_value("editor", string_options[option], value)
 	config.save(config_path)
+	
+	match option:
+		OPTIONS.SQ_SIZE, OPTIONS.GRID_WEIGHT:
+			EditorData.main.background.setup_grid_shader()
+		OPTIONS.MAX_FPS:
+			Engine.max_fps = value
 	
 func _ready():
 	call_deferred("load_config_file")
