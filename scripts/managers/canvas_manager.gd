@@ -202,6 +202,9 @@ func on_theme_change(old_palette):
 		if col_i >= 0:
 			text.curr_color = EditorColors.color_palette[col_i]
 			text.modulate = text.curr_color
+			
+	for reg in EditorData.get_tree().get_nodes_in_group("export_region"):
+		reg.update_colors()
 
 
 func is_rect_over_line2d(line: Line2D, rect : Rect2):

@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://y3s8y7jarrwn" path="res://sprites/icons/zoom.png" id="14_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://sifqnqeicb4c" path="res://scenes/quick_tools/theme_selector.tscn" id="15_jbj1t"]
 [ext_resource type="PackedScene" uid="uid://beymo5ecdkku2" path="res://scenes/quick_tools/settings.tscn" id="16_muem4"]
+[ext_resource type="PackedScene" uid="uid://r3h5c8hcuu64" path="res://scenes/quick_tools/exports.tscn" id="18_0ld40"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jbj1t"]
 bg_color = Color(0.14406255, 0.14406255, 0.14406249, 1)
@@ -206,6 +207,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
 
 [node name="top_panel" type="Panel" parent="canvas_main/Control/view" unique_id=731574821]
@@ -390,6 +392,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="canvas_main/Control/view/draw_area/SubViewportContainer" unique_id=1231874334]
@@ -508,6 +511,11 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
+[node name="Exports" parent="canvas_main/quick_controls_container/quick_options/TabContainer" unique_id=495979184 instance=ExtResource("18_0ld40")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
 [node name="latex_preview" type="TextureRect" parent="canvas_main" unique_id=1914542287]
 visible = false
 texture_filter = 6
@@ -519,6 +527,7 @@ offset_top = 57.0
 offset_right = -20.0
 offset_bottom = 97.0
 grow_horizontal = 0
+mouse_filter = 2
 stretch_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="canvas_main/latex_preview" unique_id=1813412590]
@@ -547,6 +556,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="canvas_ui" type="CanvasLayer" parent="." unique_id=2073584200 groups=["canvas_ui"]]
 

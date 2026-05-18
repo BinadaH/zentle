@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://sifqnqeicb4c"]
 
-[ext_resource type="Script" uid="uid://dc05wpldl5csv" path="res://scripts/theme_selector.gd" id="1_cxx7o"]
+[ext_resource type="Script" uid="uid://dc05wpldl5csv" path="res://scripts/quick_tools/theme_selector.gd" id="1_cxx7o"]
 
 [node name="ThemeSelector" type="MarginContainer" unique_id=372284654]
 anchors_preset = 15

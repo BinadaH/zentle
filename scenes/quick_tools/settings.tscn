@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://beymo5ecdkku2"]
 
-[ext_resource type="Script" uid="uid://d00wm6l7urqkj" path="res://scripts/settings.gd" id="1_wngva"]
+[ext_resource type="Script" uid="uid://d00wm6l7urqkj" path="res://scripts/quick_tools/settings.gd" id="1_wngva"]
 
 [node name="Settings" type="MarginContainer" unique_id=633254788]
 anchors_preset = 15

@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://r3h5c8hcuu64"]
+
+[ext_resource type="Script" uid="uid://d0aproehqxedb" path="res://scripts/quick_tools/exports.gd" id="1_semgt"]
+[ext_resource type="Script" uid="uid://vt3h10bh2dhj" path="res://scripts/quick_tools/exports_container.gd" id="2_7ftfl"]
+
+[node name="Exports" type="MarginContainer" unique_id=495979184]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_semgt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=321373424]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer" unique_id=1315006945]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/ScrollContainer" unique_id=1606439539]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer2" unique_id=631731440]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer" unique_id=505607203]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer" unique_id=391176057]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Title"
+
+[node name="Label2" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer" unique_id=954451083]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Export"
+
+[node name="Label3" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer" unique_id=1959394335]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Show"
+
+[node name="container" type="VBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer2" unique_id=572532731]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+script = ExtResource("2_7ftfl")
+
+[node name="Control" type="Control" parent="HBoxContainer" unique_id=868149286]
+layout_mode = 2
+size_flags_horizontal = 3

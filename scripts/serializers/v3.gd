@@ -5,6 +5,7 @@ enum OBJECT_TYPES{
 	LINE,
 	TEXT,
 	IMAGE,
+	EXPORT_REGION
 }
 
 enum OBJECT_DATA{
@@ -27,8 +28,12 @@ enum OBJECT_DATA{
 	
 	# Text
 	FONT_SIZE,
-	TEXT
+	TEXT,
 	
+	# Export region
+	EXPORT_ON,
+	EXPORT_TITLE,
+	EXPORT_IDX
 }
 
 ## This function loads and returns:
@@ -93,6 +98,16 @@ func serialize_canvas():
 			}
 			text_obj.merge(save_col(child.curr_color))
 			data["content"].append(text_obj)
+		elif child.is_in_group("export_region"):
+			var export_region_obj = {
+				OBJECT_DATA.TYPE: OBJECT_TYPES.EXPORT_REGION,
+				OBJECT_DATA.POSITION: child.position,
+				OBJECT_DATA.SIZE: child.size,
+				OBJECT_DATA.EXPORT_ON: child.should_export(),
+				OBJECT_DATA.EXPORT_TITLE: child.get_title(),
+				OBJECT_DATA.EXPORT_IDX: child.export_index
+			}
+			data["content"].append(export_region_obj)
 			
 	return data
 
@@ -101,6 +116,7 @@ func deserialize_canvas(data: Dictionary):
 	var line_manager = EditorFuncs.line_manager
 	
 	var text_scene = load("res://scenes/text.tscn")
+	var export_region_scene = load("res://scenes/export_region.tscn")
 	for obj in data.get("content", []):
 		match obj.get(OBJECT_DATA.TYPE, null):
 			OBJECT_TYPES.LINE:
@@ -145,5 +161,14 @@ func deserialize_canvas(data: Dictionary):
 				new_text.curr_color = load_col(obj)
 				new_text.modulate = new_text.curr_color
 				new_text.set_meta("col_i", obj.get("col_i", 0))
+			OBJECT_TYPES.EXPORT_REGION:
+				var reg = export_region_scene.instantiate()
+				reg.position = obj[OBJECT_DATA.POSITION]
+				reg.title = obj[OBJECT_DATA.EXPORT_TITLE]
+				reg.export_on = obj[OBJECT_DATA.EXPORT_ON]
+				reg.export_index = obj[OBJECT_DATA.EXPORT_IDX]
+				reg.size = obj[OBJECT_DATA.SIZE]
+				
+				return_data.append(reg)
 				
 	return return_data

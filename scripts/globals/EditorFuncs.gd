@@ -80,6 +80,27 @@ func cam_zoomed(zoom):
 func cam_moved(pos):
 	canvas_manager.update_text_edit_size()
 
+func focus_cam_on(obj):
+	var rect = get_object_rect(obj).grow(100)
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var tween_pos = create_tween()
+	var tween_zoom = create_tween()
+	
+	var target_zoom_vec = viewport_size / rect.size
+	var target_zoom = min(target_zoom_vec.x, target_zoom_vec.y)
+	
+	tween_pos.set_trans(Tween.TRANS_CUBIC)
+	tween_zoom.set_trans(Tween.TRANS_CUBIC)
+	
+	request_high_performance()
+	request_high_performance()
+	tween_pos.tween_method(EditorData.camera.move_to, EditorData.camera.position, (rect.position + rect.end) / 2, 0.7)
+	
+	tween_zoom.tween_method(EditorData.camera.zoom_to, EditorData.camera.zoom.x, target_zoom, 0.7)
+	
+	tween_pos.tween_callback(release_high_performance)
+	tween_zoom.tween_callback(release_high_performance)
+	
 func handle_change_color(col: Color):
 	if EditorTools.is_current(EditorTools.TOOLS.SELECT): 
 		selection_manager.change_color(EditorData.current_color, col)

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bsbwddpjb22qq"]
+
+[ext_resource type="Script" uid="uid://u2xx1hd77xtf" path="res://scripts/quick_tools/exports_line.gd" id="1_hwwl8"]
+[ext_resource type="Texture2D" uid="uid://b7n3o1c4dakpn" path="res://sprites/icons/drag.png" id="2_bcyv3"]
+
+[node name="ExportsLine" type="HBoxContainer" unique_id=2124283237]
+script = ExtResource("1_hwwl8")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1816007038]
+modulate = Color(0.5529556, 0.55295557, 0.55295557, 1)
+custom_minimum_size = Vector2(6, 10)
+layout_mode = 2
+texture = ExtResource("2_bcyv3")
+expand_mode = 4
+
+[node name="Control" type="Control" parent="." unique_id=1974817592]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+
+[node name="Line2D" type="Line2D" parent="." unique_id=103943739]
+visible = false
+points = PackedVector2Array(0, 0, 15, 0)
+width = 2.0
+default_color = Color(0.83702517, 0.54902476, 0.49065518, 1)

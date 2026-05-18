@@ -1,15 +1,9 @@
 using CSharpMath.SkiaSharp;
-using CSharpMath.Structures;
 using Godot;
+using Godot.Collections;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using Typography.OpenFont;
+using System.Linq;
+using System.Security.Cryptography;
 
 [GlobalClass]
 public partial class GenerateExport : Node
@@ -56,64 +50,7 @@ public partial class GenerateExport : Node
         { 
 		    using(var canvas = SKSvgCanvas.Create(new SKRect(0, 0, size.X, size.Y), stream))
 		    {
-			    using (var paint = new SKPaint())
-			    {
-                    DrawBackground(canvas, paint, size);
-                    DrawGrid(canvas, paint, position, size);
-                    
-                    
-                    foreach (var item in objs)
-				    {
-					    if (item is Line2D line)
-					    {
-                            DrawLine2D(line, paint, canvas, position);
-                        }
-                        else if (item.IsInGroup("text"))
-                        {
-                            var text_lines = item.Call("get_line_nodes").AsGodotArray<Node>();
-                            var latex_blocks = item.Get("latex_blocks").AsStringArray();
-                            paint.Color = GDColor2SKColor(item.Get("curr_color").AsColor());
-                            float font_size = (float)item.Get("curr_font_size").AsDouble();
-                            var latex_i = 0;
-                            foreach (var text_line in text_lines)
-                            {
-                                foreach (var text_block in text_line.GetChildren())
-                                {
-                                    if (text_block is Godot.RichTextLabel label)
-                                    {
-                                        paint.Style = SKPaintStyle.Fill;
-                                        
-                                        string txt = label.Text;
-                                        var obj_rect = label.GetGlobalRect();
-                                        var pos = obj_rect.Position - position;
-                                        var rect_height = obj_rect.Size.Y;
-                                        using (var font = new SKFont(fontTypeface, font_size))
-                                        {
-                                            SKPoint p = new SKPoint(pos.X, pos.Y + (font_size + rect_height) / 2);
-                                            canvas.DrawText(txt, p, SKTextAlign.Left, font, paint);
-                                        }
-                                    }
-                                    else if (text_block is Godot.TextureRect texture_rect)
-                                    {
-                                        var pos = texture_rect.GetGlobalRect().Position - position;
-                                        var painter = new MathPainter();
-                                        var expr = latex_blocks[latex_i];
-                                        painter.LaTeX = expr;
-                                        painter.FontSize = font_size;
-                                        painter.TextColor = paint.Color;
-                                        var obj_rect = texture_rect.GetGlobalRect();
-
-                                        SKPoint p = new SKPoint(pos.X, pos.Y + (font_size + obj_rect.Size.Y) / 2);
-                                        painter.Draw(canvas, p);
-                                        latex_i += 1;
-                                    }
-                                }
-                            }
-                            
-                            
-                        }
-				    }
-                }
+                HandleDraw(canvas, objs, position, size);
             }
                 
             using (SKData data = stream.CopyToData())
@@ -123,7 +60,103 @@ public partial class GenerateExport : Node
         }
     }
 
-    private void DrawLine2D(Line2D line, SKPaint paint, SKCanvas canvas, Vector2 position)
+    public byte[] ExportPdf(Array<Array<CanvasItem>> page_objs, Array<Vector2> page_positions, Array<Vector2I> page_sizes)
+    {
+        using (var stream = new SKDynamicMemoryWStream())
+        {
+            using (var document = SKDocument.CreatePdf(stream))
+            {
+                for (int i = 0; i < page_objs.Count; i++)
+                {
+                    CanvasItem[] objs = page_objs[i].ToArray<CanvasItem>();
+                    Vector2 position = page_positions[i];
+                    Vector2I size = page_sizes[i];
+
+                    using (var canvas = document.BeginPage(size.X, size.Y))
+                    {
+                        HandleDraw(canvas, objs, position, size);
+                    }
+                    document.EndPage();
+                    
+                }
+                document.Close();
+            }
+
+            using (SKData data = stream.CopyToData())
+            {
+                return data.ToArray();
+            }
+
+        }
+    }
+
+    private void HandleDraw(SKCanvas canvas, CanvasItem[] objs, Vector2 position, Vector2I size) 
+    {
+        using (var paint = new SKPaint())
+        {
+            DrawBackground(canvas, paint, size);
+            DrawGrid(canvas, paint, position, size);
+
+
+            foreach (var item in objs)
+            {
+                if (item is Line2D line)
+                {
+                    DrawLine2D(line, position, paint, canvas);
+                }
+                else if (item.IsInGroup("text"))
+                {
+                    DrawText((Control)item, position, paint, canvas);
+                }
+            }
+        }
+    }
+
+
+    private void DrawText(Control item, Vector2 position, SKPaint paint, SKCanvas canvas)
+    {
+        var text_lines = item.Call("get_line_nodes").AsGodotArray<Node>();
+        var latex_blocks = item.Get("latex_blocks").AsStringArray();
+        paint.Color = GDColor2SKColor(item.Get("curr_color").AsColor());
+        float font_size = (float)item.Get("curr_font_size").AsDouble();
+        var latex_i = 0;
+        foreach (var text_line in text_lines)
+        {
+            foreach (var text_block in text_line.GetChildren())
+            {
+                if (text_block is Godot.RichTextLabel label)
+                {
+                    paint.Style = SKPaintStyle.Fill;
+
+                    string txt = label.Text;
+                    var obj_rect = label.GetGlobalRect();
+                    var pos = obj_rect.Position - position;
+                    var rect_height = obj_rect.Size.Y;
+                    using (var font = new SKFont(fontTypeface, font_size))
+                    {
+                        SKPoint p = new SKPoint(pos.X, pos.Y + (font_size + rect_height) / 2);
+                        canvas.DrawText(txt, p, SKTextAlign.Left, font, paint);
+                    }
+                }
+                else if (text_block is Godot.TextureRect texture_rect)
+                {
+                    var pos = texture_rect.GetGlobalRect().Position - position;
+                    var painter = new MathPainter();
+                    var expr = latex_blocks[latex_i];
+                    painter.LaTeX = expr;
+                    painter.FontSize = font_size;
+                    painter.TextColor = paint.Color;
+                    var obj_rect = texture_rect.GetGlobalRect();
+
+                    SKPoint p = new SKPoint(pos.X, pos.Y + (font_size + obj_rect.Size.Y) / 2);
+                    painter.Draw(canvas, p);
+                    latex_i += 1;
+                }
+            }
+        }
+    }
+
+    private void DrawLine2D(Line2D line, Vector2 position, SKPaint paint, SKCanvas canvas)
     {
         paint.Style = SKPaintStyle.Stroke;
         paint.IsAntialias = true;

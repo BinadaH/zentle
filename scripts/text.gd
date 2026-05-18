@@ -100,6 +100,7 @@ func render(text: String):
 				if ret:
 					latex_blocks.append(data.content)
 					var new_s = TextureRect.new()
+					new_s.mouse_filter = Control.MOUSE_FILTER_IGNORE
 					new_s.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 					new_s.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 					
@@ -171,7 +172,7 @@ func _on_text_edit_gui_input(event):
 
 func get_text_node():
 	var new_l = RichTextLabel.new()
-	
+	new_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	new_l.autowrap_mode = TextServer.AUTOWRAP_OFF
 	new_l.fit_content = true
 	new_l.bbcode_enabled = true

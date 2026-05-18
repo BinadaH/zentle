@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://buhdxcet8pk4t"]
+
+[ext_resource type="Script" uid="uid://cmxeixe15vqqb" path="res://scripts/export_region.gd" id="1_kwcod"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ywxn2"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 0.84313726)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ywxn2"]
+
+[node name="ExportRegion" type="VBoxContainer" unique_id=667749584 groups=["export_region"]]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+script = ExtResource("1_kwcod")
+
+[node name="options" type="Panel" parent="." unique_id=1078899291]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ywxn2")
+
+[node name="MarginContainer" type="MarginContainer" parent="options" unique_id=36770263]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="options/MarginContainer" unique_id=246892697]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CheckButton" type="CheckButton" parent="options/MarginContainer/HBoxContainer" unique_id=371694673]
+z_index = 1
+layout_mode = 2
+text = "Export"
+
+[node name="LineEdit" type="LineEdit" parent="options/MarginContainer/HBoxContainer" unique_id=1530512050]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ywxn2")
+placeholder_text = "Title"
+
+[node name="export_region" type="Panel" parent="." unique_id=452901486]
+z_index = -1
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[connection signal="pressed" from="options/MarginContainer/HBoxContainer/CheckButton" to="." method="_on_check_button_pressed"]
+[connection signal="text_changed" from="options/MarginContainer/HBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]

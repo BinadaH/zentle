@@ -103,6 +103,7 @@ func _process(delta: float) -> void:
 
 @export var z_slider: VSlider
 func set_zoom_to(val):
+	val = max(min(MAX_CAM_ZOOM, val), MIN_CAM_ZOOM)
 	zoom = Vector2(val, val)
 	emit_signal("has_zoomed", zoom.x)
 
@@ -116,3 +117,10 @@ func reset():
 	z_slider.value = 1
 	position = Vector2.ZERO
 	emit_signal("has_moved", position)
+
+func move_to(pos):
+	position = pos
+	emit_signal("has_moved", position)
+func zoom_to(val):
+	val = max(min(MAX_CAM_ZOOM, val), MIN_CAM_ZOOM)
+	z_slider.value = val
