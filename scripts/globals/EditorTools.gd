@@ -18,12 +18,7 @@ var toggle_shortcuts = {
 	KEY_H: TOOLS.HAND,
 	KEY_Q: TOOLS.PEN,
 	KEY_T: TOOLS.TEXT,
-}
-
-var sub_shortcuts = {
-	TOOLS.SELECT: {
-		KEY_R: TOOLS.EXPORT_REGION
-	}
+	KEY_R: TOOLS.EXPORT_REGION,
 }
 
 var preloaded_cursors : Dictionary[TOOLS, Image] = {

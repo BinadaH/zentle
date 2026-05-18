@@ -15,7 +15,7 @@ class FileMenuItem:
 var file_menu_items: Array[FileMenuItem] = [
 	FileMenuItem.new("Save", self.save),
 	FileMenuItem.new("Open", self.open),
-	FileMenuItem.new("Settings", self.settings),
+	FileMenuItem.new("Options", self.options),
 	FileMenuItem.new("New", self.new),
 ]
 
@@ -71,7 +71,7 @@ func new():
 func open():
 	EditorFuncs.begin_handle_open()
 	
-func settings():
+func options():
 	EditorFuncs.toggle_quick_tools()
 	
 func _on_file_menu_id_pressed(id):

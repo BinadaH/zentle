@@ -22,18 +22,23 @@ func load_export_regions():
 		var export_btn = CheckButton.new()
 		export_btn.button_pressed = reg.should_export()
 		export_btn.size_flags_horizontal = Control.SIZE_EXPAND
+		export_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		
 		export_btn.connect("pressed", func():
 			reg.toggle_export()
 		)
 		var go_to_btn = Button.new()
 		
 		go_to_btn.text = "->"
+		go_to_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		go_to_btn.size_flags_horizontal = Control.SIZE_EXPAND
 		go_to_btn.connect("pressed", func():
 			EditorFuncs.close_quick_tools()
 			EditorFuncs.focus_cam_on(reg)
 		)
 		var label = Label.new()
 		label.size_flags_horizontal = Control.SIZE_EXPAND
+		
 		label.text = reg.get_title()
 		
 		line.add_child(label)

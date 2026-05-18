@@ -71,6 +71,7 @@ func handle_mouse_down():
 func handle_mouse_up():
 	var sq_size = EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]
 	var regions = EditorFuncs.get_tree().get_nodes_in_group("export_region")
+	curr_rect = curr_rect.abs()
 	if curr_region && curr_rect.get_area() > sq_size * sq_size:
 		var reg = export_region_scene.instantiate()
 		reg.z_index = -1
