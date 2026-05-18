@@ -33,6 +33,9 @@ func get_options_bar():
 func toggle_export():
 	check_btn.button_pressed = !check_btn.button_pressed
 
+func set_export_to(to):
+	export_on = to
+	check_btn.set_pressed_no_signal(to)
 
 func _on_line_edit_text_changed(new_text):
 	title = new_text

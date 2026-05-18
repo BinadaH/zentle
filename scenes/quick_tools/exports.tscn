@@ -42,8 +42,14 @@ text = "Title"
 
 [node name="Label2" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer" unique_id=954451083]
 layout_mode = 2
-size_flags_horizontal = 3
 text = "Export"
+horizontal_alignment = 1
+
+[node name="toggle_all" type="CheckButton" parent="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer" unique_id=239198646]
+layout_mode = 2
+size_flags_horizontal = 2
+tooltip_text = "Toggle All"
+text = "+"
 
 [node name="Label3" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer" unique_id=1959394335]
 layout_mode = 2
@@ -97,5 +103,6 @@ text = "Export"
 access = 2
 use_native_dialog = true
 
+[connection signal="pressed" from="HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer/toggle_all" to="." method="_on_toggle_all_pressed"]
 [connection signal="pressed" from="HBoxContainer/Control/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

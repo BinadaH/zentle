@@ -58,3 +58,12 @@ func _on_button_pressed():
 func _on_file_dialog_file_selected(path: String):
 	print(path)
 	EditorFuncs.export_manager.make_export(export_option_btn.selected, path)
+
+# TODO: refactoring (shouldn't need to reload every time)
+@onready var toggle_all = $HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer/toggle_all
+func _on_toggle_all_pressed():
+	var regs = get_tree().get_nodes_in_group("export_region")
+	for reg in regs:
+		reg.set_export_to(toggle_all.button_pressed)
+	
+	load_export_regions()
