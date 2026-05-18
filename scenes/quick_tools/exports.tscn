@@ -57,6 +57,45 @@ size_flags_vertical = 3
 theme_override_constants/separation = 0
 script = ExtResource("2_7ftfl")
 
-[node name="Control" type="Control" parent="HBoxContainer" unique_id=868149286]
+[node name="Control" type="Panel" parent="HBoxContainer" unique_id=402118855]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/Control" unique_id=799255737]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -32.0
+offset_right = 33.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Control/CenterContainer" unique_id=726281741]
+layout_mode = 2
+alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/Control/CenterContainer/VBoxContainer" unique_id=1726745364]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "pdf"
+popup/item_0/id = 0
+popup/item_1/text = "svg"
+popup/item_1/id = 1
+
+[node name="Button" type="Button" parent="HBoxContainer/Control/CenterContainer/VBoxContainer" unique_id=1700751415]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Export"
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1112204163]
+access = 2
+use_native_dialog = true
+
+[connection signal="pressed" from="HBoxContainer/Control/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

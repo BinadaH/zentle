@@ -13,7 +13,8 @@ func _ready():
 	line_edit.text = title
 
 func update_colors():
-	var st_box: StyleBoxFlat = $export_region.get_theme_stylebox("panel")
+	var st_box: StyleBoxFlat = $export_region.get_theme_stylebox("panel").duplicate()
+	$export_region.add_theme_stylebox_override("panel", st_box)
 	var darker_bg = EditorColors.background_col.darkened(0.5)
 	st_box.bg_color = Color(darker_bg, 0.3)
 	st_box.border_color = EditorColors.background_col.lightened(0.1)

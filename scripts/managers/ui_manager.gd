@@ -15,7 +15,6 @@ class FileMenuItem:
 var file_menu_items: Array[FileMenuItem] = [
 	FileMenuItem.new("Save", self.save),
 	FileMenuItem.new("Open", self.open),
-	FileMenuItem.new("Export", self.export),
 	FileMenuItem.new("Settings", self.settings),
 	FileMenuItem.new("New", self.new),
 ]
@@ -62,9 +61,6 @@ func update_tool_sizes(size):
 
 	if !EditorTools.is_current(EditorTools.TOOLS.TEXT):
 		EditorTools.set_tool(EditorTools.TOOLS.PEN)
-
-func export():
-	EditorFuncs.export_manager.make_export()
 
 func save():
 	EditorFuncs.handle_save()

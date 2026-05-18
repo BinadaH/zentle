@@ -271,6 +271,7 @@ icon = ExtResource("9_ya4ey")
 expand_icon = true
 
 [node name="export_reg_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=1930988323]
+visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 tooltip_text = "Export Regions"

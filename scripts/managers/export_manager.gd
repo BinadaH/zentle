@@ -1,5 +1,10 @@
 class_name ExportManager
 
+enum FILE {
+	PDF,
+	SVG
+}
+
 class Region:
 	var panel
 
@@ -16,7 +21,10 @@ func _init():
 	var font = load("res://fonts/JetBrainsMono-Regular.ttf")
 	generate_export.SetupFont(null)
 	
-func make_export():
+func make_export(type: FILE, path: String):
+	var file_name = path.get_file().get_basename()
+	var save_folder = path.get_base_dir()
+	
 	generate_export.Setup(EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE], EditorOptions.options[EditorOptions.OPTIONS.GRID_WEIGHT], EditorColors.background_col, EditorColors.grid_col)
 	var regions = EditorFuncs.get_tree().get_nodes_in_group("export_region")
 	regions.sort_custom(func(reg1, reg2): return reg1.export_index < reg2.export_index)
@@ -37,15 +45,23 @@ func make_export():
 					if !(node in items):
 						items.append(node)
 		
-		page_objs.append(items)
-		page_positions.append(rect.position)
-		page_sizes.append(rect.size)
+		if type == FILE.SVG:
+			var curr_file_path= "%s_%s.svg" % [file_name, reg.get_title()]
+			var img = generate_export.ExportSvg(items, rect.position, rect.size)
+			var f = FileAccess.open(save_folder.path_join(curr_file_path), FileAccess.WRITE)
+			f.store_buffer(img)
+		else:
+			page_objs.append(items)
+			page_positions.append(rect.position)
+			page_sizes.append(rect.size)
 	
 	if page_objs.size() == 0: return
-	var pdf = generate_export.ExportPdf(page_objs, page_positions, page_sizes)
-	var f = FileAccess.open("res://test_export.pdf", FileAccess.WRITE)
-	f.store_buffer(pdf)
-	f.close()
+	if type == FILE.PDF:
+		var curr_file_path = "%s.pdf" % [save_folder.path_join(file_name)]
+		var pdf = generate_export.ExportPdf(page_objs, page_positions, page_sizes)
+		var f = FileAccess.open(curr_file_path, FileAccess.WRITE)
+		f.store_buffer(pdf)
+		f.close()
 
 func handle_mouse_down():
 	curr_region = Region.new()
