@@ -52,13 +52,15 @@ func _ready():
 		
 		btn_size_container.call_deferred("add_child", btn)
 		btn.connect("pressed", func(): 
-			update_tool_sizes(btn_sizes[size_i])
-			)
+			var size = btn_sizes[size_i]
+			update_tool_sizes(size)
+			slider_size.set_value_no_signal(size)
+		)
 
 func update_tool_sizes(size):
 	EditorData.current_size = size * 0.4 * EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]
 	EditorData.current_text_size = size * EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]
-
+	
 	if !EditorTools.is_current(EditorTools.TOOLS.TEXT):
 		EditorTools.set_tool(EditorTools.TOOLS.PEN)
 
