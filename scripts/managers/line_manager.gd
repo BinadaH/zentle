@@ -163,6 +163,7 @@ func done():
 		smoothed_points.append(p + Vector2(0.1, 0.1)) 
 		smoothed_pressures.append(smoothed_pressures[0])
 		current_line.points = smoothed_points
+		_update_width_curve()
 	else:
 		# Check for scratch only when enabled
 		var is_scratch = null
@@ -179,8 +180,8 @@ func done():
 			smoothed_points = simplify_points(smoothed_points, SIMPLIFY_LINE_FACTOR)
 		
 		current_line.points = smoothed_points
+		_update_width_curve()
 	
-	_update_width_curve()
 	EditorHistory.create_action("Create Line", EditorFuncs.canvas_manager.add_to_canvas.bind(current_line), EditorFuncs.canvas_manager.remove_from_canvas.bind(current_line), call_history_do_func, current_line)
 	EditorFuncs.canvas_manager.set_spatial_grid_pos(current_line)
 	
