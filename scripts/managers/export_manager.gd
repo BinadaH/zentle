@@ -78,7 +78,7 @@ func handle_mouse_up():
 		reg.position = curr_rect.position
 		reg.size = curr_rect.size
 		reg.export_index = regions.size()
-		EditorFuncs.canvas_manager.add_to_canvas(reg)
+		EditorHistory.create_action("new region", EditorFuncs.canvas_manager.add_to_canvas.bind(reg), EditorFuncs.canvas_manager.remove_from_canvas.bind(reg), true, reg)
 	curr_region = null
 	EditorData.draw_ui.queue_redraw()
 	
