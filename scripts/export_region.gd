@@ -42,3 +42,6 @@ func _on_line_edit_text_changed(new_text):
 	
 func _on_check_button_pressed():
 	export_on = !export_on
+
+func _on_visible_on_screen_enabler_2d_screen_exited():
+	line_edit.release_focus()

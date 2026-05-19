@@ -47,6 +47,8 @@ size_flags_horizontal = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ywxn2")
 placeholder_text = "Title"
 
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="options/MarginContainer/HBoxContainer/LineEdit" unique_id=1497243650]
+
 [node name="export_region" type="Panel" parent="." unique_id=452901486]
 z_index = -1
 layout_mode = 2
@@ -55,3 +57,4 @@ mouse_filter = 2
 
 [connection signal="pressed" from="options/MarginContainer/HBoxContainer/CheckButton" to="." method="_on_check_button_pressed"]
 [connection signal="text_changed" from="options/MarginContainer/HBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="screen_exited" from="options/MarginContainer/HBoxContainer/LineEdit/VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
