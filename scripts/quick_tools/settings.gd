@@ -1,7 +1,9 @@
 extends MarginContainer
 
 var ui_scales = [0.75, 1.0, 1.25, 1.5, 1.75, 2]
-@onready var option_button: OptionButton = $Settings/OptionButton
+@export var option_button: OptionButton
+@export var float_tools: OptionButton
+@export var settings_grid: GridContainer
 func _ready():
 	# Load saved settings and setup UI after the config file is loaded
 	EditorOptions.connect("config_loaded", func():
@@ -22,6 +24,12 @@ func load_settings():
 	# Load scales
 	for s in ui_scales:
 		option_button.add_item(str(s))
+		
+	
+	# Float tools left and center
+	float_tools.add_item(str("Left"))
+	float_tools.add_item(str("Center"))
+	float_tools.selected = EditorOptions.options[EditorOptions.OPTIONS.FLOAT_TOOLS]
 			
 	# Select the saved ui_scale value from the config file
 	# if the scale is a custom value ui_scales.find will return -1
@@ -35,7 +43,7 @@ func load_settings():
 	for setting in settings_to_load:
 		var lab = Label.new()
 		lab.text = " ".join(EditorOptions.string_options[setting].split("_")).capitalize() + ": "
-		$Settings.add_child(lab)
+		settings_grid.add_child(lab)
 		var setting_type = typeof(EditorOptions.options[setting])
 		match setting_type:
 			TYPE_BOOL:
@@ -44,7 +52,7 @@ func load_settings():
 				btn.connect("pressed", func():
 					EditorOptions.set_and_save_editor_option(setting, !EditorOptions.options[setting]) 
 				)
-				$Settings.add_child(btn)
+				settings_grid.add_child(btn)
 			TYPE_INT, TYPE_FLOAT:
 				var spin = SpinBox.new()
 				spin.max_value = 1000
@@ -53,7 +61,7 @@ func load_settings():
 				spin.connect("value_changed", func(val):
 					EditorOptions.set_and_save_editor_option(setting, val if setting_type == TYPE_FLOAT else int(val)) 
 				)
-				$Settings.add_child(spin)
+				settings_grid.add_child(spin)
 			_:
 				continue
 		
@@ -61,3 +69,6 @@ func load_settings():
 				
 func _on_option_button_item_selected(index):
 	EditorFuncs.set_ui_scale(ui_scales[index])
+	
+func _on_float_tools_btn_item_selected(index):
+	EditorOptions.set_and_save_editor_option(EditorOptions.OPTIONS.FLOAT_TOOLS, index) 

@@ -2,15 +2,17 @@ using Godot;
 using System;
 using SkiaSharp;
 using CSharpMath.SkiaSharp;
+using System.Xml.XPath;
 
 [GlobalClass]
 public partial class GenerateLatexImg : Node
 {
-	public ImageTexture GetImage(string expr, int font_size)
+	public ImageTexture GetImage(string expr, int font_size, int error_size)
 	{
         var painter = new MathPainter();
         painter.LaTeX = expr;
         painter.FontSize = font_size;
+        painter.ErrorFontSize = error_size;
         painter.TextColor = new SKColor(255, 255, 255);
 
         var measure = painter.Measure();

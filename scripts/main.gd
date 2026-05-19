@@ -4,13 +4,12 @@ class_name Main
 @onready var canvas = $canvas
 @onready var camera = $camera
 @onready var background = $background
-@onready var draw_line = $canvas_main/Control/view/draw_area/SubViewportContainer/SubViewport/draw_line
+@export var ui: UIManager
 
 func _ready():
 	EditorData.main_ready(self)
 	EditorData.camera = camera
-	EditorData.draw_line = draw_line
-	TextServer
+	EditorData.draw_line = ui.draw_line
 	camera.connect("has_moved", background.update_material_position)
 	camera.connect("has_zoomed", background.update_material_zoom)
 	
@@ -20,8 +19,7 @@ func _ready():
 	get_tree().root.connect("size_changed", func(): 
 		background.update_material_position(EditorData.camera.position)
 		background.update_material_zoom(EditorData.camera.zoom.x)
-		draw_line.clear_viewport(false)
-		
+		EditorData.draw_line.clear_viewport(false)
 	)
 	
 	EditorData.draw_ui = $draw_ui
@@ -39,7 +37,7 @@ func _ready():
 		Engine.max_fps = EditorOptions.options[EditorOptions.OPTIONS.MAX_FPS]
 	)
 	
-	should_keep_rendering_on.append($canvas_main/Control/view/top_panel/HBoxContainer/MenuBar/file_menu)
+	should_keep_rendering_on.append(ui.file_menu)
 
 @onready var debug_info_label = $canvas_main/Control/debug_info
 var time_since_last_render = 0

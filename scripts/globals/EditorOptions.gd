@@ -14,6 +14,7 @@ enum OPTIONS {
 	UI_SCALE,
 	SCRATCH_TO_ERASE,
 	ZOOM_TO_CURSOR,
+	FLOAT_TOOLS,
 	MAX_FPS
 }
 
@@ -26,6 +27,7 @@ var options: Dictionary = {
 	OPTIONS.UI_SCALE: 1,
 	OPTIONS.SCRATCH_TO_ERASE: true,
 	OPTIONS.ZOOM_TO_CURSOR: false,
+	OPTIONS.FLOAT_TOOLS: 0, #0 Left, 1 Center
 	OPTIONS.MAX_FPS: 144
 }
 
@@ -37,6 +39,7 @@ var string_options: Dictionary[OPTIONS, String] = {
 	OPTIONS.SHAPE_RECOGNIZER_DELAY: "shape_recognizer_delay",
 	OPTIONS.UI_SCALE: "ui_scale",
 	OPTIONS.MAX_FPS: "max_fps",
+	OPTIONS.FLOAT_TOOLS: "float_tools",
 	OPTIONS.ZOOM_TO_CURSOR: "zoom_to_cursor",
 	OPTIONS.SCRATCH_TO_ERASE: "scratch_to_erase"
 }
@@ -54,6 +57,8 @@ func set_and_save_editor_option(option: OPTIONS, value: Variant):
 			EditorData.main.background.setup_grid_shader()
 		OPTIONS.MAX_FPS:
 			Engine.max_fps = value
+		OPTIONS.FLOAT_TOOLS:
+			EditorData.main.ui.set_tools_float(value)
 	
 func _ready():
 	call_deferred("load_config_file")

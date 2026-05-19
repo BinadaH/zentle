@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d00wm6l7urqkj" path="res://scripts/quick_tools/settings.gd" id="1_wngva"]
 
-[node name="Settings" type="MarginContainer" unique_id=633254788]
+[node name="Settings" type="MarginContainer" unique_id=633254788 node_paths=PackedStringArray("option_button", "float_tools", "settings_grid")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,18 +13,39 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("1_wngva")
+option_button = NodePath("HBoxContainer/Settings/ui_scale_btn")
+float_tools = NodePath("HBoxContainer/Settings/float_tools_btn")
+settings_grid = NodePath("HBoxContainer/Settings")
 
-[node name="Settings" type="GridContainer" parent="." unique_id=991895525]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1948085070]
 layout_mode = 2
+
+[node name="Settings" type="GridContainer" parent="HBoxContainer" unique_id=991895525]
+layout_mode = 2
+size_flags_horizontal = 3
 columns = 2
 
-[node name="Label" type="Label" parent="Settings" unique_id=2104233178]
+[node name="ui_scale_label" type="Label" parent="HBoxContainer/Settings" unique_id=2104233178]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "UI Scale: "
 
-[node name="OptionButton" type="OptionButton" parent="Settings" unique_id=51963402]
+[node name="ui_scale_btn" type="OptionButton" parent="HBoxContainer/Settings" unique_id=51963402]
 layout_mode = 2
 size_flags_horizontal = 2
 
-[connection signal="item_selected" from="Settings/OptionButton" to="." method="_on_option_button_item_selected"]
+[node name="float_tools_label" type="Label" parent="HBoxContainer/Settings" unique_id=1461459318]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "UI Scale: "
+
+[node name="float_tools_btn" type="OptionButton" parent="HBoxContainer/Settings" unique_id=1030290622]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Control" type="Control" parent="HBoxContainer" unique_id=2062095704]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="item_selected" from="HBoxContainer/Settings/ui_scale_btn" to="." method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="HBoxContainer/Settings/float_tools_btn" to="." method="_on_float_tools_btn_item_selected"]

@@ -2,9 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cmxeixe15vqqb" path="res://scripts/export_region.gd" id="1_kwcod"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ywxn2"]
-bg_color = Color(0.18039216, 0.18039216, 0.18039216, 0.84313726)
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ywxn2"]
 
 [node name="ExportRegion" type="VBoxContainer" unique_id=667749584 groups=["export_region"]]
@@ -21,7 +18,6 @@ script = ExtResource("1_kwcod")
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ywxn2")
 
 [node name="MarginContainer" type="MarginContainer" parent="options" unique_id=36770263]
 layout_mode = 1

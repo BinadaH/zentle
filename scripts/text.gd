@@ -96,7 +96,7 @@ func render(text: String):
 			line.add_child(new_l)
 		elif data.type == "latex":
 			if data.mode == "inline":
-				var ret : ImageTexture = get_latex_img(data.content, curr_font_size)
+				var ret : ImageTexture = get_latex_img(data.content, curr_font_size, curr_font_size * 0.5)
 				if ret:
 					latex_blocks.append(data.content)
 					var new_s = TextureRect.new()
@@ -184,8 +184,8 @@ func get_text_node():
 	
 	return new_l
 	
-func get_latex_img(expression: String, font_size: float) -> ImageTexture:
-	return EditorFuncs.latex_generator.GetImage(expression, font_size)
+func get_latex_img(expression: String, font_size: float, error_size: float) -> ImageTexture:
+	return EditorFuncs.latex_generator.GetImage(expression, font_size, error_size)
 
 func on_caret_changed():
 	var line_i = text_edit.get_caret_line()
@@ -208,7 +208,7 @@ func on_caret_changed():
 				block_start = -1
 	
 	if caret_in_block:
-		var ret : ImageTexture = get_latex_img(block, 30)
+		var ret : ImageTexture = get_latex_img(block, 30, 25)
 		if ret:
 			EditorData.latex_preview.visible = true
 			EditorData.latex_preview.texture = ret
