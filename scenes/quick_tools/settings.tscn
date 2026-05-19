@@ -13,39 +13,44 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("1_wngva")
-option_button = NodePath("HBoxContainer/Settings/ui_scale_btn")
-float_tools = NodePath("HBoxContainer/Settings/float_tools_btn")
-settings_grid = NodePath("HBoxContainer/Settings")
+option_button = NodePath("ScrollContainer/HBoxContainer/Settings/ui_scale_btn")
+float_tools = NodePath("ScrollContainer/HBoxContainer/Settings/float_tools_btn")
+settings_grid = NodePath("ScrollContainer/HBoxContainer/Settings")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1948085070]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=419866196]
 layout_mode = 2
 
-[node name="Settings" type="GridContainer" parent="HBoxContainer" unique_id=991895525]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer" unique_id=1948085070]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Settings" type="GridContainer" parent="ScrollContainer/HBoxContainer" unique_id=991895525]
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
 
-[node name="ui_scale_label" type="Label" parent="HBoxContainer/Settings" unique_id=2104233178]
+[node name="ui_scale_label" type="Label" parent="ScrollContainer/HBoxContainer/Settings" unique_id=2104233178]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "UI Scale: "
 
-[node name="ui_scale_btn" type="OptionButton" parent="HBoxContainer/Settings" unique_id=51963402]
+[node name="ui_scale_btn" type="OptionButton" parent="ScrollContainer/HBoxContainer/Settings" unique_id=51963402]
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="float_tools_label" type="Label" parent="HBoxContainer/Settings" unique_id=1461459318]
+[node name="float_tools_label" type="Label" parent="ScrollContainer/HBoxContainer/Settings" unique_id=1461459318]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Float Tools: "
 
-[node name="float_tools_btn" type="OptionButton" parent="HBoxContainer/Settings" unique_id=1030290622]
+[node name="float_tools_btn" type="OptionButton" parent="ScrollContainer/HBoxContainer/Settings" unique_id=1030290622]
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="Control" type="Control" parent="HBoxContainer" unique_id=2062095704]
+[node name="Control" type="Control" parent="ScrollContainer/HBoxContainer" unique_id=2062095704]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="item_selected" from="HBoxContainer/Settings/ui_scale_btn" to="." method="_on_option_button_item_selected"]
-[connection signal="item_selected" from="HBoxContainer/Settings/float_tools_btn" to="." method="_on_float_tools_btn_item_selected"]
+[connection signal="item_selected" from="ScrollContainer/HBoxContainer/Settings/ui_scale_btn" to="." method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="ScrollContainer/HBoxContainer/Settings/float_tools_btn" to="." method="_on_float_tools_btn_item_selected"]
