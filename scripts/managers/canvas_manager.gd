@@ -143,7 +143,7 @@ func update_eraser():
 			for y in range(-1, 2):
 				for line in EditorData.spatial_grid.get(Vector2i(mouse_cell) + Vector2i(x, y), []):
 					if not (line is Line2D): continue
-					if EditorFuncs.get_object_rect(line).intersects(mouse_rect):
+					if EditorFuncs.get_object_rect(line).grow(line.width / 2).intersects(mouse_rect):
 						if is_rect_over_line2d(line, mouse_rect):
 							for cell in line.get_meta("spatial_grid"):
 								if EditorData.spatial_grid.has(cell):
