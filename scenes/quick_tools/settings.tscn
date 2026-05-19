@@ -37,7 +37,7 @@ size_flags_horizontal = 2
 [node name="float_tools_label" type="Label" parent="HBoxContainer/Settings" unique_id=1461459318]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "UI Scale: "
+text = "Float Tools: "
 
 [node name="float_tools_btn" type="OptionButton" parent="HBoxContainer/Settings" unique_id=1030290622]
 layout_mode = 2
