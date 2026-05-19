@@ -230,3 +230,10 @@ func _on_select_btn_button_up():
 @export var tools_hbox: HBoxContainer
 func set_tools_float(value):
 	tools_hbox.alignment = value
+
+func _on_undo_btn_pressed():
+	EditorHistory.undo()
+	EditorFuncs.selection_manager.clear_selection_status()
+func _on_redo_btn_pressed():
+	EditorHistory.redo()
+	EditorFuncs.selection_manager.clear_selection_status()
