@@ -4,8 +4,6 @@ var current_line: Line2D = null
 var dash_line: Line2D
 var base_line: Line2D 
 
-var curr_points = []
-var curr_pressures = []
 var curr_length = 0
 
 const SIMPLIFY_LINE_FACTOR = 0.75
@@ -38,8 +36,11 @@ func handle_mouse_motion():
 		else:
 			#updating the line that was previously created
 			update_line()
+			
+func handle_mouse_button():
+	if EditorData.mouse_down:
+		create_line()
 	else:
-		#On mouse release, if line exists -> reset the state
 		done()
 
 func create_line():
@@ -53,9 +54,6 @@ func create_line():
 	current_line.default_color = EditorData.current_color
 	current_line.width = EditorData.current_size
 	current_line.width_curve = Curve.new()
-	
-	curr_points.append(EditorData.world_pos)
-	curr_pressures.append(EditorData.pressure)
 	
 	check_shape_timer = EditorData.get_tree().create_timer(EditorOptions.options[EditorOptions.OPTIONS.SHAPE_RECOGNIZER_DELAY])
 	check_shape_timer.connect("timeout", check_shape)
@@ -158,11 +156,14 @@ func done():
 	if found_shape:
 		found_shape = null
 		call_history_do_func = false
-	elif smoothed_points.size() == 1:
-		var p = smoothed_points[0]
-		smoothed_points.append(p + Vector2(0.1, 0.1)) 
-		smoothed_pressures.append(smoothed_pressures[0])
-		current_line.points = smoothed_points
+	elif smoothed_points.size() <= 1:
+		var p = EditorData.world_pos
+		if smoothed_pressures.size() > 0:
+			smoothed_pressures.append(smoothed_pressures[0])
+		else:
+			smoothed_pressures.append(1)
+			smoothed_pressures.append(1)
+		current_line.points = [p, p + Vector2(0.1, 0.1)]
 		_update_width_curve()
 	else:
 		# Check for scratch only when enabled
@@ -193,8 +194,6 @@ func reset_line():
 	last_smooth_pressure = null
 	smoothed_pressures.clear()
 	smoothed_points.clear()
-	curr_pressures.clear()
-	curr_points.clear()
 	if check_shape_timer:
 		check_shape_timer.disconnect("timeout", check_shape)
 	check_shape_timer = null
