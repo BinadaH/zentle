@@ -7,13 +7,14 @@ signal has_zoomed(zoom: float)
 var m_rel = Vector2()
 var new_pos = Vector2()
 var target_zoom = 1
+var zoomed_with_mouse = false
 
 var move = false
 var moving = false
 var zooming = false
 
 const CAM_SPEED = 15
-const CAM_SMOOTHNESS = 10
+const CAM_SMOOTHNESS = 15
 const ZOOM_SENSITIVITY = 1.1
 
 var cam_vel = Vector2()
@@ -33,9 +34,14 @@ func _unhandled_input(event):
 			# Handle zoom
 			if EditorOptions.options[EditorOptions.OPTIONS.CTRL_TO_ZOOM] == event.ctrl_pressed:
 				if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-					z_slider.value = snapped(clamp(z_slider.value * ZOOM_SENSITIVITY, MIN_CAM_ZOOM, MAX_CAM_ZOOM), 0.001)
+					target_zoom = z_slider.value * ZOOM_SENSITIVITY
 				elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-					z_slider.value = snapped(clamp(z_slider.value / ZOOM_SENSITIVITY, MIN_CAM_ZOOM, MAX_CAM_ZOOM), 0.001)
+					target_zoom = z_slider.value / ZOOM_SENSITIVITY
+				
+				if event.button_index == MOUSE_BUTTON_WHEEL_UP || event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+					target_zoom = snapped(clamp(target_zoom, MIN_CAM_ZOOM, MAX_CAM_ZOOM), 0.001)
+					z_slider.set_value_no_signal(target_zoom)
+					zoomed_with_mouse = true
 			
 			# Handle scroll
 			elif event.pressed:
@@ -76,6 +82,7 @@ func _ready() -> void:
 	emit_signal("has_moved", position)
 	emit_signal("has_zoomed", zoom.x)
 
+
 func _process(delta: float) -> void:
 	cam_vel = cam_vel.lerp(target_vel, delta * CAM_SMOOTHNESS)
 	if cam_vel.length_squared() > 0.01:
@@ -94,12 +101,21 @@ func _process(delta: float) -> void:
 	if abs(zoom.x - target_zoom) > 0.001:
 		var new_zoom = lerp(zoom.x, float(target_zoom), delta * CAM_SMOOTHNESS)
 		EditorFuncs.request_high_performance(0)
-		set_zoom_to(new_zoom)
+		if zoomed_with_mouse && EditorOptions.options[EditorOptions.OPTIONS.ZOOM_TO_CURSOR]: zoom_towards_mouse(new_zoom)
+		else: set_zoom_to(new_zoom)
 		zooming = true
 	elif zooming:
 		EditorFuncs.release_high_performance(0)
 		set_zoom_to(target_zoom)
 		zooming = false
+		zoomed_with_mouse = false
+
+func zoom_towards_mouse(val: float):
+	var before = get_global_mouse_position()
+	set_zoom_to(val)
+	var after = get_global_mouse_position()
+	position += before - after
+	emit_signal("has_moved", position)
 
 @export var z_slider: VSlider
 func set_zoom_to(val):
@@ -110,6 +126,7 @@ func set_zoom_to(val):
 func _on_v_slider_value_changed(value: float) -> void:
 	if !EditorFuncs.line_manager.current_line:
 		target_zoom = max(MIN_CAM_ZOOM, min(MAX_CAM_ZOOM, value))
+		zoomed_with_mouse = false
 	else:
 		z_slider.value = target_zoom
 	

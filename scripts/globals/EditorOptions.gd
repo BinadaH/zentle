@@ -13,6 +13,7 @@ enum OPTIONS {
 	SHAPE_RECOGNIZER_DELAY,
 	UI_SCALE,
 	SCRATCH_TO_ERASE,
+	ZOOM_TO_CURSOR,
 	MAX_FPS
 }
 
@@ -24,6 +25,7 @@ var options: Dictionary = {
 	OPTIONS.SHAPE_RECOGNIZER_DELAY: 0.5,
 	OPTIONS.UI_SCALE: 1,
 	OPTIONS.SCRATCH_TO_ERASE: true,
+	OPTIONS.ZOOM_TO_CURSOR: false,
 	OPTIONS.MAX_FPS: 144
 }
 
@@ -35,6 +37,7 @@ var string_options: Dictionary[OPTIONS, String] = {
 	OPTIONS.SHAPE_RECOGNIZER_DELAY: "shape_recognizer_delay",
 	OPTIONS.UI_SCALE: "ui_scale",
 	OPTIONS.MAX_FPS: "max_fps",
+	OPTIONS.ZOOM_TO_CURSOR: "zoom_to_cursor",
 	OPTIONS.SCRATCH_TO_ERASE: "scratch_to_erase"
 }
 

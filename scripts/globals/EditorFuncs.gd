@@ -57,11 +57,13 @@ func toggle_quick_tools():
 		EditorFuncs.open_quick_tools()
 
 func open_quick_tools():
+	Input.set_custom_mouse_cursor(null)
 	EditorData.quick_tools_opened = true
 	play_animation("show_quick_tools")
 
 func close_quick_tools():
 	EditorData.quick_tools_opened = false
+	EditorTools.update_cursor()
 	play_animation("show_quick_tools", true)
 
 func get_screen_to_world_pos(screen_pos : Vector2) -> Vector2:
