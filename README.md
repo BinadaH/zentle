@@ -4,34 +4,53 @@ Zentle is a minimalist note-taking app focused on speed. \
 Note: This project is in a very early WIP stage. If it doesn't break, it's probably a bug.  \
 WEB DEMO: https://bin-h.itch.io/zentle
 <br> <br>
-<img width="1280" height="720" alt="front" src="https://github.com/user-attachments/assets/4f24fde3-63ed-476d-ab89-4a9fe5960048" />
+<img width="1280" height="720" alt="front1" src="https://github.com/user-attachments/assets/d6e807a2-b46b-4348-b449-2b8fc3a90f7c" />
+
+---
+## Index
+* [Quick start](#quick-start)
+* [Features](#features)
+* [Saving and Exporting](#saving-and-exporting)
+
+---
+
+### Quick Start
+
+Install the latest .NET version of Godot: https://godotengine.org/download.
+Make sure to have the .NET SDK installed on your system.
+
+Download the source code and run the project.
+
+---
 
 ### Features
 
 #### Tools (shortcut)
 
-Pen (q)
+_Pen (q)_
 
 - draw and hold to begin shape recognition. If a shape is recognized it can then be modified
   
   <img width="150" height="200" alt="rect_shape" src="https://github.com/user-attachments/assets/621e6dc8-6de3-4ad9-9ede-d09600926457" />
   <img width="150" height="200" alt="circ_shape" src="https://github.com/user-attachments/assets/9ac306b9-9e06-4123-a1f1-b390fd3abe00" />
 
-Hand (h) - for panning
+_Hand (h)_ - for panning
 
 
-Select (s)
+_Select (s)_
 
-- press Ctrl while scaling and moving to snap to the grid
+- press Ctrl while scaling and moving to snap to the grid and shift to keep proportions
 - hold Ctrl while making a box selection to only select objects that are inside the box
+- hold down the Select tool button (or press r), to use [Export Regions](#saving-and-exporting)
 
-Text (t)
+_Text (t)_
 
 - surround the text with \_\_...\_\_ to underline, with \*\*...\*\* to bold
 - insert inline LaTex expressions inside \$ ... \$ blocks (Not available in the web demo)
 
   <img width="334" height="125" alt="lat_rescaled" src="https://github.com/user-attachments/assets/f05a8610-3fc8-4414-ab24-096d9cd10212" />
 
+LaTex is rendered through [CSharpMath](https://github.com/verybadcat/CSharpMath)
 
 #### Themes
 
@@ -75,6 +94,18 @@ grid_weight=2
 To define a new theme, create a new section that begins with "theme\_" (e.g \[theme_gruvbox\]) \
 Each theme has 6 colors (main_text, critical, important, quote, meta, success) + the background and grid colors.
 
-#### File saving
+---
 
-Files are currently saved in a binary format and cannot be exported
+### Saving and Exporting
+
+#### Saving
+Files are saved in a binary format (_.zentle_) that uses the Zstandard compression method.
+
+#### Exporting
+Zentle supports PDF and SVG export through [SkiaSharp](https://github.com/mono/skiasharp).
+To export notes, you need to use _Export Regions_ to define the areas you want to output.
+Each _Export Region_ contains a __Title__ and a __Export on/off__ state. The latter is used to determin whether the _Region_ is included in the exported file or not. 
+
+You can _Select_ a _Region_ (to Scale/Move) only by selecting it's edges.
+
+To change export order and create the final output, navigate to the _Options > Export_ tab (Ctrl + Shift + t or from the File menu).
