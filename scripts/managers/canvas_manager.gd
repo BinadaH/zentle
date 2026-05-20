@@ -7,6 +7,7 @@ func make_copy(objs: Array):
 	copy_buffer.clear()
 	if objs.size() > 0:
 		copy_buffer = objs
+	DisplayServer.clipboard_set("")
 
 ## If the user has an image in the clipboard, the function adds a [TextureRect] with the corresponding image.
 ## Otherwise it duplicates [member copy_buffer] into the canvas
