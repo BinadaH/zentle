@@ -46,6 +46,7 @@ func handle_key(event: InputEventKey):
 func handle_mouse_button(event: InputEventMouseButton):
 	if event.button_index == MOUSE_BUTTON_LEFT:
 		EditorData.mouse_down = event.pressed
+		calc_mouse_position(event)
 		if event.pressed:
 			EditorFuncs.request_high_performance()
 		else:
@@ -121,16 +122,7 @@ func handle_mouse_button(event: InputEventMouseButton):
 			EditorFuncs.release_high_performance()
 
 func handle_mouse_motion(event: InputEventMouseMotion):
-	# Workaround: event.relative occasionally returns fixed Vector2.ZERO, calculating
-	# manually from position
-	EditorData.mouse_relative = event.position - EditorData.screen_pos
-	
-	EditorData.screen_pos = event.position 
-	var new_world_pos = EditorFuncs.get_screen_to_world_pos(event.position)
-	
-	EditorData.snapped_world_relative = EditorFuncs.get_grid_pos(new_world_pos, 0.5) - EditorFuncs.get_grid_pos(EditorData.world_pos, 0.5)
-	
-	EditorData.world_pos = new_world_pos
+	calc_mouse_position(event)
 	EditorData.pressure = max(event.pressure, 0.3)
 
 	match EditorTools.current_tool:
@@ -143,3 +135,15 @@ func handle_mouse_motion(event: InputEventMouseMotion):
 			EditorFuncs.canvas_manager.update_eraser()
 		EditorTools.TOOLS.EXPORT_REGION:
 			EditorFuncs.export_manager.handle_mouse_movement()
+			
+func calc_mouse_position(event: InputEvent):
+	# Workaround: event.relative occasionally returns fixed Vector2.ZERO, calculating
+	# manually from position
+	EditorData.mouse_relative = event.position - EditorData.screen_pos
+	
+	EditorData.screen_pos = event.position 
+	var new_world_pos = EditorFuncs.get_screen_to_world_pos(event.position)
+	
+	EditorData.snapped_world_relative = EditorFuncs.get_grid_pos(new_world_pos, 0.5) - EditorFuncs.get_grid_pos(EditorData.world_pos, 0.5)
+	
+	EditorData.world_pos = new_world_pos
