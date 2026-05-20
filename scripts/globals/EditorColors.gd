@@ -45,7 +45,6 @@ func calc_ui_color_palette():
 	var base_txt = color_palette[0]
 	var button_normal = color_palette[4]
 	var success = color_palette[5]
-	var alert_red = color_palette[2]
 
 	ui_palette[UI.TEXT_MAIN] = base_txt
 	ui_palette[UI.TEXT_DARK] = base_txt.darkened(0.4)

@@ -93,11 +93,11 @@ func scale(rel : Vector2, proportional : bool):
 var last_scale_factor = 1
 var last_move_factor = Vector2.ZERO
 func end_move_scale():
-	var do_func = func(move, scale, origin): 
-		EditorFuncs.canvas_manager.move_objs(objs.duplicate(), move)
+	var do_func = func(move_val, scale, origin): 
+		EditorFuncs.canvas_manager.move_objs(objs.duplicate(), move_val)
 		EditorFuncs.canvas_manager.rescale_objs(objs.duplicate(), scale, origin)
 		for i in range(points.size()):
-			points[i] += move
+			points[i] += move_val
 			points[i] = scale * (points[i] - origin) + origin
 		EditorData.draw_ui.queue_redraw()
 	

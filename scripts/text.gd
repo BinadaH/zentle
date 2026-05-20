@@ -73,9 +73,9 @@ func markdown_to_bbcode(markdown_text: String) -> String:
 
 
 var latex_blocks = []
-func render(text: String):
+func render(new_text: String):
 	EditorData.can_use_shortcuts = true
-	if text == "":
+	if new_text == "":
 		EditorFuncs.canvas_manager.remove_from_canvas(self)
 		queue_free()
 		return
@@ -84,7 +84,7 @@ func render(text: String):
 	for child in $content.get_children():
 		$content.remove_child(child)
 	
-	self.text = text
+	text = new_text
 	latex_blocks.clear()
 	text = markdown_to_bbcode(text)
 	var parsed_data = EditorFuncs.parse_text_and_latex(text)
@@ -185,7 +185,7 @@ func get_text_node():
 	return new_l
 	
 func get_latex_img(expression: String, font_size: float, error_size: float) -> ImageTexture:
-	return EditorFuncs.latex_generator.GetImage(expression, font_size, error_size)
+	return EditorFuncs.latex_generator.GetImage(expression, int(font_size), int(error_size))
 
 func on_caret_changed():
 	var line_i = text_edit.get_caret_line()

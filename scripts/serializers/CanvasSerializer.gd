@@ -8,5 +8,5 @@ func _init(fs_version):
 func serialize_canvas():
 	pass
 
-func deserialize_canvas(data: Dictionary):
+func deserialize_canvas(_data: Dictionary):
 	pass
