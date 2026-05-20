@@ -85,47 +85,24 @@ func get_color_index(color: Color) -> int:
 	return color_palette.find(color)
 
 
+@onready var default_theme = ThemeDB.get_project_theme()
+@onready var st_box_normal = default_theme.get_stylebox("normal", "Button")
+@onready var st_box_pressed = default_theme.get_stylebox("pressed", "Button")
+@onready var st_box_hover = default_theme.get_stylebox("hover", "Button")
+@onready var st_box_panel = default_theme.get_stylebox("panel", "Panel")
+@onready var st_box_check_box = default_theme.get_stylebox("hover", "CheckBox")
+@onready var st_box_slider = default_theme.get_stylebox("grabber_area", "HSlider")
+@onready var st_box_slider_hover = default_theme.get_stylebox("grabber_area_highlight", "HSlider")
+@onready var st_line_slider = default_theme.get_stylebox("slider", "HSlider")
 func update_ui_theme(_old_palette):
-	var default_theme = ThemeDB.get_project_theme()
-	var st_box_normal = default_theme.get_stylebox("normal", "Button")
-	var st_box_pressed = default_theme.get_stylebox("pressed", "Button")
-	var st_box_hover = default_theme.get_stylebox("hover", "Button")
-	
 	st_box_normal.bg_color = ui_palette[UI.BTN_BG_NORMAL]
 	st_box_hover.bg_color = ui_palette[UI.BTN_BG_HOVER]
 	st_box_pressed.bg_color = ui_palette[UI.BTN_BG_PRESSED]
-	default_theme.set_stylebox("normal", "Button", st_box_normal)
-	default_theme.set_stylebox("pressed", "Button", st_box_pressed)
-	default_theme.set_stylebox("hover", "Button", st_box_hover)
 	
-	default_theme.set_color("font_color", "Button", ui_palette[UI.BTN_TEXT])
-	default_theme.set_color("font_hover_color", "Button", ui_palette[UI.BTN_TEXT_HOVER])
-	default_theme.set_color("font_pressed_color", "Button", ui_palette[UI.BTN_TEXT])
-	
-	var st_box_panel = default_theme.get_stylebox("panel", "Panel")
 	st_box_panel.bg_color = ui_palette[UI.BG_PANEL]
-	default_theme.set_stylebox("panel", "Panel", st_box_panel)
-	
-	var st_box_check_box = default_theme.get_stylebox("hover", "CheckBox")
+
 	st_box_check_box.bg_color = ui_palette[UI.BTN_BG_HOVER]
-	default_theme.set_stylebox("hover", "CheckBox", st_box_check_box)
-	default_theme.set_stylebox("hover_pressed", "CheckBox", st_box_check_box)
-	
-	default_theme.set_stylebox("hover_pressed", "CheckButton", st_box_check_box)
-	default_theme.set_stylebox("hover", "CheckButton", st_box_check_box)
-	default_theme.set_stylebox("pressed", "CheckButton", st_box_pressed)
-	
-	
-	var st_box_slider = default_theme.get_stylebox("grabber_area", "HSlider")
-	var st_box_slider_hover = default_theme.get_stylebox("grabber_area_highlight", "HSlider")
-	var st_line_slider = default_theme.get_stylebox("slider", "HSlider")
+
 	st_box_slider.bg_color = ui_palette[UI.PRIMARY]
 	st_box_slider_hover.bg_color = ui_palette[UI.PRIMARY_HOVER]
 	st_line_slider.color = ui_palette[UI.TEXT_LIGHT]
-	default_theme.set_stylebox("grabber_area", "CheckBox", st_box_slider)
-	default_theme.set_stylebox("grabber_area_highlight", "CheckBox", st_box_slider_hover)
-	default_theme.set_stylebox("grabber_slider", "CheckBox", st_line_slider)
-	
-	
-	
-	get_tree().root.theme = default_theme
