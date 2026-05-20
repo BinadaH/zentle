@@ -95,6 +95,10 @@ func set_tool(_tool: TOOLS):
 	# Clear the selection status when leaving Select tool
 	if current_tool == TOOLS.SELECT:
 		EditorFuncs.selection_manager.clear_selection_status()
+	elif current_tool == TOOLS.PEN:
+		EditorFuncs.line_manager.done()
+	elif current_tool == TOOLS.EXPORT_REGION:
+		EditorFuncs.export_manager.handle_mouse_up()
 		
 	current_tool = _tool
 	update_cursor()

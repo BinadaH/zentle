@@ -38,6 +38,7 @@ func _ready():
 	)
 	
 	should_keep_rendering_on.append(ui.file_menu)
+	should_keep_rendering_on.append(ui.confirmation_dialog)
 
 @onready var debug_info_label = $canvas_main/Control/debug_info
 var time_since_last_render = 0

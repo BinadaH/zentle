@@ -1,6 +1,6 @@
 extends MarginContainer
 
-@onready var export_option_btn: OptionButton = $HBoxContainer/Control/CenterContainer/VBoxContainer/HBoxContainer/OptionButton
+@onready var export_option_btn: OptionButton = $HBoxContainer/Control/CenterContainer/VBoxContainer/HBoxContainer/OptionButton 
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
@@ -48,12 +48,17 @@ func load_export_regions():
 		
 		container.add_child(line)
 
+@export var file_dialog: FileDialog
 func _on_button_pressed():
-	if !$FileDialog.visible:
-		var target_ext = "*.pdf" if export_option_btn.selected == 0 else "*.svg"
-		$FileDialog.clear_filters()
-		$FileDialog.filters = [target_ext]
-		$FileDialog.visible = true
+	if !file_dialog.visible:
+		var curr_ext = ".pdf" if export_option_btn.selected == 0 else ".svg"
+		var target_ext = "*" + curr_ext
+		file_dialog.clear_filters()
+		file_dialog.filters = [target_ext]
+		if EditorFiles.curr_path:
+			file_dialog.current_dir = EditorFiles.curr_path.get_base_dir()
+			file_dialog.current_file = EditorFiles.curr_path.get_file().get_basename() + curr_ext
+		file_dialog.visible = true
 
 @onready var timer = $HBoxContainer/Control/CenterContainer/VBoxContainer/Timer
 @onready var grid_check = $HBoxContainer/Control/CenterContainer/VBoxContainer/HBoxContainer/CheckBox

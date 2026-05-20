@@ -5,6 +5,7 @@ class_name UIManager
 @export var slider_size: HSlider
 @export var file_name_label: Label
 @export var file_menu: PopupMenu
+@export var confirmation_dialog: ConfirmationDialog
 @export var draw_line: Control
 
 class FileMenuItem:

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d0aproehqxedb" path="res://scripts/quick_tools/exports.gd" id="1_semgt"]
 [ext_resource type="Script" uid="uid://vt3h10bh2dhj" path="res://scripts/quick_tools/exports_container.gd" id="2_7ftfl"]
 
-[node name="Exports" type="MarginContainer" unique_id=495979184]
+[node name="Exports" type="MarginContainer" unique_id=495979184 node_paths=PackedStringArray("file_dialog")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -14,6 +14,7 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("1_semgt")
+file_dialog = NodePath("FileDialog")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=321373424]
 layout_mode = 2
