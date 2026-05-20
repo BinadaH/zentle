@@ -247,7 +247,7 @@ func set_spatial_grid_pos(obj):
 	var curr_rect = EditorFuncs.get_object_rect(obj)
 	var start_cell = (curr_rect.position / EditorData.SPATIAL_GRID_SIZE).floor()
 	var end_cell = (curr_rect.end / EditorData.SPATIAL_GRID_SIZE).floor()
-	
+		
 	var curr_spatial_grid = []
 	for x in range(int(start_cell.x), int(end_cell.x) + 1):
 		for y in range(int(start_cell.y), int(end_cell.y) + 1):

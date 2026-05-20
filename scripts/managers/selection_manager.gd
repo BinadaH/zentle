@@ -35,10 +35,11 @@ func _perform_area_selection():
 	var start_cell = (area.position / grid_size).floor()
 	var end_cell = (area.end / grid_size).floor()
 	
-	for cell in EditorData.spatial_grid:
-		var cell_rect = Rect2(cell * EditorData.SPATIAL_GRID_SIZE, Vector2.ONE * EditorData.SPATIAL_GRID_SIZE)
-		if area.intersects(cell_rect):
-			for child in EditorData.spatial_grid.get(cell, []):
+	for x in range(int(start_cell.x), int(end_cell.x) + 1):
+		for y in range(int(start_cell.y), int(end_cell.y) + 1):
+			var cell_pos = Vector2i(x, y)
+			var cell = EditorData.spatial_grid.get(cell_pos, [])
+			for child in cell:
 				if found_objs.has(child): continue
 				var to_add = false
 				var obj_rect = Rect2()
@@ -59,6 +60,7 @@ func _perform_area_selection():
 					found_objs.append(child)
 					combined_rect = combined_rect.merge(obj_rect) if found_objs.size() > 1 else obj_rect
 			
+	
 	if found_objs.size() > 0:
 		selection_made = ShapeBounds.new(combined_rect)
 		selection_made.set_objs(found_objs)
@@ -126,14 +128,15 @@ func single_click_selection():
 		else:
 			return
 	
-	var objs = EditorFuncs.canvas_manager.get_children()
-	for objs_i in range(objs.size() - 1, -1, -1):
-		var child = objs[objs_i]
+	var mouse_spatial_grid_pos = (EditorData.world_pos / EditorData.SPATIAL_GRID_SIZE).floor()
+	var cell = EditorData.spatial_grid.get(Vector2i(mouse_spatial_grid_pos), [])
+	for objs_i in range(cell.size() - 1, -1, -1):
+		var child = cell[objs_i]
 		var is_selected = false
 		var new_rect
 		
 		if child is Line2D:
-			var area = Rect2(EditorData.world_pos, Vector2.ZERO)
+			var area = Rect2(EditorData.world_pos, Vector2.ZERO).grow(10)
 			is_selected = EditorFuncs.canvas_manager.is_rect_over_line2d(child, area)
 			if is_selected:
 				new_rect = EditorFuncs.get_object_rect(child)

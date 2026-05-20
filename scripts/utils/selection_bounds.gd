@@ -94,13 +94,17 @@ var last_scale_factor = 1
 var last_move_factor = Vector2.ZERO
 func end_move_scale():
 	var do_func = func(move_val, scale, origin): 
-		EditorFuncs.canvas_manager.move_objs(objs.duplicate(), move_val)
-		EditorFuncs.canvas_manager.rescale_objs(objs.duplicate(), scale, origin)
 		for i in range(points.size()):
 			points[i] += move_val
 			points[i] = scale * (points[i] - origin) + origin
-		EditorData.draw_ui.queue_redraw()
+		
+		for obj in objs:
+			EditorFuncs.canvas_manager.move_obj(obj, move_val)
+			EditorFuncs.canvas_manager.rescale_obj(obj, scale, origin)
+			EditorFuncs.canvas_manager.set_spatial_grid_pos(obj)
 	
+		EditorData.draw_ui.queue_redraw()
+		
 	var inv_last_scale_factor = Vector2.ONE / last_scale_factor
 	EditorHistory.create_action("move_scale", do_func.bind(last_move_factor, last_scale_factor, origin), do_func.bind(-last_move_factor, inv_last_scale_factor, origin), false)
 	
