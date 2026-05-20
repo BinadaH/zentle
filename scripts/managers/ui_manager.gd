@@ -193,7 +193,8 @@ func _on_pen_size_value_changed(value):
 func _on_quick_controls_container_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed && event.button_index == MOUSE_BUTTON_LEFT:
-			EditorFuncs.toggle_quick_tools()
+			if EditorData.quick_tools_opened:
+				EditorFuncs.close_quick_tools()
 
 ## Switch between Slider / Buttons size controls
 func _on_show_size_slider_pressed():
