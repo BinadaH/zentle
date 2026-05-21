@@ -6,6 +6,9 @@ var base_line: Line2D
 
 var curr_length = 0
 
+var ink_spell_strokes = []
+var is_curr_stroke_spell = false
+
 const SIMPLIFY_LINE_FACTOR = 0.75
 
 enum STROKE_TYPES {
@@ -14,6 +17,9 @@ enum STROKE_TYPES {
 }
 
 var shape_recognizer : ShapeRecognizer
+var shape_timer : Timer
+var spell_timer : Timer
+var curr_timer: Timer
 
 func _init():
 	dash_line = Line2D.new()
@@ -28,14 +34,25 @@ func _init():
 	
 	shape_recognizer = ShapeRecognizer.new()
 
+func ready():
+	shape_timer = Timer.new()
+	spell_timer = Timer.new()
+	
+	shape_timer.one_shot = true
+	spell_timer.one_shot = true
+	shape_timer.wait_time = 1
+	spell_timer.wait_time = 0.5
+	shape_timer.connect("timeout", check_shape)
+	spell_timer.connect("timeout", check_spell)
+	
+	EditorFuncs.get_tree().get_root().call_deferred("add_child", shape_timer)
+	EditorFuncs.get_tree().get_root().call_deferred("add_child", spell_timer)
+	
+
 func handle_mouse_motion():
 	if EditorData.mouse_down:
-		if !current_line:
-			#creating the line on mouse down
-			create_line()
-		else:
-			#updating the line that was previously created
-			update_line()
+		#updating the line that was previously created
+		update_line()
 			
 func handle_mouse_button():
 	if EditorData.mouse_down:
@@ -44,31 +61,33 @@ func handle_mouse_button():
 		done()
 
 func create_line():
-	if EditorData.shift_pressed && !EditorData.ctrl_pressed:
-		current_line = dash_line.duplicate()
-		current_line.set_meta("stroke", STROKE_TYPES.DASHED)
+	if curr_timer: curr_timer.stop()
+	EditorData.draw_line.first_point = true
+	
+	if EditorData.shift_pressed && EditorData.ctrl_pressed:
+		is_curr_stroke_spell = true
+		curr_timer = spell_timer
 	else:
-		current_line = base_line.duplicate()
-		current_line.set_meta("stroke", STROKE_TYPES.NORMAL)
-		
-	current_line.default_color = EditorData.current_color
-	current_line.width = EditorData.current_size
-	current_line.width_curve = Curve.new()
+		if EditorData.shift_pressed && !EditorData.ctrl_pressed:
+			current_line = dash_line.duplicate()
+			current_line.set_meta("stroke", STROKE_TYPES.DASHED)
+		else:
+			current_line = base_line.duplicate()
+			current_line.set_meta("stroke", STROKE_TYPES.NORMAL)
+			
+		current_line.default_color = EditorData.current_color
+		current_line.width = EditorData.current_size
+		current_line.width_curve = Curve.new()
+		current_line.visible = false
+		curr_length = 0
+		curr_timer = shape_timer
 	
-	check_shape_timer = EditorData.get_tree().create_timer(EditorOptions.options[EditorOptions.OPTIONS.SHAPE_RECOGNIZER_DELAY])
-	check_shape_timer.connect("timeout", check_shape)
-	
-	current_line.visible = false
-	curr_length = 0
-
-
 var last_smooth_point = null
 var last_smooth_pressure = null
 var smoothed_pressures = PackedFloat32Array()
 var smoothed_points = PackedVector2Array()
 
 const MIN_DISTANCE = 1
-var check_shape_timer : SceneTreeTimer = null
 
 func update_line():
 	if found_shape:
@@ -118,7 +137,7 @@ func draw_line():
 	# Add new point to the draw_line viewport
 	EditorData.draw_line.draw_new_point(target_point, last_smooth_pressure * EditorData.current_size * 0.5)
 	
-	check_shape_timer.time_left = 1
+	curr_timer.start()
 
 var found_shape : ShapeRecognizer.ShapeRecognizerResult = null
 var shape_check_iter = 0
@@ -135,10 +154,13 @@ func check_shape():
 		current_line.width_curve.clear_points()
 		current_line.width_curve.add_point(Vector2(1.0, 1.0))
 	else:
-		check_shape_timer = EditorData.get_tree().create_timer(1)
-		check_shape_timer.connect("timeout", check_shape)
-		check_shape_timer.time_left = EditorOptions.options[EditorOptions.OPTIONS.SHAPE_RECOGNIZER_DELAY]
+		curr_timer.start()
 
+
+func check_spell():
+	EditorData.draw_line.clear_viewport()
+	EditorFuncs.ink_spells_manager.check_spell(ink_spell_strokes)
+	ink_spell_strokes = []
 
 func _update_width_curve():
 	if smoothed_pressures.size() == 0: return
@@ -147,9 +169,17 @@ func _update_width_curve():
 		var p = float(i) / steps
 		var index = int(smoothed_pressures.size()* p)
 		current_line.width_curve.add_point(Vector2(p, smoothed_pressures[index]))
-	
+
+
 func done():
-	if !current_line: return
+	if is_curr_stroke_spell:
+		ink_spell_strokes.append(PackedVector2Array(smoothed_points))
+		reset_line()
+		return
+		
+	if !current_line: 
+		reset_line()
+		return
 	current_line.visible = true
 	
 	var call_history_do_func = true
@@ -190,16 +220,17 @@ func done():
 	
 func reset_line():
 	current_line = null
+	if !is_curr_stroke_spell:
+		EditorData.draw_line.clear_viewport()
+		if curr_timer:
+			curr_timer.stop()
+		
 	last_smooth_point = null
 	last_smooth_pressure = null
 	smoothed_pressures.clear()
 	smoothed_points.clear()
-	if check_shape_timer:
-		check_shape_timer.disconnect("timeout", check_shape)
-	check_shape_timer = null
 	shape_check_iter = 0
-	
-	EditorData.draw_line.clear_viewport()
+	is_curr_stroke_spell = false
 
 func simplify_points(points: PackedVector2Array, epsilon: float) -> PackedVector2Array:
 	if points.size() < 3:

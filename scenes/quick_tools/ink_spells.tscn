@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://co3vhjgu03j3b"]
+
+[ext_resource type="Script" uid="uid://c40p5gr3xvaft" path="res://scripts/quick_tools/ink_spells.gd" id="1_eqvod"]
+[ext_resource type="Script" uid="uid://dpuai5hrp1iyv" path="res://scripts/quick_tools/draw_spell_letters.gd" id="2_kgoy2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqvod"]
+bg_color = Color(0.1728327, 0.17283267, 0.17283267, 1)
+
+[node name="InkSpells" type="MarginContainer" unique_id=602614440 node_paths=PackedStringArray("container", "missing_letters_ui", "letters_saved_ui", "draw_letters_ui", "home_ui")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_eqvod")
+container = NodePath("HBoxContainer/VBoxContainer/GridContainer")
+missing_letters_ui = NodePath("HBoxContainer/Control/Panel/home/missing")
+letters_saved_ui = NodePath("HBoxContainer/Control/Panel/home/saved")
+draw_letters_ui = NodePath("HBoxContainer/Control/Panel/draw_letters")
+home_ui = NodePath("HBoxContainer/Control/Panel/home")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=534992020]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1674360548]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer" unique_id=1748163420]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 3
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/GridContainer" unique_id=1237492025]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Trigger"
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer/GridContainer" unique_id=656989109]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "File Path"
+
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer/GridContainer" unique_id=2183142]
+layout_mode = 2
+text = "Delete"
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1055186329]
+layout_mode = 2
+text = "+"
+
+[node name="Control" type="Control" parent="HBoxContainer" unique_id=1570142045]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="HBoxContainer/Control" unique_id=1580671919]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="draw_letters" type="MarginContainer" parent="HBoxContainer/Control/Panel" unique_id=909839275 node_paths=PackedStringArray("curr_msg", "draw_panel", "timer")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("2_kgoy2")
+curr_msg = NodePath("VBoxContainer/Label")
+draw_panel = NodePath("VBoxContainer/MarginContainer/draw_panel")
+timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="HBoxContainer/Control/Panel/draw_letters" unique_id=1070141672]
+one_shot = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Control/Panel/draw_letters" unique_id=1709743125]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Control/Panel/draw_letters/VBoxContainer" unique_id=1528726703]
+layout_mode = 2
+text = "Write the letter ..."
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Control/Panel/draw_letters/VBoxContainer" unique_id=1099003900]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="draw_panel" type="Panel" parent="HBoxContainer/Control/Panel/draw_letters/VBoxContainer/MarginContainer" unique_id=1776199563]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eqvod")
+
+[node name="home" type="CenterContainer" parent="HBoxContainer/Control/Panel" unique_id=63369383]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="missing" type="VBoxContainer" parent="HBoxContainer/Control/Panel/home" unique_id=650723057]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Control/Panel/home/missing" unique_id=369092132]
+layout_mode = 2
+text = "Some Letters are missing"
+
+[node name="start_btn" type="Button" parent="HBoxContainer/Control/Panel/home/missing" unique_id=1898450142]
+layout_mode = 2
+text = "Start Now"
+
+[node name="saved" type="Label" parent="HBoxContainer/Control/Panel/home" unique_id=794532214]
+layout_mode = 2
+text = "All letters are saved"
+
+[connection signal="visibility_changed" from="HBoxContainer/Control/Panel/draw_letters" to="." method="_on_draw_letters_visibility_changed"]
+[connection signal="visibility_changed" from="HBoxContainer/Control/Panel/draw_letters" to="HBoxContainer/Control/Panel/draw_letters" method="_on_visibility_changed"]
+[connection signal="timeout" from="HBoxContainer/Control/Panel/draw_letters/Timer" to="HBoxContainer/Control/Panel/draw_letters" method="_on_timer_timeout"]
+[connection signal="gui_input" from="HBoxContainer/Control/Panel/draw_letters/VBoxContainer/MarginContainer/draw_panel" to="HBoxContainer/Control/Panel/draw_letters" method="_on_panel_gui_input"]
+[connection signal="pressed" from="HBoxContainer/Control/Panel/home/missing/start_btn" to="." method="_on_start_btn_pressed"]

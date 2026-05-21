@@ -85,7 +85,6 @@ func rescale_obj(obj, k, origin):
 	if !is_instance_valid(obj): return
 	if obj is Line2D:
 		obj.position = k * (obj.position - origin) + origin
-		
 		var avg_scale = ((abs(k.x) + abs(k.y)) / 2.0) if k is Vector2 else k
 		
 		for i in range(obj.points.size()):

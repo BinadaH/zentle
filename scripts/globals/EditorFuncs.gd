@@ -7,6 +7,7 @@ var selection_manager: SelectionManger
 var ui_manager: UIManager
 var canvas_manager: CanvasManager
 var export_manager: ExportManager
+var ink_spells_manager: InkSpellsManager
 
 
 var latex_generator: GenerateLatexImg
@@ -17,9 +18,14 @@ func _init():
 	canvas_manager = CanvasManager.new()
 	latex_generator = GenerateLatexImg.new()
 	export_manager = ExportManager.new()
+	ink_spells_manager = InkSpellsManager.new()
+	
 	
 func _ready():
 	EditorOptions.connect("theme_changed", canvas_manager.on_theme_change)
+	ink_spells_manager.load_files()
+	line_manager.ready()
+	
 	
 func set_ui_manager(manager):
 	ui_manager = manager

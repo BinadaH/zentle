@@ -8,7 +8,7 @@ func _notification(what):
 			load_export_regions()
 
 @onready var container = $HBoxContainer/ScrollContainer/VBoxContainer2/container
-@onready var line_scene = preload("res://scenes/quick_tools/exports_line.tscn")
+@onready var line_scene = preload("res://scenes/quick_tools/exports/exports_line.tscn")
 # TODO: refactoring (shouldn't need to reload every time)
 func load_export_regions():
 	var lines = container.get_children()

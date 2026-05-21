@@ -86,11 +86,12 @@ func end_save_to_path(path: String):
 		set_to_saved()
 		EditorHistory.mark_save_point()
 		animations.play("save_label_animation")
-	
-func end_open_path(path: String):
+
+
+## This function is used to open both normal files and spell files
+func end_open_path(path: String, is_spell: bool = false) -> bool:
 	# We assume the file is compressed
 	var f = FileAccess.open_compressed(path, FileAccess.READ, FileAccess.COMPRESSION_ZSTD)
-	print(f)
 	var data = null
 	
 	# If the file wasn't compressed of get_var fails
@@ -104,22 +105,29 @@ func end_open_path(path: String):
 			f.close()
 	
 	# Exit if no data was loaded during the file opening fase
-	if !data: return
+	if !data: return false
 	
 	var fs_version = data.get("version", null)
-	print("Opening File Version: ", fs_version)
-	if !fs_version: return
+	print("Opening %s (%s) Version: " % ["Ink Spell" if is_spell else "File", path], fs_version)
+	if !fs_version: return false
 	
 	var seriaizer: CanvasSerializer = serializers.get(fs_version if fs_version is int else 1)
-	if !seriaizer: return
-	
-	EditorFuncs.reset()
+	if !seriaizer: return false
 	
 	var objs = seriaizer.deserialize_canvas(data)
-	EditorFuncs.canvas_manager.add_objs(objs)
 	
-	set_to_saved()
-	set_current_path(path)
+	if is_spell:
+		if objs.size() > 20:
+			return false
+		
+		EditorFuncs.ink_spells_manager.curr_loading_spell = objs
+	else:
+		EditorFuncs.reset()
+		EditorFuncs.canvas_manager.add_objs(objs)
+		set_to_saved()
+		set_current_path(path)
+	
+	return true
 	
 func on_dialog_file_selected(path):
 	file_dialog.visible = false

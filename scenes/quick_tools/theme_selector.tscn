@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dc05wpldl5csv" path="res://scripts/quick_tools/theme_selector.gd" id="1_cxx7o"]
 
-[node name="ThemeSelector" type="MarginContainer" unique_id=372284654]
+[node name="Theme Selector" type="MarginContainer" unique_id=372284654]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

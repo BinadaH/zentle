@@ -13,6 +13,8 @@ func handle_input(event: InputEvent):
 func handle_key(event: InputEventKey):
 	if event.keycode == KEY_CTRL:
 		EditorData.ctrl_pressed = event.pressed
+	elif event.keycode == KEY_SHIFT:
+		EditorData.shift_pressed = event.pressed
 	elif event.keycode == KEY_DELETE:
 		EditorTools.delete()
 	elif event.keycode == KEY_ESCAPE:
@@ -38,7 +40,7 @@ func handle_key(event: InputEventKey):
 		if event.keycode == KEY_T && event.shift_pressed:
 			EditorFuncs.toggle_quick_tools()
 	else:
-		if EditorData.can_use_shortcuts:
+		if EditorData.can_use_shortcuts && !EditorData.quick_tools_opened:
 			if EditorTools.toggle_shortcuts.has(event.keycode):
 				EditorTools.toggle_to(EditorTools.toggle_shortcuts[event.keycode], event.pressed)
 
