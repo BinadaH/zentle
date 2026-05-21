@@ -2,7 +2,6 @@ extends Node
 
 var curr_path: String = ""
 var file_dialog: FileDialog
-var confirm_dialog: ConfirmationDialog
 var file_label: Label
 var animations: AnimationPlayer
 
@@ -15,6 +14,10 @@ var serializers: Dictionary[int, CanvasSerializer] = {
 	2: preload("res://scripts/serializers/v2.gd").new(2),
 	3: preload("res://scripts/serializers/v3.gd").new(3)
 }
+
+func reset():
+	set_current_path("")
+	need_to_save = false
 
 func check_save_status(is_synced: bool):
 	if is_synced:
@@ -36,26 +39,15 @@ func set_file_dialog(_file_dialog: FileDialog):
 	file_dialog = _file_dialog
 	file_dialog.connect("file_selected", on_dialog_file_selected)
 
-var confirm_dialog_callback: Callable
-func set_confirm_dialog(_confirm_dialog: ConfirmationDialog):
-	confirm_dialog = _confirm_dialog
-	confirm_dialog.get_cancel_button().connect("pressed", func(): 
-		need_to_save = false
-		file_label.text = file_label.text.rstrip("*")
-		if !confirm_dialog_callback.is_null():
-			confirm_dialog_callback.call()
-			confirm_dialog_callback = Callable()
-	)
-	confirm_dialog.connect("visibility_changed", func():
-		if !confirm_dialog.visible:
-			confirm_dialog_callback = Callable()
-	)
-	confirm_dialog.connect("confirmed", begin_save_file)
-
-func show_confirm_dialog(callback: Callable):
+func show_save_confirm_dialog(callback: Callable):
 	if need_to_save:
-		confirm_dialog.visible = true
-		confirm_dialog_callback = callback
+		EditorFuncs.ui_manager.create_confirm_dialog(
+			"Do you want to save?",
+			"Save",
+			"Discard",
+			begin_save_file,
+			callback
+		)
 	else:
 		callback.call()
 		
@@ -94,9 +86,6 @@ func end_save_to_path(path: String):
 		set_to_saved()
 		EditorHistory.mark_save_point()
 		animations.play("save_label_animation")
-		if !confirm_dialog_callback.is_null():
-			confirm_dialog_callback.call()
-			confirm_dialog_callback = Callable()
 	
 func end_open_path(path: String):
 	# We assume the file is compressed

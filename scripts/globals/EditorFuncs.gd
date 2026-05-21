@@ -24,7 +24,6 @@ func _ready():
 func set_ui_manager(manager):
 	ui_manager = manager
 
-
 var active_tasks : int = 0
 ## Call request_high_performance at the beginning of the event 
 ## and release_high_performance at the end.
@@ -49,7 +48,8 @@ func play_animation(anim_name, reversed = false):
 		animations.play_backwards(anim_name)
 	else:
 		animations.play(anim_name)
-	
+
+
 func toggle_quick_tools():
 	if EditorData.quick_tools_opened:
 		EditorFuncs.close_quick_tools()
@@ -123,7 +123,8 @@ func handle_save():
 	EditorFiles.begin_save_file()
 
 func begin_handle_new():
-	EditorFiles.show_confirm_dialog(self.end_handle_new)
+	EditorFiles.show_save_confirm_dialog(self.end_handle_new)
+
 	
 func end_handle_new():
 	reset()
@@ -134,11 +135,11 @@ func reset():
 	canvas_manager.clear()
 	EditorHistory.clear()
 	EditorData.camera.reset()
-	EditorFiles.set_current_path("")
+	EditorFiles.reset()
 	EditorData.spatial_grid.clear()
 	
 func begin_handle_open():
-	EditorFiles.show_confirm_dialog(self.end_handle_open)
+	EditorFiles.show_save_confirm_dialog(self.end_handle_open)
 	
 func end_handle_open():
 	EditorFiles.begin_open_file()

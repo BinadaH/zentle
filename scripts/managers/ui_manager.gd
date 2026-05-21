@@ -5,7 +5,6 @@ class_name UIManager
 @export var slider_size: HSlider
 @export var file_name_label: Label
 @export var file_menu: PopupMenu
-@export var confirmation_dialog: ConfirmationDialog
 @export var draw_line: Control
 
 class FileMenuItem:
@@ -33,7 +32,6 @@ func _ready():
 	
 	EditorFiles.set_file_dialog($open_save_dialog)
 	EditorFiles.set_file_label(file_name_label)
-	EditorFiles.set_confirm_dialog($ConfirmationDialog)
 	
 	EditorData.latex_preview = $latex_preview
 	
@@ -162,6 +160,27 @@ func reload_color_grid():
 		load_btn_stylebox(btn)
 		set_stbox_unselected(btn, col)
 
+var curr_conf_dialog: ConfirmationDialog
+func create_confirm_dialog(diag_text: String, yes_text: String, no_text: String, yes_callback: Callable, no_callback: Callable):
+	if curr_conf_dialog: return
+	var diag = ConfirmationDialog.new()
+	diag.cancel_button_text = no_text
+	diag.ok_button_text = yes_text
+	diag.dialog_text = diag_text
+	
+	diag.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN
+	diag.get_cancel_button().connect("pressed", no_callback)
+	diag.connect("confirmed", yes_callback)
+	diag.connect("visibility_changed", func():
+		if !diag.visible:
+			curr_conf_dialog = null
+			diag.queue_free()
+	)
+	diag.visible = true
+	curr_conf_dialog = diag
+	add_child(diag)
+	
+	
 
 func _on_pen_btn_pressed():
 	EditorTools.set_tool(EditorTools.TOOLS.PEN)

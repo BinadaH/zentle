@@ -186,13 +186,12 @@ back_rect = NodePath("../canvas_bg/ColorRect")
 script = ExtResource("2_0wfyh")
 z_slider = NodePath("../canvas_main/Control/VBoxContainer/VSlider")
 
-[node name="canvas_main" type="CanvasLayer" parent="." unique_id=108408841 node_paths=PackedStringArray("btn_size_container", "slider_size", "file_name_label", "file_menu", "confirmation_dialog", "draw_line", "color_btn_grid", "tools_hbox")]
+[node name="canvas_main" type="CanvasLayer" parent="." unique_id=108408841 node_paths=PackedStringArray("btn_size_container", "slider_size", "file_name_label", "file_menu", "draw_line", "color_btn_grid", "tools_hbox")]
 script = ExtResource("4_jyhfs")
 btn_size_container = NodePath("Control/view/top_panel/HBoxContainer/CenterContainer/HBoxContainer/button_size")
 slider_size = NodePath("Control/view/top_panel/HBoxContainer/slider_size")
 file_name_label = NodePath("Control/view/top_panel/file_name")
 file_menu = NodePath("Control/view/top_panel/HBoxContainer/MenuBar/file_menu")
-confirmation_dialog = NodePath("ConfirmationDialog")
 draw_line = NodePath("Control/view/draw_area/SubViewportContainer/SubViewport/draw_line")
 color_btn_grid = NodePath("Control/view/top_panel/HBoxContainer/color_grid/GridContainer")
 tools_hbox = NodePath("Control/view/top_panel/HBoxContainer")
@@ -500,15 +499,6 @@ oversampling_override = 1.0
 access = 2
 filters = PackedStringArray("*.zentle")
 use_native_dialog = true
-
-[node name="ConfirmationDialog" type="ConfirmationDialog" parent="canvas_main" unique_id=65153881]
-oversampling_override = 1.0
-title = "Save"
-initial_position = 2
-size = Vector2i(300, 100)
-ok_button_text = "Save"
-dialog_text = "Do you want to save the current file?"
-cancel_button_text = "Discard"
 
 [node name="quick_controls_container" type="MarginContainer" parent="canvas_main" unique_id=1097161308]
 anchors_preset = 15

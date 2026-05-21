@@ -6,7 +6,12 @@ class_name Main
 @onready var background = $background
 @export var ui: UIManager
 
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		EditorFiles.show_save_confirm_dialog(func(): get_tree().quit())
+
 func _ready():
+	get_tree().set_auto_accept_quit(false)
 	EditorData.main_ready(self)
 	EditorData.camera = camera
 	EditorData.draw_line = ui.draw_line
@@ -38,7 +43,6 @@ func _ready():
 	)
 	
 	should_keep_rendering_on.append(ui.file_menu)
-	should_keep_rendering_on.append(ui.confirmation_dialog)
 
 @onready var debug_info_label = $canvas_main/Control/debug_info
 var time_since_last_render = 0
@@ -61,6 +65,8 @@ func _process(delta):
 			if obj.visible:
 				keep_on = true
 				break
+		keep_on = keep_on || EditorFuncs.ui_manager.curr_conf_dialog != null
+		
 		if !keep_on:
 			time_since_last_render += delta
 			if time_since_last_render >= frame_threshold:
