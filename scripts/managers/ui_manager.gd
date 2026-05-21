@@ -160,7 +160,7 @@ func reload_color_grid():
 		load_btn_stylebox(btn)
 		set_stbox_unselected(btn, col)
 
-var curr_conf_dialog: ConfirmationDialog
+var curr_conf_dialog: ConfirmationDialog = null
 func create_confirm_dialog(diag_text: String, yes_text: String, no_text: String, yes_callback: Callable, no_callback: Callable):
 	if curr_conf_dialog: return
 	var diag = ConfirmationDialog.new()
@@ -179,8 +179,32 @@ func create_confirm_dialog(diag_text: String, yes_text: String, no_text: String,
 	diag.visible = true
 	curr_conf_dialog = diag
 	add_child(diag)
+
+var curr_file_dialog: FileDialog = null
+func create_file_dialog(file_mode: FileDialog.FileMode, callback: Callable, filters: Array[String] = []):
+	if curr_file_dialog: return
+	var diag = FileDialog.new()
+	diag.file_mode = file_mode
+	diag.filters = filters
+	diag.access = FileDialog.ACCESS_FILESYSTEM
+	diag.use_native_dialog = true
 	
+	diag.connect("canceled", func():
+		diag.queue_free()
+		curr_file_dialog = null
+		callback.call("")
+	)
 	
+	diag.connect("file_selected", func(path):
+		diag.queue_free()
+		curr_file_dialog = null
+		callback.call(path)
+	)
+	
+	curr_file_dialog = diag
+	curr_file_dialog.show()
+	add_child(diag)
+
 
 func _on_pen_btn_pressed():
 	EditorTools.set_tool(EditorTools.TOOLS.PEN)
