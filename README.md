@@ -101,8 +101,8 @@ Each theme has 6 colors (main_text, critical, important, quote, meta, success) +
 
 _Ink Spells_ are useful when you have to draw certain objects regularly (e.g. Logic Gates, Cartesian planes, ...) \
 Each _Spell_ needs to be saved in it's own file (centered to the origin). \
-For example, let's say we want to add a XOR gate into the notes when we write "XOR". \
-1) Create and save a file (e.g. xor.zentle) containing a drawn version of the port.
+For example, let's say we want to add a XOR gate into the notes when we write "XOR".
+1) Create and save a file (e.g. xor.zentle) containing a drawn version of the gate.
 2) Go to Options > Ink Spells and press the "+" button
 3) Set the _trigger_ to "XOR" and select the previously saved file
 4) When Zentle is presented with new letters inside a trigger, it will request you to write them once on the box to the right.
