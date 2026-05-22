@@ -30,6 +30,7 @@ Download the source code and run the project.
 _Pen (q)_
 
 - draw and hold to begin shape recognition. If a shape is recognized it can then be modified
+- hold Ctrl + Shift to use [Ink Spells](#ink-spells)
   
   <img width="150" height="200" alt="rect_shape" src="https://github.com/user-attachments/assets/621e6dc8-6de3-4ad9-9ede-d09600926457" />
   <img width="150" height="200" alt="circ_shape" src="https://github.com/user-attachments/assets/9ac306b9-9e06-4123-a1f1-b390fd3abe00" />
@@ -91,8 +92,21 @@ grid_weight=2
 
 ```
 
-To define a new theme, create a new section that begins with "theme\_" (e.g \[theme_gruvbox\]) \
+To define a new theme, create a new section that begins with "theme\_" (e.g. \[theme_gruvbox\]) \
 Each theme has 6 colors (main_text, critical, important, quote, meta, success) + the background and grid colors.
+
+---
+
+### Ink Spells
+
+_Ink Spells_ are useful when you have to draw certain objects regularly (e.g. Logic Gates, Cartesian planes, ...) \
+Each _Spell_ needs to be saved in it's own file (centered to the origin). \
+For example, let's say we want to add a XOR gate into the notes when we write "XOR". \
+1) Create and save a file (e.g. xor.zentle) containing a drawn version of the port.
+2) Go to Options > Ink Spells and press the "+" button
+3) Set the _trigger_ to "XOR" and select the previously saved file
+4) When Zentle is presented with new letters inside a trigger, it will request you to write them once on the box to the right.
+5) Use _spells_ while using the pen by holding down Ctrl + Shift
 
 ---
 
@@ -109,3 +123,4 @@ Each _Export Region_ contains a __Title__ and a __Export on/off__ state. The lat
 You can _Select_ a _Region_ (to Scale/Move) only by selecting it's edges.
 
 To change export order and create the final output, navigate to the _Options > Export_ tab (Ctrl + Shift + t or from the File menu).
+
