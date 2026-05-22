@@ -5,13 +5,34 @@ var saved_samples = {
 	
 }
 
+const path_to_saved_samples = "user://spell_samples.letterz"
+func _init():
+	load_from_file()
+	
+func load_from_file():
+	var f = FileAccess.open_compressed(path_to_saved_samples, FileAccess.READ, FileAccess.COMPRESSION_ZSTD)
+	if f:
+		saved_samples = f.get_var(true)
+		f.close()
+
+func save_to_file():
+	var f = FileAccess.open_compressed(path_to_saved_samples, FileAccess.WRITE, FileAccess.COMPRESSION_ZSTD)
+	if f:
+		f.store_var(saved_samples)
+		f.close()
+
 func is_letter_saved(letter):
 	return saved_samples.has(letter)
 func is_string_saved(string):
 	for c in string.split(""):
 		if !is_letter_saved(c): return false
 	return true
-	
+func get_saved_letters():
+	return saved_samples.keys()
+func forget_letter(letter):
+	saved_samples.erase(letter)
+	save_to_file()
+
 func save_points_to_image(points: PackedVector2Array, file_path: String):
 	var img = Image.create_empty(100, 100, false, Image.FORMAT_RGB8)
 	img.fill(Color.WHITE)
@@ -29,7 +50,8 @@ func save_sample(letter: String, strokes: Array[PackedVector2Array]):
 	var scale2 = apply_scale(normalized, Vector2(1, 0.5))
 	
 	saved_samples[letter] = [normalized, shear1, shear2, scale1, scale2]
-
+	save_to_file()
+	
 func get_prediction(strokes: Array[PackedVector2Array]):
 	var normalized_points = normalize(strokes)
 	var r = EditorFuncs.get_points_rect(normalized_points)

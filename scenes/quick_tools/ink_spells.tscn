@@ -6,7 +6,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqvod"]
 bg_color = Color(0.1728327, 0.17283267, 0.17283267, 1)
 
-[node name="InkSpells" type="MarginContainer" unique_id=602614440 node_paths=PackedStringArray("container", "missing_letters_ui", "letters_saved_ui", "draw_letters_ui", "home_ui")]
+[node name="InkSpells" type="MarginContainer" unique_id=602614440 node_paths=PackedStringArray("container", "missing_letters_ui", "letters_saved_ui", "list_saved_ui", "list_btn", "draw_letters_ui", "home_ui", "list_saved_container")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -20,8 +20,11 @@ script = ExtResource("1_eqvod")
 container = NodePath("HBoxContainer/VBoxContainer/GridContainer")
 missing_letters_ui = NodePath("HBoxContainer/Control/Panel/home/missing")
 letters_saved_ui = NodePath("HBoxContainer/Control/Panel/home/saved")
+list_saved_ui = NodePath("HBoxContainer/Control/Panel/list_saved")
+list_btn = NodePath("HBoxContainer/Control/Panel/list_saved_btn")
 draw_letters_ui = NodePath("HBoxContainer/Control/Panel/draw_letters")
 home_ui = NodePath("HBoxContainer/Control/Panel/home")
+list_saved_container = NodePath("HBoxContainer/Control/Panel/list_saved/ScrollContainer/GridContainer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=534992020]
 layout_mode = 2
@@ -49,7 +52,7 @@ text = "File Path"
 layout_mode = 2
 text = "Delete"
 
-[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1055186329]
+[node name="add_new_spell" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1055186329]
 layout_mode = 2
 text = "+"
 
@@ -65,7 +68,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="draw_letters" type="MarginContainer" parent="HBoxContainer/Control/Panel" unique_id=909839275 node_paths=PackedStringArray("curr_msg", "draw_panel", "timer")]
+[node name="draw_letters" type="MarginContainer" parent="HBoxContainer/Control/Panel" unique_id=909839275 node_paths=PackedStringArray("curr_msg", "next_btn", "draw_panel")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -79,11 +82,8 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("2_kgoy2")
 curr_msg = NodePath("VBoxContainer/Label")
+next_btn = NodePath("VBoxContainer/control_btns/next_btn")
 draw_panel = NodePath("VBoxContainer/MarginContainer/draw_panel")
-timer = NodePath("Timer")
-
-[node name="Timer" type="Timer" parent="HBoxContainer/Control/Panel/draw_letters" unique_id=1070141672]
-one_shot = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Control/Panel/draw_letters" unique_id=1709743125]
 layout_mode = 2
@@ -104,6 +104,19 @@ theme_override_constants/margin_bottom = 20
 [node name="draw_panel" type="Panel" parent="HBoxContainer/Control/Panel/draw_letters/VBoxContainer/MarginContainer" unique_id=1776199563]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_eqvod")
+
+[node name="control_btns" type="HBoxContainer" parent="HBoxContainer/Control/Panel/draw_letters/VBoxContainer" unique_id=255747920]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 40
+
+[node name="clear_btn" type="Button" parent="HBoxContainer/Control/Panel/draw_letters/VBoxContainer/control_btns" unique_id=675644995]
+layout_mode = 2
+text = "Clear"
+
+[node name="next_btn" type="Button" parent="HBoxContainer/Control/Panel/draw_letters/VBoxContainer/control_btns" unique_id=153856219]
+layout_mode = 2
+text = "Next"
 
 [node name="home" type="CenterContainer" parent="HBoxContainer/Control/Panel" unique_id=63369383]
 layout_mode = 1
@@ -128,8 +141,49 @@ text = "Start Now"
 layout_mode = 2
 text = "All letters are saved"
 
+[node name="list_saved" type="MarginContainer" parent="HBoxContainer/Control/Panel" unique_id=591637158]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/Control/Panel/list_saved" unique_id=2108559623]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/Control/Panel/list_saved/ScrollContainer" unique_id=1361177695]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 3
+
+[node name="list_saved_btn" type="Button" parent="HBoxContainer/Control/Panel" unique_id=1449203011]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -54.0
+offset_top = -38.0
+offset_right = -9.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "List"
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/add_new_spell" to="." method="_on_add_new_spell_pressed"]
 [connection signal="visibility_changed" from="HBoxContainer/Control/Panel/draw_letters" to="." method="_on_draw_letters_visibility_changed"]
 [connection signal="visibility_changed" from="HBoxContainer/Control/Panel/draw_letters" to="HBoxContainer/Control/Panel/draw_letters" method="_on_visibility_changed"]
-[connection signal="timeout" from="HBoxContainer/Control/Panel/draw_letters/Timer" to="HBoxContainer/Control/Panel/draw_letters" method="_on_timer_timeout"]
 [connection signal="gui_input" from="HBoxContainer/Control/Panel/draw_letters/VBoxContainer/MarginContainer/draw_panel" to="HBoxContainer/Control/Panel/draw_letters" method="_on_panel_gui_input"]
+[connection signal="pressed" from="HBoxContainer/Control/Panel/draw_letters/VBoxContainer/control_btns/clear_btn" to="HBoxContainer/Control/Panel/draw_letters" method="_on_clear_btn_pressed"]
+[connection signal="pressed" from="HBoxContainer/Control/Panel/draw_letters/VBoxContainer/control_btns/next_btn" to="HBoxContainer/Control/Panel/draw_letters" method="_on_next_btn_pressed"]
+[connection signal="visibility_changed" from="HBoxContainer/Control/Panel/home" to="." method="_on_home_visibility_changed"]
 [connection signal="pressed" from="HBoxContainer/Control/Panel/home/missing/start_btn" to="." method="_on_start_btn_pressed"]
+[connection signal="pressed" from="HBoxContainer/Control/Panel/list_saved_btn" to="." method="_on_list_saved_btn_pressed"]

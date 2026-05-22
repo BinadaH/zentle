@@ -10,8 +10,8 @@ var PCR: PointCloudRecognition
 
 var curr_loading_spell = null
 func _init():
-	load_spells()
 	PCR = PointCloudRecognition.new()
+	load_spells()
 
 func is_letter_saved(letter):
 	return PCR.is_letter_saved(letter)
@@ -24,6 +24,11 @@ func get_missing_letters():
 			if !missing.has(c) && !PCR.is_letter_saved(c):
 				missing.append(c)
 	return missing
+func get_saved_letters():
+	return PCR.get_saved_letters()
+func forget_letter(letter):
+	PCR.forget_letter(letter)
+	
 func save_letter(letter: String, strokes: Array[PackedVector2Array]):
 	PCR.save_sample(letter, strokes)
 	
@@ -53,7 +58,7 @@ func check_spell(ink_spell_strokes: Array):
 	var curr_trigger = ""
 	for stroke_to_check in combined_strokes:
 		curr_trigger += PCR.get_prediction(stroke_to_check.strokes)
-	print(curr_trigger)
+	
 	if trigger_spell.has(curr_trigger):
 		var combined_rect = combined_strokes[0].rect
 		for i in range(1, combined_strokes.size()):
@@ -79,13 +84,18 @@ func check_spell(ink_spell_strokes: Array):
 
 func load_spells():
 	var f = FileAccess.open(PATH, FileAccess.READ)
+	if !f: return
+	
 	var content = f.get_as_text()
 	f.close()
+	if !content: return
 	
 	var json = JSON.parse_string(content)
-
-	if json:
-		spell_data = json
+	if !json: return
+	
+	for data in json:
+		if data.get("file_path", "") != "" && data.get("trigger", "") != "":
+			spell_data.append(data)
 		
 func load_files():
 	for spell in spell_data:
@@ -112,23 +122,50 @@ func save_file():
 	
 	if save_timer:
 		save_timer = null
-	
+
+func get_spell_index_by_trigger(trigger):
+	return spell_data.find_custom(func(a): return a["trigger"] == trigger)
+
 var save_timer: SceneTreeTimer
-func update_spell_trigger(index, trigger):
-	var old_trigger = spell_data[index].get("trigger", null)
-	if old_trigger:
+func update_spell_trigger(old_trigger, new_trigger):
+	if old_trigger && trigger_spell.has(old_trigger):
 		var old_spell_objs = trigger_spell[old_trigger]
 		trigger_spell.erase(old_trigger)
-		trigger_spell[trigger] = old_spell_objs
+		trigger_spell[new_trigger] = old_spell_objs
+	
+	var indx = get_spell_index_by_trigger(old_trigger)
+	if indx != -1:
+		spell_data[indx]["trigger"] = new_trigger
+	else:
+		spell_data.append({
+			"file_path": "",
+			"trigger": new_trigger
+		})
 		
-	spell_data[index]["trigger"] = trigger
 	check_timer_and_save()
 
-func update_spell_file_path(index, file_path):
-	spell_data[index]["file_path"] = file_path
-	load_spell_file(spell_data[index]["trigger"], file_path)
+func update_spell_file_path(trigger, file_path):
+	var indx = get_spell_index_by_trigger(trigger)
+	if indx != -1:
+		spell_data[indx]["file_path"] = file_path
+	else:
+		spell_data.append({
+			"file_path": file_path, 
+			"trigger": trigger
+		})
+		
+	load_spell_file(trigger, file_path)
 	check_timer_and_save()
-	
+
+func delete_spell(trigger):
+	var indx = get_spell_index_by_trigger(trigger)
+	if indx != -1:
+		spell_data.remove_at(indx)
+	if trigger_spell.has(trigger):
+		trigger_spell.erase(trigger)
+		
+	check_timer_and_save()
+
 func check_timer_and_save():
 	if save_timer:
 		save_timer.time_left = 2
