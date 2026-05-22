@@ -33,6 +33,9 @@ func create_spell_container_row(trigger, file_path):
 	trigger_line_edit.connect("text_changed", func(new_text):
 		var old_trigger = trigger_line_edit.get_meta("curr_trigger", "")
 		EditorFuncs.ink_spells_manager.update_spell_trigger(old_trigger, new_text)
+		var are_letters_missing = EditorFuncs.ink_spells_manager.get_missing_letters().size() != 0
+		missing_letters_ui.visible = are_letters_missing
+		letters_saved_ui.visible = !are_letters_missing
 		trigger_line_edit.set_meta("curr_trigger", new_text)
 	)
 
@@ -47,7 +50,11 @@ func create_spell_container_row(trigger, file_path):
 				FileDialog.FileMode.FILE_MODE_OPEN_FILE,
 				func(path):
 					if path:
-						update_file_path(path_button, curr_trigger, path),
+						update_file_path(path_button, curr_trigger, path)
+						var are_letters_missing = EditorFuncs.ink_spells_manager.get_missing_letters().size() != 0
+						missing_letters_ui.visible = are_letters_missing
+						letters_saved_ui.visible = !are_letters_missing
+					,
 				["*.zentle"]
 			)
 		else:
