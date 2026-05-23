@@ -71,6 +71,8 @@ func _process(delta):
 			time_since_last_render += delta
 			if time_since_last_render >= frame_threshold:
 				RenderingServer.render_loop_enabled = false
+		else:
+			RenderingServer.render_loop_enabled = true
 	
 	if !RenderingServer.render_loop_enabled: return
 
