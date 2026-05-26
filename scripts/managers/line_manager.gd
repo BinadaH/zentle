@@ -61,6 +61,7 @@ func handle_mouse_button():
 		done()
 
 func create_line():
+	Input.use_accumulated_input = false
 	if curr_timer: curr_timer.stop()
 	EditorData.draw_line.first_point = true
 	
@@ -121,7 +122,7 @@ func draw_line():
 	
 	var target_point = EditorData.world_pos
 	if last_smooth_point != null:
-		target_point = lerp(last_smooth_point, target_point, 0.25)
+		target_point = lerp(last_smooth_point, target_point, 0.75)
 	else:
 		last_smooth_point = target_point
 	
@@ -172,6 +173,7 @@ func _update_width_curve():
 
 
 func done():
+	Input.use_accumulated_input = false
 	if is_curr_stroke_spell:
 		ink_spell_strokes.append(PackedVector2Array(smoothed_points))
 		reset_line()
