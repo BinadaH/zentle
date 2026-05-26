@@ -40,7 +40,7 @@ func ready():
 	
 	shape_timer.one_shot = true
 	spell_timer.one_shot = true
-	shape_timer.wait_time = 1
+	shape_timer.wait_time = 0.5
 	spell_timer.wait_time = 0.5
 	shape_timer.connect("timeout", check_shape)
 	spell_timer.connect("timeout", check_spell)
@@ -88,7 +88,7 @@ var last_smooth_pressure = null
 var smoothed_pressures = PackedFloat32Array()
 var smoothed_points = PackedVector2Array()
 
-const MIN_DISTANCE = 1
+const MIN_DISTANCE_SQ = 9
 
 func update_line():
 	if found_shape:
@@ -127,7 +127,7 @@ func draw_line():
 		last_smooth_point = target_point
 	
 	if not smoothed_points.is_empty():
-		if target_point.distance_to(smoothed_points[-1]) < MIN_DISTANCE:
+		if target_point.distance_squared_to(smoothed_points[-1]) < MIN_DISTANCE_SQ:
 			return
 	
 	curr_length += last_smooth_point.distance_to(target_point)
