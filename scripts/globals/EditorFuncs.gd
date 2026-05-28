@@ -23,7 +23,7 @@ func _init():
 	
 func _ready():
 	EditorOptions.connect("theme_changed", canvas_manager.on_theme_change)
-	ink_spells_manager.load_files()
+	ink_spells_manager.call_deferred("load_files")
 	line_manager.ready()
 	
 	

@@ -36,10 +36,7 @@ var color_names = [
 var current_theme = "theme"
 
 func _ready():
-	calc_ui_color_palette()
 	EditorOptions.connect("theme_changed", update_ui_theme)
-
-
 
 func calc_ui_color_palette():
 	var base_txt = color_palette[0]
