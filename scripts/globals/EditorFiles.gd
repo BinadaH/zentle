@@ -1,7 +1,6 @@
 extends Node
 
 var curr_path: String = ""
-var file_dialog: FileDialog
 var file_label: Label
 var animations: AnimationPlayer
 
@@ -34,10 +33,6 @@ func set_to_saved():
 	if !need_to_save: return
 	need_to_save = false
 	file_label.text = file_label.text.rstrip("*")
-	
-func set_file_dialog(_file_dialog: FileDialog):
-	file_dialog = _file_dialog
-	file_dialog.connect("file_selected", on_dialog_file_selected)
 
 func show_save_confirm_dialog(callback: Callable):
 	if need_to_save:
@@ -58,17 +53,21 @@ func set_animation_player(anim: AnimationPlayer):
 	animations = anim
 
 func begin_save_file():
-	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	
 	if curr_path:
 		end_save_to_path(curr_path)
 	else:
-		file_dialog.visible = true
+		EditorFuncs.ui_manager.create_file_dialog(
+			FileDialog.FILE_MODE_SAVE_FILE,
+			end_save_to_path,
+			["*.zentle"]
+		)
 		
 func begin_open_file():
-	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	file_dialog.visible = true
-
+	EditorFuncs.ui_manager.create_file_dialog(
+		FileDialog.FILE_MODE_OPEN_FILE,
+		end_open_path,
+		["*.zentle"]
+	)
 
 func end_save_to_path(path: String):
 	var serialized_data = serializers[CURR_FS_VERSION].serialize_canvas()
@@ -129,15 +128,6 @@ func end_open_path(path: String, is_spell: bool = false) -> bool:
 	
 	return true
 	
-func on_dialog_file_selected(path):
-	file_dialog.visible = false
-	
-	match file_dialog.file_mode:
-		FileDialog.FILE_MODE_SAVE_FILE:
-			end_save_to_path(path)
-		FileDialog.FILE_MODE_OPEN_FILE:
-			end_open_path(path)
-			
 func set_current_path(path: String):
 	curr_path = path
 	var label_text = "new file"

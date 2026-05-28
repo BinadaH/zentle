@@ -5,6 +5,11 @@ class_name Main
 @onready var camera = $camera
 @onready var background = $background
 @export var ui: UIManager
+@export var animations_player: AnimationPlayer
+@export var draw_ui: Node2D
+@export var quick_controls_container: MarginContainer
+@export var debug_info_label: Label
+
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -27,12 +32,11 @@ func _ready():
 		EditorData.draw_line.clear_viewport(false)
 	)
 	
-	EditorData.draw_ui = $draw_ui
-	EditorFiles.set_animation_player($AnimationPlayer)
+	EditorData.draw_ui = draw_ui
+	EditorFiles.set_animation_player(animations_player)
+	EditorFuncs.animations = animations_player
 	
-	EditorFuncs.animations = $AnimationPlayer
-	
-	$canvas_main/quick_controls_container.visible = false
+	quick_controls_container.visible = false
 	
 	
 	# Use low_processor_usage_mode when idling
@@ -44,7 +48,7 @@ func _ready():
 	
 	should_keep_rendering_on.append(ui.file_menu)
 
-@onready var debug_info_label = $canvas_main/Control/debug_info
+
 var time_since_last_render = 0
 var frame_threshold = 1.5
 

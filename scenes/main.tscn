@@ -163,9 +163,13 @@ _data = {
 &"show_quick_tools": SubResource("Animation_muem4")
 }
 
-[node name="Main" type="Node2D" unique_id=671551885 node_paths=PackedStringArray("ui")]
+[node name="Main" type="Node2D" unique_id=671551885 node_paths=PackedStringArray("ui", "animations_player", "draw_ui", "quick_controls_container", "debug_info_label")]
 script = ExtResource("1_o5qli")
 ui = NodePath("canvas_main")
+animations_player = NodePath("AnimationPlayer")
+draw_ui = NodePath("draw_ui")
+quick_controls_container = NodePath("canvas_main/quick_controls_container")
+debug_info_label = NodePath("canvas_main/Control/debug_info")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=431555796]
 position = Vector2(1, 1)
@@ -187,13 +191,14 @@ back_rect = NodePath("../canvas_bg/ColorRect")
 script = ExtResource("2_0wfyh")
 z_slider = NodePath("../canvas_main/Control/VBoxContainer/VSlider")
 
-[node name="canvas_main" type="CanvasLayer" parent="." unique_id=108408841 node_paths=PackedStringArray("btn_size_container", "slider_size", "file_name_label", "file_menu", "draw_line", "color_btn_grid", "tools_hbox")]
+[node name="canvas_main" type="CanvasLayer" parent="." unique_id=108408841 node_paths=PackedStringArray("btn_size_container", "slider_size", "file_name_label", "file_menu", "draw_line", "latex_preview", "color_btn_grid", "tools_hbox")]
 script = ExtResource("4_jyhfs")
 btn_size_container = NodePath("Control/view/top_panel/HBoxContainer/CenterContainer/HBoxContainer/button_size")
 slider_size = NodePath("Control/view/top_panel/HBoxContainer/slider_size")
 file_name_label = NodePath("Control/view/top_panel/file_name")
 file_menu = NodePath("Control/view/top_panel/HBoxContainer/MenuBar/file_menu")
 draw_line = NodePath("Control/view/draw_area/SubViewportContainer/SubViewport/draw_line")
+latex_preview = NodePath("latex_preview")
 color_btn_grid = NodePath("Control/view/top_panel/HBoxContainer/color_grid/GridContainer")
 tools_hbox = NodePath("Control/view/top_panel/HBoxContainer")
 

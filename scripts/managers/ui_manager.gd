@@ -6,6 +6,7 @@ class_name UIManager
 @export var file_name_label: Label
 @export var file_menu: PopupMenu
 @export var draw_line: Control
+@export var latex_preview: TextureRect
 
 class FileMenuItem:
 	var callback: Callable
@@ -30,14 +31,12 @@ func _ready():
 		var label = file_menu_items[item_id].label
 		file_menu.add_item(label, item_id)
 	
-	EditorFiles.set_file_dialog($open_save_dialog)
 	EditorFiles.set_file_label(file_name_label)
 	
-	EditorData.latex_preview = $latex_preview
+	EditorData.latex_preview = latex_preview
 	
 	EditorOptions.connect("theme_changed", func(old_palette): 
 		reload_color_grid()
-		
 	)
 	
 	# Setup Slider / Buttons size controls

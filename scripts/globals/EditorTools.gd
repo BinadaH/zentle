@@ -21,12 +21,18 @@ var toggle_shortcuts = {
 	KEY_R: TOOLS.EXPORT_REGION,
 }
 
-var preloaded_cursors : Dictionary[TOOLS, Image] = {
+var preloaded_cursors : Dictionary[TOOLS, Resource] = {
 	
 }
 
 var current_tool: TOOLS = TOOLS.PEN
 var saved_tool: TOOLS = TOOLS.NONE
+
+
+const HAND_CURSOR_32_IMG = preload("res://sprites/icons/hand_cursor32.png")
+const SELECT_CURSOR_32_IMG = preload("res://sprites/icons/select_cursor32.png")
+const EXPORT_CURSOR_32_IMG = preload("res://sprites/icons/region_cursor32.png")
+const TEXT_CURSOR_IMG = preload("res://sprites/icons/text_cursor.png")
 
 func _ready():
 	# Update the cursor when the user changes colors
@@ -41,20 +47,13 @@ func _ready():
 	EditorData.current_color = EditorColors.color_palette[0]
 	
 	# Load Cursor Imgs
-	
-	preloaded_cursors[TOOLS.HAND] = load("res://sprites/icons/hand_cursor.png").get_image()
-	preloaded_cursors[TOOLS.HAND].resize(32, 32)
-	
-	preloaded_cursors[TOOLS.SELECT] = load("res://sprites/icons/select_cursor.png").get_image()
-	preloaded_cursors[TOOLS.SELECT].resize(32, 32)
-	
-	preloaded_cursors[TOOLS.EXPORT_REGION] = load("res://sprites/icons/region_cursor.png").get_image()
-	preloaded_cursors[TOOLS.EXPORT_REGION].resize(32, 32)
-	
+	# using get_image for cursors that need color/size changes
+	preloaded_cursors[TOOLS.HAND] = HAND_CURSOR_32_IMG
+	preloaded_cursors[TOOLS.SELECT] = SELECT_CURSOR_32_IMG
+	preloaded_cursors[TOOLS.EXPORT_REGION] =EXPORT_CURSOR_32_IMG
+	preloaded_cursors[TOOLS.TEXT] =  TEXT_CURSOR_IMG.get_image()
 	preloaded_cursors[TOOLS.ERASER] = Image.create(EditorData.curr_eraser_size, EditorData.curr_eraser_size, false, Image.FORMAT_RGB8)
 	preloaded_cursors[TOOLS.PEN] = Image.create(4, 4, false, Image.FORMAT_RGB8)
-	preloaded_cursors[TOOLS.TEXT] =  load("res://sprites/icons/text_cursor.png").get_image()
-	
 	
 	update_cursor()
 	
@@ -75,6 +74,8 @@ func toggle_to(_tool: TOOLS, active: bool):
 		set_tool(_tool)
 	
 func update_cursor():
+	# Cursor color/size can be modified if preloaded_cursors
+	# saves an Image instead of a CompressedTexture2D
 	var img = preloaded_cursors[current_tool].duplicate()
 	match current_tool:
 		TOOLS.ERASER:
