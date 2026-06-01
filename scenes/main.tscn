@@ -28,12 +28,12 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tbgi4"]
 shader = ExtResource("6_tefeu")
 shader_parameter/square_size = 50.0
-shader_parameter/viewport_size = Vector2(0, 0)
-shader_parameter/camera_position = Vector2(0, 0)
-shader_parameter/camera_zoom = 0.0
 shader_parameter/grid_weight = 0.0
 shader_parameter/grid_col = Vector3(0.5, 0.5, 0.5)
 shader_parameter/background_col = Vector3(0.2, 0.2, 0.2)
+shader_parameter/viewport_size = Vector2(0, 0)
+shader_parameter/camera_position = Vector2(0, 0)
+shader_parameter/camera_zoom = 0.0
 
 [sub_resource type="Animation" id="Animation_jkv2x"]
 length = 0.001
@@ -172,7 +172,6 @@ quick_controls_container = NodePath("canvas_main/quick_controls_container")
 debug_info_label = NodePath("canvas_main/Control/debug_info")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=431555796]
-position = Vector2(1, 1)
 points = PackedVector2Array(0, -20, 20, 0, 0, 20, -20, 0)
 closed = true
 width = 5.0
