@@ -22,43 +22,46 @@ func paste_copy():
 		var tex_rect = TextureRect.new()
 		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		
-		# Scale the size to compensate for camera zoom
-		tex_rect.size = tex.get_size() / EditorData.camera.zoom.x
+		# Scale the size to fit current zoom and viewport
+		tex_rect.size = tex.get_size()
+		var tex_max_size = EditorData.get_viewport().get_visible_rect().size / 1.5
+		tex_rect.size = tex_rect.size.clamp(Vector2.ONE, tex_max_size) / EditorData.camera.zoom.x
+		
 		# All imgs are behind lines
 		tex_rect.z_index = -1
 		
 		tex_rect.texture = tex
 		
-		# When pasted, the img is centered around the mouse pos
-		tex_rect.position = EditorData.world_pos - tex_rect.size / 2
+		# Center the image to viewport
+		tex_rect.position = EditorData.camera.position - tex_rect.size / 2
 		
 		new_objs.append(tex_rect)
 		
 		rect = tex_rect.get_rect()
 		copy_buffer.clear()
 	else:
+		var old_rect = EditorFuncs.get_objects_rect(copy_buffer)
+		var center_offset = EditorData.camera.position - old_rect.position - old_rect.size / 2
+		rect = old_rect
+		rect.position += center_offset
+		
 		for obj in copy_buffer:
 			var new_obj = obj.duplicate()
 			
-			# Add an offset to the copied item
-			move_obj(new_obj, Vector2.ONE * EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE])
+			# Center the pasted item
+			move_obj(new_obj, center_offset)
 			
 			new_objs.append(new_obj)
-			var new_rect = EditorFuncs.get_object_rect(new_obj)
 			
 			# Copy text if the the item is a text object 
 			if obj.is_in_group("text"):
 				new_obj.text = obj.text
-			
-			if obj == copy_buffer[0]:
-				rect = new_rect
-			else:
-				rect = rect.merge(new_rect)
 
 	EditorHistory.create_action("paste", add_objs.bind(new_objs), remove_objs.bind(new_objs), true)
 	
 	# Select the new items after they are pasted
 	EditorFuncs.selection_manager.perform_objs_selection(new_objs, rect)
+	EditorTools.set_tool(EditorTools.TOOLS.SELECT)
 
 func add_to_canvas(node):
 	if is_instance_valid(node):
