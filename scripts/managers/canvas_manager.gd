@@ -24,9 +24,18 @@ func paste_copy():
 		
 		# Scale the size to fit current zoom and viewport
 		tex_rect.size = tex.get_size()
-		var tex_max_size = EditorData.get_viewport().get_visible_rect().size / 1.5
-		tex_rect.size = tex_rect.size.clamp(Vector2.ONE, tex_max_size) / EditorData.camera.zoom.x
+		if tex_rect.size.is_zero_approx(): return
+		var aspect_ratio = tex_rect.size.aspect()
+		var tex_max_size = EditorData.get_viewport().get_visible_rect().size / 1.2
+		var target_size = tex_rect.size.clamp(Vector2.ONE, tex_max_size) / EditorData.camera.zoom.x
 		
+		if tex_rect.size.y > tex_max_size.y:
+			tex_rect.size.x = target_size.y * aspect_ratio
+			tex_rect.size.y = target_size.y
+		else:
+			tex_rect.size.x = target_size.x
+			tex_rect.size.y = target_size.x / aspect_ratio
+			
 		# All imgs are behind lines
 		tex_rect.z_index = -1
 		
