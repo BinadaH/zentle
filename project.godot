@@ -14,7 +14,7 @@ config/name="zentle"
 run/main_scene="uid://bpe4mvhg62b6o"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="zentle"
-config/features=PackedStringArray("4.6", "C#", "Forward Plus")
+config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
