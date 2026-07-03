@@ -100,7 +100,7 @@ func rescale_obj(obj, k, origin):
 		var avg_scale = ((abs(k.x) + abs(k.y)) / 2.0) if k is Vector2 else k
 		
 		for i in range(obj.points.size()):
-			obj.points[i] *= k
+			obj.set_point_position(i, obj.points[i] * k)
 	elif obj && obj.is_in_group("text"):
 		obj.scale *= k
 		obj.position = k * (obj.position - origin) + origin
@@ -120,7 +120,7 @@ func move_obj(obj, rel):
 	if !is_instance_valid(obj): return
 	if obj is Line2D:
 		for i in range(obj.points.size()):
-			obj.points[i] += rel
+			obj.set_point_position(i, obj.points[i] + rel)
 	elif obj is Control:
 		obj.position += rel
 	elif obj.is_in_group("template"):
