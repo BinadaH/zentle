@@ -4,7 +4,8 @@ var current_line: Line2D = null
 var dash_line: Line2D
 var base_line: Line2D 
 
-var curr_length = 0
+var curr_length = 0.0
+var curr_pressure_sum = 0.0
 
 var ink_spell_strokes = []
 var is_curr_stroke_spell = false
@@ -80,7 +81,6 @@ func create_line():
 		current_line.width = EditorData.current_size
 		current_line.width_curve = Curve.new()
 		current_line.visible = false
-		curr_length = 0
 		curr_timer = shape_timer
 	
 var last_smooth_point = null
@@ -131,6 +131,7 @@ func draw_line():
 			return
 	
 	curr_length += last_smooth_point.distance_to(target_point)
+	curr_pressure_sum += last_smooth_pressure
 	last_smooth_point = target_point
 	smoothed_pressures.append(last_smooth_pressure)
 	smoothed_points.append(target_point)
@@ -154,6 +155,8 @@ func check_shape():
 		EditorData.draw_line.clear_viewport()
 		current_line.width_curve.clear_points()
 		current_line.width_curve.add_point(Vector2(1.0, 1.0))
+		if curr_pressure_sum != 0:
+			current_line.width *= curr_pressure_sum / smoothed_pressures.size()
 	else:
 		curr_timer.start()
 
@@ -170,7 +173,6 @@ func _update_width_curve():
 		var p = float(i) / steps
 		var index = int(smoothed_pressures.size()* p)
 		current_line.width_curve.add_point(Vector2(p, smoothed_pressures[index]))
-
 
 func done():
 	Input.use_accumulated_input = false
@@ -233,6 +235,8 @@ func reset_line():
 	smoothed_points.clear()
 	shape_check_iter = 0
 	is_curr_stroke_spell = false
+	curr_pressure_sum = 0.0
+	curr_length = 0.0
 
 func simplify_points(points: PackedVector2Array, epsilon: float) -> PackedVector2Array:
 	if points.size() < 3:
