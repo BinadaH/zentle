@@ -26,6 +26,12 @@ func _ready():
 	ink_spells_manager.call_deferred("load_files")
 	line_manager.ready()
 	
+	var args = OS.get_cmdline_args()
+	if !args.is_empty():
+		var file_to_open = args[0]
+		print(file_to_open)
+		EditorFiles.call_deferred("end_open_path", file_to_open)
+	
 	
 func set_ui_manager(manager):
 	ui_manager = manager
