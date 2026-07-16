@@ -121,8 +121,9 @@ func draw_line():
 		last_smooth_pressure = lerp(last_smooth_pressure, current_raw_pressure, 0.1)
 	
 	var target_point = EditorData.world_pos
+	var smooth_lerp_factor = clampf(0.75 * EditorData.camera.zoom.x, 0.3, 0.75)
 	if last_smooth_point != null:
-		target_point = lerp(last_smooth_point, target_point, 0.75)
+		target_point = lerp(last_smooth_point, target_point, smooth_lerp_factor)
 	else:
 		last_smooth_point = target_point
 	
