@@ -289,3 +289,6 @@ func get_lines_under_rect(rect: Rect2) -> Array:
 						if !(obj in objs) && is_rect_over_line2d(obj, rect):
 							objs.append(obj)
 	return objs
+
+func get_text_objs():
+	return EditorData.get_tree().get_nodes_in_group("text")

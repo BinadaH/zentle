@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://beymo5ecdkku2" path="res://scenes/quick_tools/settings.tscn" id="16_muem4"]
 [ext_resource type="PackedScene" uid="uid://r3h5c8hcuu64" path="res://scenes/quick_tools/exports/exports.tscn" id="18_0ld40"]
 [ext_resource type="PackedScene" uid="uid://co3vhjgu03j3b" path="res://scenes/quick_tools/ink_spells.tscn" id="21_jscy8"]
+[ext_resource type="PackedScene" uid="uid://ciqm4xtmb2b4a" path="res://scenes/quick_tools/search_text.tscn" id="22_pm3ni"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_muem4"]
 
@@ -547,6 +548,11 @@ metadata/_tab_index = 2
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
+
+[node name="SearchText" parent="canvas_main/quick_controls_container/quick_options/TabContainer" unique_id=412276852 instance=ExtResource("22_pm3ni")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
 
 [node name="latex_preview" type="TextureRect" parent="canvas_main" unique_id=1914542287]
 visible = false

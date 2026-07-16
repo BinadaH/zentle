@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://ciqm4xtmb2b4a"]
+
+[ext_resource type="Script" uid="uid://dtn8l6vjckqhk" path="res://scripts/quick_tools/search_text.gd" id="1_i33bg"]
+
+[node name="SearchText" type="MarginContainer" unique_id=412276852 node_paths=PackedStringArray("line_edit", "found_data_parent")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_i33bg")
+line_edit = NodePath("CenterContainer/VBoxContainer/HBoxContainer/LineEdit")
+found_data_parent = NodePath("CenterContainer/VBoxContainer/ScrollContainer/found_data")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=196943307]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1578197613]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1075168020]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=950408831]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+placeholder_text = "Text"
+
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=416708541]
+layout_mode = 2
+text = "Search"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/VBoxContainer" unique_id=648996468]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="found_data" type="VBoxContainer" parent="CenterContainer/VBoxContainer/ScrollContainer" unique_id=1134605695]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
