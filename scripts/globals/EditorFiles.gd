@@ -4,14 +4,15 @@ var curr_path: String = ""
 var file_label: Label
 var animations: AnimationPlayer
 
-const CURR_FS_VERSION = 3
+const CURR_FS_VERSION = 4
 
 var need_to_save = false
 
 var serializers: Dictionary[int, CanvasSerializer] = {
 	1: preload("res://scripts/serializers/v1.gd").new(1),
 	2: preload("res://scripts/serializers/v2.gd").new(2),
-	3: preload("res://scripts/serializers/v3.gd").new(3)
+	3: preload("res://scripts/serializers/v3.gd").new(3),
+	4: preload("res://scripts/serializers/v4.gd").new(4)
 }
 
 func reset():

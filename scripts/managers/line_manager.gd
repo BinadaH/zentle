@@ -174,6 +174,8 @@ func _update_width_curve():
 		var p = float(i) / steps
 		var index = int(smoothed_pressures.size()* p)
 		current_line.width_curve.add_point(Vector2(p, smoothed_pressures[index]))
+	
+	current_line.set_meta("press_p", smoothed_pressures)
 
 func done():
 	Input.use_accumulated_input = false
