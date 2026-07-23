@@ -61,13 +61,10 @@ func serialize_canvas():
 	var children = EditorFuncs.canvas_manager.get_children()
 	for child in children:
 		if child is Line2D and child.width_curve:
-			var press_points
-			if child.has_meta("press_p"):
-				press_points = child.get_meta("press_p")
-			else:
+			var press_points = child.get_meta("press_p", [])
+			if press_points.size() == 0:
 				var curve = child.width_curve
 				var pc = curve.point_count
-				press_points = []
 				press_points.resize(pc)
 				for i in pc:
 					press_points[i] = curve.get_point_position(i).y
