@@ -58,9 +58,11 @@ func handle_mouse_motion():
 func handle_mouse_button():
 	if EditorData.mouse_down:
 		create_line()
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	else:
 		done()
-
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
 func create_line():
 	Input.use_accumulated_input = false
 	if curr_timer: curr_timer.stop()
