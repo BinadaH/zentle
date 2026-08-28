@@ -173,10 +173,10 @@ quick_controls_container = NodePath("canvas_main/quick_controls_container")
 debug_info_label = NodePath("canvas_main/Control/debug_info")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=431555796]
-points = PackedVector2Array(0, -20, 20, 0, 0, 20, -20, 0)
+points = PackedVector2Array(0, -5, 5, 0, 0, 5, -5, 0)
 closed = true
-width = 5.0
-default_color = Color(1, 1, 1, 0.38039216)
+width = 1.0
+default_color = Color(1.353256, 1.353256, 1.353256, 0.7176471)
 
 [node name="canvas" type="Node2D" parent="." unique_id=1568860248]
 
@@ -479,10 +479,6 @@ stretch_mode = 5
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
-min_value = 0.15
-max_value = 1.0
-step = 0.01
-value = 0.15
 
 [node name="debug_info" type="Label" parent="canvas_main/Control" unique_id=1479249767]
 layout_mode = 1

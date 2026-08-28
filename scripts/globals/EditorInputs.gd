@@ -122,6 +122,11 @@ func handle_mouse_button(event: InputEventMouseButton):
 			EditorFuncs.request_high_performance()
 		else:
 			EditorFuncs.release_high_performance()
+			
+	if event.button_index == MOUSE_BUTTON_MIDDLE || event.button_index == MOUSE_BUTTON_LEFT:
+		var focused = get_viewport().gui_get_focus_owner()
+		if focused && !focused.is_in_group("text_edit"):
+			focused.release_focus()
 
 func handle_mouse_motion(event: InputEventMouseMotion):
 	calc_mouse_position(event)

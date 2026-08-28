@@ -4,7 +4,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ywxn2"]
 
-[node name="ExportRegion" type="VBoxContainer" unique_id=667749584 groups=["export_region"]]
+[node name="ExportRegion" type="VBoxContainer" unique_id=667749584 node_paths=PackedStringArray("check_btn", "line_edit", "preset_option_button") groups=["export_region"]]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,41 +13,50 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 script = ExtResource("1_kwcod")
+check_btn = NodePath("options/MarginContainer/HBoxContainer/CheckButton")
+line_edit = NodePath("options/MarginContainer/HBoxContainer/LineEdit")
+preset_option_button = NodePath("options/MarginContainer/HBoxContainer/OptionButton")
 
-[node name="options" type="Panel" parent="." unique_id=1078899291]
-custom_minimum_size = Vector2(0, 50)
+[node name="options" type="PanelContainer" parent="." unique_id=1492688244]
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="options" unique_id=36770263]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+[node name="MarginContainer" type="MarginContainer" parent="options" unique_id=645899558]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="options/MarginContainer" unique_id=246892697]
 layout_mode = 2
 mouse_filter = 2
+alignment = 1
 
 [node name="CheckButton" type="CheckButton" parent="options/MarginContainer/HBoxContainer" unique_id=371694673]
 z_index = 1
+texture_filter = 1
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Export"
 
 [node name="LineEdit" type="LineEdit" parent="options/MarginContainer/HBoxContainer" unique_id=1530512050]
 z_index = 1
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ywxn2")
 placeholder_text = "Title"
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="options/MarginContainer/HBoxContainer/LineEdit" unique_id=1497243650]
+
+[node name="OptionButton" type="OptionButton" parent="options/MarginContainer/HBoxContainer" unique_id=374753568]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+allow_reselect = true
+search_bar_enabled = true
 
 [node name="export_region" type="Panel" parent="." unique_id=452901486]
 z_index = -1

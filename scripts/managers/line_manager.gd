@@ -10,7 +10,13 @@ var curr_pressure_sum = 0.0
 var ink_spell_strokes = []
 var is_curr_stroke_spell = false
 
-const SIMPLIFY_LINE_FACTOR = 0.75
+var last_smooth_point = null
+var last_smooth_pressure = null
+var smoothed_pressures = PackedFloat32Array()
+var smoothed_points = PackedVector2Array()
+
+const MIN_DISTANCE_SQ = 1
+const SIMPLIFY_LINE_FACTOR = 0.15
 
 enum STROKE_TYPES {
 	NORMAL,
@@ -85,12 +91,7 @@ func create_line():
 		current_line.visible = false
 		curr_timer = shape_timer
 	
-var last_smooth_point = null
-var last_smooth_pressure = null
-var smoothed_pressures = PackedFloat32Array()
-var smoothed_points = PackedVector2Array()
 
-const MIN_DISTANCE_SQ = 9
 
 func update_line():
 	if found_shape:

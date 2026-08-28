@@ -17,7 +17,8 @@ var settings_to_load: Array[EditorOptions.OPTIONS] = [
 	EditorOptions.OPTIONS.REALTIME_MOVE_SCALE,
 	EditorOptions.OPTIONS.SCRATCH_TO_ERASE,
 	EditorOptions.OPTIONS.ZOOM_TO_CURSOR,
-	EditorOptions.OPTIONS.MAX_FPS
+	EditorOptions.OPTIONS.MAX_FPS,
+	EditorOptions.OPTIONS.GRID_WEIGHT
 ]
 
 func load_settings():

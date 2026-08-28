@@ -72,10 +72,14 @@ func _unhandled_input(event):
 func mouse_wheel_pan_modifier(x):
 	return x
 
-const MIN_CAM_ZOOM = 0.15
-const MAX_CAM_ZOOM = 1
+const MIN_CAM_ZOOM = 0.5
+const MAX_CAM_ZOOM = 10.0
 func _ready() -> void:
-	target_zoom = 1
+	z_slider.min_value = MIN_CAM_ZOOM
+	z_slider.max_value = MAX_CAM_ZOOM
+	z_slider.step  = 0.1
+	
+	target_zoom = lerp(MIN_CAM_ZOOM, MAX_CAM_ZOOM, 0.5)
 	zoom = Vector2(target_zoom, target_zoom)
 	z_slider.value  = target_zoom
 	
