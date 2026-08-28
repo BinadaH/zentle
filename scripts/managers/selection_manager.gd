@@ -120,6 +120,7 @@ func _handle_existing_selection():
 			EditorData.draw_ui.queue_redraw()
 
 func single_click_selection():
+	var sq_size = EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]
 	if selection_made:
 		if selection_made.calc_handle(EditorData.world_pos):
 			return
@@ -136,12 +137,12 @@ func single_click_selection():
 		var new_rect
 		
 		if child is Line2D:
-			var area = Rect2(EditorData.world_pos, Vector2.ZERO).grow(10)
+			var area = Rect2(EditorData.world_pos, Vector2.ZERO).grow(sq_size * 0.08)
 			is_selected = EditorFuncs.canvas_manager.is_rect_over_line2d(child, area)
 			if is_selected:
 				new_rect = EditorFuncs.get_object_rect(child)
 		elif child.is_in_group("export_region"):
-			var area = Rect2(EditorData.world_pos, Vector2.ZERO).grow(10)
+			var area = Rect2(EditorData.world_pos, Vector2.ZERO).grow(sq_size * 0.08)
 			new_rect = EditorFuncs.get_object_rect(child)
 			is_selected = EditorFuncs.rect_intersects_rect_borders(area, new_rect)
 		else:

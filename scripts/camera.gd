@@ -13,7 +13,7 @@ var move = false
 var moving = false
 var zooming = false
 
-const CAM_SPEED = 15
+const CAM_SPEED = 10
 const CAM_SMOOTHNESS = 15
 const ZOOM_SENSITIVITY = 1.1
 
@@ -65,9 +65,9 @@ func _unhandled_input(event):
 	if event is InputEventKey:
 		if event.pressed && event.ctrl_pressed:
 			if event.keycode == KEY_KP_ADD:
-				z_slider.value = min(MAX_CAM_ZOOM, z_slider.value + 0.1)
+				z_slider.value = min(MAX_CAM_ZOOM, z_slider.value * ZOOM_SENSITIVITY)
 			elif event.keycode == KEY_KP_SUBTRACT:
-				z_slider.value = max(MIN_CAM_ZOOM, z_slider.value - 0.1)
+				z_slider.value = max(MIN_CAM_ZOOM, z_slider.value / ZOOM_SENSITIVITY)
 				
 func mouse_wheel_pan_modifier(x):
 	return x

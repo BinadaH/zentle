@@ -1,9 +1,10 @@
 class_name ShapeBounds
 
 var points = []
-const handle_r = 15
-const handle_size_squared = handle_r * handle_r
+var handle_r = 15
+var handle_size_squared = handle_r * handle_r
 var origin = Vector2()
+var sq_size = 14
 
 var objs = []
 
@@ -12,7 +13,9 @@ func set_objs(obj_array):
 	
 func _init(rect : Rect2):
 	create_rect(rect.position, rect.end)
-
+	sq_size = EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]
+	handle_r = sq_size * 0.15
+	handle_size_squared = handle_r * handle_r
 
 func add_point(point : Vector2):
 	points.append(point)
@@ -39,20 +42,20 @@ func calc_handle(mouse_pos : Vector2):
 
 
 func is_cursor_inside(mouse_pos : Vector2):
-	return get_rect().grow(10).has_point(mouse_pos)
+	return get_rect().grow(sq_size * 0.08).has_point(mouse_pos)
 
 func get_handle() -> Vector2:
 	return points[curr_handle]
 
 func draw(canvas : Node2D):
 	var col = EditorColors.ui_palette[EditorColors.UI.PRIMARY_HOVER]
-	var r = get_rect().grow(4)
-	canvas.draw_rect(r, col, false, 5)
+	var r = get_rect()
+	canvas.draw_rect(r, col, false, sq_size * 0.1)
 	canvas.draw_rect(r, EditorColors.ui_palette[EditorColors.UI.PRIMARY_TRANSPARENT], true)
 	
 	for o in objs:
 		var obj_r = EditorFuncs.get_object_rect(o)
-		canvas.draw_rect(obj_r, col, false, 3)
+		canvas.draw_rect(obj_r, col, false, sq_size * 0.08)
 	
 	for p in range(points.size()):
 		var grab_col =  EditorColors.ui_palette[EditorColors.UI.PRIMARY_PRESSED] if (handle_selected && p == curr_handle) else col
