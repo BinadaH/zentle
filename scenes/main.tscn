@@ -322,14 +322,14 @@ expand_icon = true
 [node name="undo_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=387674362]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-tooltip_text = "Paste"
+tooltip_text = "Undo"
 icon = ExtResource("14_yc10j")
 expand_icon = true
 
 [node name="redo_btn" type="Button" parent="canvas_main/Control/view/top_panel/HBoxContainer/tools_btn" unique_id=1846384542]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-tooltip_text = "Paste"
+tooltip_text = "Redo"
 icon = ExtResource("15_jscy8")
 expand_icon = true
 
