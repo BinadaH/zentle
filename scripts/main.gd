@@ -10,10 +10,14 @@ class_name Main
 @export var quick_controls_container: MarginContainer
 @export var debug_info_label: Label
 
+var inputs_manager: InputsManager
+
+func _init() -> void:
+	inputs_manager = InputsManager.new()
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		EditorFiles.show_save_confirm_dialog(func(): get_tree().quit())
+		EditorFuncs.file_manager.show_save_confirm_dialog(func(): get_tree().quit())
 
 func _ready():
 	get_tree().set_auto_accept_quit(false)
@@ -33,7 +37,7 @@ func _ready():
 	)
 	
 	EditorData.draw_ui = draw_ui
-	EditorFiles.set_animation_player(animations_player)
+	EditorFuncs.file_manager.set_animation_player(animations_player)
 	EditorFuncs.animations = animations_player
 	
 	quick_controls_container.visible = false
@@ -41,7 +45,7 @@ func _ready():
 	
 	# Use low_processor_usage_mode when idling
 	OS.low_processor_usage_mode = true
-	OS.low_processor_usage_mode_sleep_usec = 45000
+	OS.low_processor_usage_mode_sleep_usec = 60000
 	EditorOptions.connect("config_loaded", func(): 
 		Engine.max_fps = EditorOptions.options[EditorOptions.OPTIONS.MAX_FPS]
 	)
@@ -92,4 +96,4 @@ func _input(event):
 	time_since_last_render = 0
 
 func _unhandled_input(event):
-	EditorInputs.handle_input(event)
+	inputs_manager.handle_input(event)

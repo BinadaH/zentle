@@ -1,4 +1,4 @@
-extends Node
+class_name InputsManager
 
 
 ## This function receives every _unhandled_input that is not blocked by a UI element.  
@@ -26,10 +26,10 @@ func handle_key(event: InputEventKey):
 	
 	elif event.pressed && event.ctrl_pressed:
 		if event.keycode == KEY_Y or (event.shift_pressed && event.keycode == KEY_Z):
-			EditorHistory.redo()
+			EditorFuncs.history_manager.redo()
 			EditorFuncs.selection_manager.clear_selection_status()
 		elif event.keycode == KEY_Z:
-			EditorHistory.undo()
+			EditorFuncs.history_manager.undo()
 			EditorFuncs.selection_manager.clear_selection_status()
 		elif event.keycode == KEY_C:
 			EditorFuncs.handle_copy()
@@ -58,7 +58,7 @@ func handle_mouse_button(event: InputEventMouseButton):
 			if EditorTools.is_current(EditorTools.TOOLS.SELECT):
 				# Exit from editing a [Text] object while using the Select Tool and clicking outside the CodeEdit
 				EditorData.mouse_relative = Vector2(0, 0)
-				var text_edit = get_viewport().gui_get_focus_owner()
+				var text_edit = EditorData.get_viewport().gui_get_focus_owner()
 				if text_edit && text_edit.is_in_group("text_edit") && !text_edit.get_rect().has_point(EditorFuncs.get_screen_to_world_pos(event.position)):
 					text_edit.release_focus()
 				
@@ -89,7 +89,7 @@ func handle_mouse_button(event: InputEventMouseButton):
 						new_t.curr_color = EditorData.current_color
 						new_t.modulate = new_t.curr_color
 						
-						EditorHistory.create_action("create_text", EditorFuncs.canvas_manager.add_to_canvas.bind(new_t), EditorFuncs.canvas_manager.remove_from_canvas.bind(new_t), true, new_t)
+						EditorFuncs.history_manager.create_action("create_text", EditorFuncs.canvas_manager.add_to_canvas.bind(new_t), EditorFuncs.canvas_manager.remove_from_canvas.bind(new_t), true, new_t)
 						new_t.edit_text()
 						
 			elif EditorTools.is_current(EditorTools.TOOLS.ERASER):
@@ -124,7 +124,7 @@ func handle_mouse_button(event: InputEventMouseButton):
 			EditorFuncs.release_high_performance()
 			
 	if event.button_index == MOUSE_BUTTON_MIDDLE || event.button_index == MOUSE_BUTTON_LEFT:
-		var focused = get_viewport().gui_get_focus_owner()
+		var focused = EditorData.get_viewport().gui_get_focus_owner()
 		if focused && !focused.is_in_group("text_edit"):
 			focused.release_focus()
 

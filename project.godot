@@ -21,12 +21,9 @@ config/icon="res://icon.svg"
 
 EditorFuncs="*uid://cbd00nig62gna"
 EditorTools="*uid://bili80coqsvqm"
-EditorInputs="*uid://xg06flsmuw06"
 EditorData="*uid://bd5knl6tjv51n"
-EditorHistory="*uid://drc6qihbyblm2"
 EditorColors="*uid://b2vbfn6qqyxau"
 EditorOptions="*uid://y1k61da3guvd"
-EditorFiles="*uid://7ea0gntdds2k"
 
 [display]
 

@@ -181,7 +181,7 @@ func change_color(old: Color, new: Color):
 				obj.modulate = to
 				obj.curr_color = to
 					
-	EditorHistory.create_action("change_color", do.bind(new, selection_made.objs.duplicate()), do.bind(old, selection_made.objs.duplicate()))
+	EditorFuncs.history_manager.create_action("change_color", do.bind(new, selection_made.objs.duplicate()), do.bind(old, selection_made.objs.duplicate()))
 
 func clear_selection_status():
 	selection_made = null

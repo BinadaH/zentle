@@ -109,7 +109,7 @@ func end_move_scale():
 		EditorData.draw_ui.queue_redraw()
 		
 	var inv_last_scale_factor = Vector2.ONE / last_scale_factor
-	EditorHistory.create_action("move_scale", do_func.bind(last_move_factor, last_scale_factor, origin), do_func.bind(-last_move_factor, inv_last_scale_factor, origin), false)
+	EditorFuncs.history_manager.create_action("move_scale", do_func.bind(last_move_factor, last_scale_factor, origin), do_func.bind(-last_move_factor, inv_last_scale_factor, origin), false)
 	
 	
 	if !EditorOptions.options[EditorOptions.OPTIONS.REALTIME_MOVE_SCALE]:

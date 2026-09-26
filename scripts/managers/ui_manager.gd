@@ -31,7 +31,7 @@ func _ready():
 		var label = file_menu_items[item_id].label
 		file_menu.add_item(label, item_id)
 	
-	EditorFiles.set_file_label(file_name_label)
+	EditorFuncs.file_manager.set_file_label(file_name_label)
 	
 	EditorData.latex_preview = latex_preview
 	
@@ -278,8 +278,8 @@ func set_tools_float(value):
 	tools_hbox.alignment = value
 
 func _on_undo_btn_pressed():
-	EditorHistory.undo()
+	EditorFuncs.history_manager.undo()
 	EditorFuncs.selection_manager.clear_selection_status()
 func _on_redo_btn_pressed():
-	EditorHistory.redo()
+	EditorFuncs.history_manager.redo()
 	EditorFuncs.selection_manager.clear_selection_status()

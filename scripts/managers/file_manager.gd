@@ -1,4 +1,4 @@
-extends Node
+class_name FileManager
 
 var curr_path: String = ""
 var file_label: Label
@@ -84,7 +84,7 @@ func end_save_to_path(path: String):
 		if !curr_path:
 			set_current_path(path)
 		set_to_saved()
-		EditorHistory.mark_save_point()
+		EditorFuncs.history_manager.mark_save_point()
 		animations.play("save_label_animation")
 
 

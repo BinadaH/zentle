@@ -11,7 +11,6 @@ var PCR: PointCloudRecognition
 var curr_loading_spell = null
 func _init():
 	PCR = PointCloudRecognition.new()
-	load_spells()
 
 func is_letter_saved(letter):
 	return PCR.is_letter_saved(letter)
@@ -105,7 +104,7 @@ func load_files():
 		load_spell_file(trigger, file_path)
 
 func load_spell_file(trigger, file_path):
-	if EditorFiles.end_open_path(file_path, true):
+	if EditorFuncs.file_manager.end_open_path(file_path, true):
 		var rect = EditorFuncs.get_object_rect(curr_loading_spell[0])
 		for	obj in range(1, curr_loading_spell.size()):
 			rect = rect.merge(EditorFuncs.get_object_rect(curr_loading_spell[obj]))

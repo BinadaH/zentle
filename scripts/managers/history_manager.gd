@@ -1,4 +1,4 @@
-extends Node
+class_name HistoryManager
 
 signal history_changed
 var undo_redo = UndoRedo.new()
@@ -41,7 +41,7 @@ func redo():
 	
 func on_history_modified():
 	var curr_version = undo_redo.get_version()
-	EditorFiles.check_save_status(curr_version == last_save_version)
+	EditorFuncs.file_manager.check_save_status(curr_version == last_save_version)
 
 func mark_save_point():
 	last_save_version = undo_redo.get_version()

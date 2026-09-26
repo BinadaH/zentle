@@ -15,7 +15,7 @@ var last_smooth_pressure = null
 var smoothed_pressures = PackedFloat32Array()
 var smoothed_points = PackedVector2Array()
 
-const MIN_DISTANCE_SQ = 1
+const MIN_DISTANCE_SQ = 0.2
 const SIMPLIFY_LINE_FACTOR = 0.15
 
 enum STROKE_TYPES {
@@ -91,8 +91,6 @@ func create_line():
 		current_line.visible = false
 		curr_timer = shape_timer
 	
-
-
 func update_line():
 	if found_shape:
 		update_shape()
@@ -164,7 +162,6 @@ func check_shape():
 	else:
 		curr_timer.start()
 
-
 func check_spell():
 	EditorData.draw_line.clear_viewport()
 	EditorFuncs.ink_spells_manager.check_spell(ink_spell_strokes)
@@ -214,7 +211,7 @@ func done():
 		if is_scratch && is_scratch.recognized:
 			var rect = is_scratch.bounding_box
 			var lines_to_erase = EditorFuncs.canvas_manager.get_lines_under_rect(rect)
-			EditorHistory.create_action("erase", EditorFuncs.canvas_manager.remove_objs.bind(lines_to_erase), EditorFuncs.canvas_manager.add_objs.bind(lines_to_erase), true, null, lines_to_erase)
+			EditorFuncs.history_manager.create_action("erase", EditorFuncs.canvas_manager.remove_objs.bind(lines_to_erase), EditorFuncs.canvas_manager.add_objs.bind(lines_to_erase), true, null, lines_to_erase)
 			reset_line()
 			return
 		else:
@@ -223,7 +220,7 @@ func done():
 		current_line.points = smoothed_points
 		_update_width_curve()
 	
-	EditorHistory.create_action("Create Line", EditorFuncs.canvas_manager.add_to_canvas.bind(current_line), EditorFuncs.canvas_manager.remove_from_canvas.bind(current_line), call_history_do_func, current_line)
+	EditorFuncs.history_manager.create_action("Create Line", EditorFuncs.canvas_manager.add_to_canvas.bind(current_line), EditorFuncs.canvas_manager.remove_from_canvas.bind(current_line), call_history_do_func, current_line)
 	EditorFuncs.canvas_manager.set_spatial_grid_pos(current_line)
 	
 	reset_line()

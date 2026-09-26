@@ -55,9 +55,9 @@ func _on_button_pressed():
 		var target_ext = "*" + curr_ext
 		file_dialog.clear_filters()
 		file_dialog.filters = [target_ext]
-		if EditorFiles.curr_path:
-			file_dialog.current_dir = EditorFiles.curr_path.get_base_dir()
-			file_dialog.current_file = EditorFiles.curr_path.get_file().get_basename() + curr_ext
+		if EditorFuncs.file_manager.curr_path:
+			file_dialog.current_dir = EditorFuncs.file_manager.curr_path.get_base_dir()
+			file_dialog.current_file = EditorFuncs.file_manager.curr_path.get_file().get_basename() + curr_ext
 		file_dialog.visible = true
 
 @onready var timer = $HBoxContainer/Control/CenterContainer/VBoxContainer/Timer

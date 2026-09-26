@@ -1,5 +1,8 @@
 class_name ShapeRecognizer
 
+var SNAP_THRESHOLD = 25.0
+var CLOSED_THRESHOLD = 25.0
+
 enum SHAPES{
 	CIRCLE,
 	RECTANGLE,
@@ -36,7 +39,6 @@ func get_shape(points: PackedVector2Array, checking_iter: int = 1) -> ShapeRecog
 	var result = ShapeRecognizerResult.new(points, false, SHAPES.NONE)
 	if points.size() < 2: return result
 	
-	var snap_threshold = 25.0
 	if is_closed(points, checking_iter):
 		var area = get_area(points)
 		var length = get_length(points)
@@ -47,9 +49,9 @@ func get_shape(points: PackedVector2Array, checking_iter: int = 1) -> ShapeRecog
 		var snapped_pos = EditorFuncs.get_grid_pos(bounding_box.position)
 		var snapped_end = EditorFuncs.get_grid_pos(bounding_box.end)
 		
-		if bounding_box.position.distance_to(snapped_pos) < snap_threshold:
+		if bounding_box.position.distance_to(snapped_pos) < SNAP_THRESHOLD:
 			bounding_box.position = snapped_pos
-		if bounding_box.end.distance_to(snapped_end) < snap_threshold:
+		if bounding_box.end.distance_to(snapped_end) < SNAP_THRESHOLD:
 			bounding_box.end = snapped_end
 		
 		result.center = bounding_box.get_center()
@@ -80,6 +82,7 @@ func get_shape(points: PackedVector2Array, checking_iter: int = 1) -> ShapeRecog
 				result.recognized = true
 				return result
 	else:
+		
 		if check_for_segment(points, checking_iter):
 			var start = points[0]
 			var end = points[points.size() - 1]
@@ -87,8 +90,8 @@ func get_shape(points: PackedVector2Array, checking_iter: int = 1) -> ShapeRecog
 			var s_start = EditorFuncs.get_grid_pos(start, EditorOptions.shape_snap_tolerance)
 			var s_end = EditorFuncs.get_grid_pos(end, EditorOptions.shape_snap_tolerance)
 			
-			if start.distance_to(s_start) < snap_threshold: start = s_start
-			if end.distance_to(s_end) < snap_threshold: end = s_end
+			if start.distance_to(s_start) < SNAP_THRESHOLD: start = s_start
+			if end.distance_to(s_end) < SNAP_THRESHOLD: end = s_end
 			
 			result.points = PackedVector2Array([start, end])
 			result.recognized = true
@@ -119,7 +122,7 @@ func get_corners_distance_score(points: PackedVector2Array, rect: Rect2) -> floa
 	return total_min_distance / 4.0
 	
 func is_closed(points: PackedVector2Array, checking_iter: int):
-	return beg_end_dist(points) < 25 * checking_iter
+	return beg_end_dist(points) < CLOSED_THRESHOLD * checking_iter
 
 func get_rect_points(rect: Rect2) -> PackedVector2Array:
 	return PackedVector2Array([ rect.position, 

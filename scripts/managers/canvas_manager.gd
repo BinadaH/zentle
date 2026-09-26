@@ -66,7 +66,7 @@ func paste_copy():
 			if obj.is_in_group("text"):
 				new_obj.text = obj.text
 
-	EditorHistory.create_action("paste", add_objs.bind(new_objs), remove_objs.bind(new_objs), true)
+	EditorFuncs.history_manager.create_action("paste", add_objs.bind(new_objs), remove_objs.bind(new_objs), true)
 	
 	# Select the new items after they are pasted
 	EditorFuncs.selection_manager.perform_objs_selection(new_objs, rect)
@@ -168,7 +168,7 @@ func update_eraser():
 									var undo_func = func(l):
 										add_to_canvas(l)
 
-									EditorHistory.create_action("erase", EditorFuncs.canvas_manager.remove_from_canvas.bind(line), undo_func.bind(line), true, null, line)
+									EditorFuncs.history_manager.create_action("erase", EditorFuncs.canvas_manager.remove_from_canvas.bind(line), undo_func.bind(line), true, null, line)
 							else:
 								pass #remove from grid?
 

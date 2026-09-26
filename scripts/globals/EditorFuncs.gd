@@ -8,7 +8,8 @@ var ui_manager: UIManager
 var canvas_manager: CanvasManager
 var export_manager: ExportManager
 var ink_spells_manager: InkSpellsManager
-
+var file_manager: FileManager
+var history_manager: HistoryManager
 
 var latex_generator: GenerateLatexImg
 
@@ -19,10 +20,13 @@ func _init():
 	latex_generator = GenerateLatexImg.new()
 	export_manager = ExportManager.new()
 	ink_spells_manager = InkSpellsManager.new()
+	file_manager = FileManager.new()
+	history_manager = HistoryManager.new()
 	
 	
 func _ready():
 	EditorOptions.connect("theme_changed", canvas_manager.on_theme_change)
+	EditorOptions.connect("config_loaded", on_config_loaded)
 	ink_spells_manager.call_deferred("load_files")
 	line_manager.ready()
 	
@@ -30,9 +34,13 @@ func _ready():
 	if !args.is_empty():
 		var file_to_open = args[0]
 		print(file_to_open)
-		EditorFiles.call_deferred("end_open_path", file_to_open)
+		file_manager.call_deferred("end_open_path", file_to_open)
 	
-	
+func on_config_loaded():
+	var sq_size = EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]
+	line_manager.shape_recognizer.CLOSED_THRESHOLD = sq_size / 2
+	line_manager.shape_recognizer.SNAP_THRESHOLD = sq_size / 2
+
 func set_ui_manager(manager):
 	ui_manager = manager
 
@@ -132,10 +140,10 @@ func handle_paste():
 	canvas_manager.paste_copy()
 	
 func handle_save():
-	EditorFiles.begin_save_file()
+	file_manager.begin_save_file()
 
 func begin_handle_new():
-	EditorFiles.show_save_confirm_dialog(self.end_handle_new)
+	file_manager.show_save_confirm_dialog(self.end_handle_new)
 
 	
 func end_handle_new():
@@ -145,16 +153,16 @@ func end_handle_new():
 func reset():
 	selection_manager.clear_selection_status()
 	canvas_manager.clear()
-	EditorHistory.clear()
+	history_manager.clear()
 	EditorData.camera.reset()
-	EditorFiles.reset()
+	file_manager.reset()
 	EditorData.spatial_grid.clear()
 	
 func begin_handle_open():
-	EditorFiles.show_save_confirm_dialog(self.end_handle_open)
+	file_manager.show_save_confirm_dialog(self.end_handle_open)
 	
 func end_handle_open():
-	EditorFiles.begin_open_file()
+	file_manager.begin_open_file()
 
 func get_objects_rect(objs : Array) -> Rect2:
 	var new_rect = null

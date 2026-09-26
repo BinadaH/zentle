@@ -107,6 +107,6 @@ func set_tool(_tool: TOOLS):
 func delete():
 	var sel = EditorFuncs.selection_manager.selection_made
 	if sel && sel.objs.size() > 0:
-		EditorHistory.create_action("delete_selection", EditorFuncs.canvas_manager.remove_objs.bind(sel.objs.duplicate()), EditorFuncs.canvas_manager.add_objs.bind(sel.objs.duplicate()))
+		EditorFuncs.history_manager.create_action("delete_selection", EditorFuncs.canvas_manager.remove_objs.bind(sel.objs.duplicate()), EditorFuncs.canvas_manager.add_objs.bind(sel.objs.duplicate()))
 	
 	EditorFuncs.selection_manager.clear_selection_status()
