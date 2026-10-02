@@ -12,14 +12,19 @@ var region_container: Node2D
 var curr_region: Region
 var curr_rect: Rect2
 
-var generate_export: GenerateExport
+var _generate_export: GenerateExport = null
+var generate_export: GenerateExport:
+	get:
+		if _generate_export == null:
+			_generate_export = GenerateExport.new()
+			var font = load("res://fonts/JetBrainsMono-Regular.ttf")
+			_generate_export.SetupFont(null)
+		return _generate_export
+			
 var export_region_scene: PackedScene
 
 func _init():
 	export_region_scene = preload("res://scenes/export_region.tscn")
-	generate_export = GenerateExport.new()
-	var font = load("res://fonts/JetBrainsMono-Regular.ttf")
-	generate_export.SetupFont(null)
 	
 func make_export(type: FILE, path: String, grid_on: bool):
 	var file_name = path.get_file().get_basename()

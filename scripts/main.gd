@@ -52,7 +52,6 @@ func _ready():
 	
 	should_keep_rendering_on.append(ui.file_menu)
 
-
 var time_since_last_render = 0
 var frame_threshold = 1.5
 

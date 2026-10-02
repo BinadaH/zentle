@@ -63,7 +63,6 @@ func set_and_save_editor_option(option: OPTIONS, value: Variant):
 func _ready():
 	call_deferred("load_config_file")
 
-
 var config: ConfigFile = ConfigFile.new()
 var config_path = "user://settings.cfg"
 func load_config_file():
@@ -84,7 +83,6 @@ func load_config_file():
 	load_theme(tmp_current_theme)
 	
 	emit_signal("config_loaded")
-	
 	
 var all_themes = {}
 func load_themes_from_settings():
@@ -107,16 +105,17 @@ func load_theme(theme: String):
 		return
 	
 	if theme != current_theme:
-		var old_palette = EditorColors.color_palette.duplicate()
-		EditorColors.color_palette = all_themes[theme].get("color_palette", EditorColors.color_palette)
+		var color_palette = EditorColors.color_palette
+		var old_palette = color_palette.duplicate()
+		color_palette = all_themes[theme].get("color_palette", color_palette)
 		EditorColors.background_col = all_themes[theme].get("background_col", EditorColors.background_col)
 		EditorColors.grid_col = all_themes[theme].get("grid_col", EditorColors.grid_col)
 		
 		EditorColors.calc_ui_color_palette()
-		EditorData.current_color = EditorColors.color_palette[0]
+		EditorData.current_color = color_palette[0]
 		
 		current_theme = theme
-		emit_signal("theme_changed", old_palette)
+		call_deferred("emit_signal", "theme_changed", old_palette)
 		config.set_value("editor", "current_theme", theme)
 		config.save(config_path)
 

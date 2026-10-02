@@ -16,7 +16,7 @@ var smoothed_pressures = PackedFloat32Array()
 var smoothed_points = PackedVector2Array()
 
 const MIN_DISTANCE_SQ = 0.2
-const SIMPLIFY_LINE_FACTOR = 0.15
+const SIMPLIFY_LINE_FACTOR = 0.05
 
 enum STROKE_TYPES {
 	NORMAL,
@@ -72,7 +72,7 @@ func handle_mouse_button():
 func create_line():
 	Input.use_accumulated_input = false
 	if curr_timer: curr_timer.stop()
-	EditorData.draw_line.first_point = true
+	#EditorData.draw_line.first_point = true
 	
 	if EditorData.shift_pressed && EditorData.ctrl_pressed:
 		is_curr_stroke_spell = true
@@ -122,7 +122,12 @@ func draw_line():
 		last_smooth_pressure = lerp(last_smooth_pressure, current_raw_pressure, 0.1)
 	
 	var target_point = EditorData.world_pos
-	var smooth_lerp_factor = clampf(0.75 * EditorData.camera.zoom.x, 0.3, 0.75)
+	
+	var log_zoom = log(EditorData.camera.zoom.x)
+	var log_max = log(EditorData.camera.MAX_CAM_ZOOM)
+	var t = clampf(log_zoom / log_max, 0.0, 1.0)
+	var smooth_lerp_factor = lerpf(0.25, 0.75, t)
+	
 	if last_smooth_point != null:
 		target_point = lerp(last_smooth_point, target_point, smooth_lerp_factor)
 	else:

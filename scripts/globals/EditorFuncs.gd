@@ -11,18 +11,22 @@ var ink_spells_manager: InkSpellsManager
 var file_manager: FileManager
 var history_manager: HistoryManager
 
-var latex_generator: GenerateLatexImg
+var _latex_generator: GenerateLatexImg = null
+var latex_generator: GenerateLatexImg:
+	get:
+		if _latex_generator == null:
+			_latex_generator = GenerateLatexImg.new()
+		return _latex_generator
+	
 
 func _init():
 	line_manager = LineManager.new()
 	selection_manager = SelectionManger.new()
 	canvas_manager = CanvasManager.new()
-	latex_generator = GenerateLatexImg.new()
 	export_manager = ExportManager.new()
 	ink_spells_manager = InkSpellsManager.new()
 	file_manager = FileManager.new()
 	history_manager = HistoryManager.new()
-	
 	
 func _ready():
 	EditorOptions.connect("theme_changed", canvas_manager.on_theme_change)

@@ -38,7 +38,7 @@ func clear_viewport(animate = true):
 	queue_redraw()
 	if animate:
 		var t = create_tween()
-		t.tween_property(get_parent().get_parent(), "modulate", Color.TRANSPARENT, 0.1)
+		t.tween_property(get_parent().get_parent(), "modulate", Color.TRANSPARENT, 0.05)
 		t.tween_callback(reset)
 	else:
 		reset()

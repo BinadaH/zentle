@@ -40,6 +40,7 @@ func _ready():
 	)
 	
 	
+	
 	var btn_size_img : Image = load("res://sprites/circle.png").get_image()
 	var btn_sizes = [0.5, 1, 2]
 	var num_sizes = btn_sizes.size()
@@ -59,6 +60,7 @@ func _ready():
 			slider_size.set_value_no_signal(size)
 		)
 	
+	
 	# Setup Slider / Buttons size controls
 	slider_size.value = EditorData.current_size / EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE] * 2.5
 	
@@ -66,7 +68,6 @@ func _ready():
 		update_tool_sizes(btn_sizes[0])
 		tools_hbox.alignment = EditorOptions.options[EditorOptions.OPTIONS.FLOAT_TOOLS]
 	)
-	
 
 func update_tool_sizes(size):
 	EditorData.current_size = size * 0.4 * EditorOptions.options[EditorOptions.OPTIONS.SQ_SIZE]

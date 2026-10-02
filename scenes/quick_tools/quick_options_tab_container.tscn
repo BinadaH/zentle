@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dbn4ccki6d358"]
+
+[ext_resource type="PackedScene" uid="uid://beymo5ecdkku2" path="res://scenes/quick_tools/settings.tscn" id="1_dco1t"]
+[ext_resource type="PackedScene" uid="uid://sifqnqeicb4c" path="res://scenes/quick_tools/theme_selector.tscn" id="2_qtu3t"]
+[ext_resource type="PackedScene" uid="uid://r3h5c8hcuu64" path="res://scenes/quick_tools/exports/exports.tscn" id="3_16j51"]
+[ext_resource type="PackedScene" uid="uid://co3vhjgu03j3b" path="res://scenes/quick_tools/ink_spells.tscn" id="4_0wauq"]
+[ext_resource type="PackedScene" uid="uid://ciqm4xtmb2b4a" path="res://scenes/quick_tools/search_text.tscn" id="5_qkkqr"]
+
+[node name="TabContainer" type="TabContainer" unique_id=1313930189]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+
+[node name="Settings" parent="." unique_id=633254788 instance=ExtResource("1_dco1t")]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Theme Selector" parent="." unique_id=372284654 instance=ExtResource("2_qtu3t")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Exports" parent="." unique_id=495979184 instance=ExtResource("3_16j51")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="InkSpells" parent="." unique_id=602614440 instance=ExtResource("4_0wauq")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="SearchText" parent="." unique_id=412276852 instance=ExtResource("5_qkkqr")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
