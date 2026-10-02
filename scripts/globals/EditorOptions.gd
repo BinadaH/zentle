@@ -107,7 +107,7 @@ func load_theme(theme: String):
 	if theme != current_theme:
 		var color_palette = EditorColors.color_palette
 		var old_palette = color_palette.duplicate()
-		color_palette = all_themes[theme].get("color_palette", color_palette)
+		EditorColors.color_palette = all_themes[theme].get("color_palette", color_palette)
 		EditorColors.background_col = all_themes[theme].get("background_col", EditorColors.background_col)
 		EditorColors.grid_col = all_themes[theme].get("grid_col", EditorColors.grid_col)
 		
