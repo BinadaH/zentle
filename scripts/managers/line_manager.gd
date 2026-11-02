@@ -15,6 +15,8 @@ var last_smooth_pressure = null
 var smoothed_pressures = PackedFloat32Array()
 var smoothed_points = PackedVector2Array()
 
+var smooth_lerp_factor = 0
+
 const MIN_DISTANCE_SQ = 0.2
 const SIMPLIFY_LINE_FACTOR = 0.05
 
@@ -72,8 +74,14 @@ func handle_mouse_button():
 func create_line():
 	Input.use_accumulated_input = false
 	if curr_timer: curr_timer.stop()
-	#EditorData.draw_line.first_point = true
 	
+	last_smooth_point = EditorData.world_pos
+	last_smooth_pressure = EditorData.pressure
+	
+	smoothed_points.append(last_smooth_point)
+	smoothed_pressures.append(last_smooth_pressure)
+	EditorData.draw_line.draw_new_point(last_smooth_point, EditorData.pressure * EditorData.current_size * 0.5)
+
 	if EditorData.shift_pressed && EditorData.ctrl_pressed:
 		is_curr_stroke_spell = true
 		curr_timer = spell_timer
@@ -90,6 +98,13 @@ func create_line():
 		current_line.width_curve = Curve.new()
 		current_line.visible = false
 		curr_timer = shape_timer
+	
+	
+	var log_zoom = log(EditorData.camera.zoom.x)
+	var log_max = log(EditorData.camera.MAX_CAM_ZOOM)
+	var t = clampf(log_zoom / log_max, 0.0, 1.0)
+	smooth_lerp_factor = lerpf(0.25, 0.75, t)
+	
 	
 func update_line():
 	if found_shape:
@@ -122,11 +137,6 @@ func draw_line():
 		last_smooth_pressure = lerp(last_smooth_pressure, current_raw_pressure, 0.1)
 	
 	var target_point = EditorData.world_pos
-	
-	var log_zoom = log(EditorData.camera.zoom.x)
-	var log_max = log(EditorData.camera.MAX_CAM_ZOOM)
-	var t = clampf(log_zoom / log_max, 0.0, 1.0)
-	var smooth_lerp_factor = lerpf(0.25, 0.75, t)
 	
 	if last_smooth_point != null:
 		target_point = lerp(last_smooth_point, target_point, smooth_lerp_factor)
@@ -183,7 +193,7 @@ func _update_width_curve():
 	current_line.set_meta("press_p", smoothed_pressures)
 
 func done():
-	Input.use_accumulated_input = false
+	Input.use_accumulated_input = true
 	if is_curr_stroke_spell:
 		ink_spell_strokes.append(PackedVector2Array(smoothed_points))
 		reset_line()
@@ -221,7 +231,8 @@ func done():
 			return
 		else:
 			smoothed_points = simplify_points(smoothed_points, SIMPLIFY_LINE_FACTOR)
-		
+			smoothed_points = chaikin_smooth(smoothed_points, 1)
+			
 		current_line.points = smoothed_points
 		_update_width_curve()
 	
@@ -245,6 +256,30 @@ func reset_line():
 	is_curr_stroke_spell = false
 	curr_pressure_sum = 0.0
 	curr_length = 0.0
+
+func chaikin_smooth(points: PackedVector2Array, iterations: int = 1) -> PackedVector2Array:
+	if points.size() < 3:
+		return points
+	
+	var current_points = points
+	for it in range(iterations):
+		var smoothed = PackedVector2Array()
+		smoothed.append(current_points[0])
+		
+		for i in range(current_points.size() - 1):
+			var p0 = current_points[i]
+			var p1 = current_points[i + 1]
+			
+			var q = p0.lerp(p1, 0.25)
+			var r = p0.lerp(p1, 0.75)
+			
+			smoothed.append(q)
+			smoothed.append(r)
+			
+		smoothed.append(current_points[-1])
+		current_points = smoothed
+		
+	return current_points
 
 func simplify_points(points: PackedVector2Array, epsilon: float) -> PackedVector2Array:
 	if points.size() < 3:
